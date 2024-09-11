@@ -1,3 +1,7 @@
 export default function DashboardChat() {
-    return <div></div>;
+  return (
+    <div>
+      <h1>Hello and welcome to the world</h1>
+    </div>
+  );
 }
