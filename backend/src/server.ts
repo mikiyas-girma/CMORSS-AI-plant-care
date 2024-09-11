@@ -1,18 +1,9 @@
-import express from 'express';
-import connectDB from './config/db.js';
+import app from "./app.js";
+import 'dotenv/config';
 
-const app = express();
+
 const PORT = process.env.PORT || 3000;
 
-connectDB();
-
-app.use(express.json());
-
-app.get('/', (req, res) => {
-  res.send('Root endpoint check ');
-});
-
-
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
