@@ -9,6 +9,7 @@ import DashboardLayout from '@/gui/layouts/DashboardLayout';
 
 // components
 import Loadable from '@/gui/components/Loadable';
+import NotFound from '@/gui/pages/NotFound';
 
 // IMPORT COMPONENTS
 
@@ -45,46 +46,53 @@ export default function Router() {
     {
       path: '/',
       element: <Index />,
-    },
-    {
-      path: 'auth',
-      element: <AuthLayout />,
       children: [
         {
-          path: 'login',
-          element: <SignIn />,
+          path: 'auth',
+          element: <AuthLayout />,
+          children: [
+            {
+              path: 'login',
+              element: <SignIn />,
+            },
+            {
+              path: 'register',
+              element: <SignUp />,
+            },
+            { path: 'reset-password', element: <ResetPassword /> },
+            { path: 'new-password', element: <NewPassword /> },
+          ],
         },
         {
-          path: 'register',
-          element: <SignUp />,
+          path: 'dashboard',
+          element: <DashboardLayout />,
+          children: [
+            {
+              element: <Navigate to="/dashboard/home" replace />,
+              index: true,
+            },
+            {
+              path: 'home',
+              element: <DashboardHome />,
+            },
+            {
+              path: 'chat',
+              element: <DashboardChat />,
+            },
+            {
+              path: 'plant-identification',
+              element: <DashboardPlantIdentificationChat />,
+            },
+            { path: '*', element: <NotFound /> },
+          ],
         },
-        { path: 'reset-password', element: <ResetPassword /> },
-        { path: 'new-password', element: <NewPassword /> },
-      ],
-    },
-    {
-      path: 'dashboard',
-      element: <DashboardLayout />,
-      children: [
         {
-          element: <Navigate to="/dashboard/home" replace />,
-          index: true,
-        },
-        {
-          path: 'home',
-          element: <DashboardHome />,
-        },
-        {
-          path: 'chat',
-          element: <DashboardChat />,
-        },
-        {
-          path: 'plant-identification',
-          element: <DashboardPlantIdentificationChat />,
+          path: 'not-found',
+          element: <NotFound />,
         },
       ],
     },
 
-    { path: '*', element: <Navigate to="/404" replace /> },
+    { path: '*', element: <Navigate to="/not-found" /> },
   ]);
 }
