@@ -1,12 +1,15 @@
 import './App.css'
 import { BrowserRouter } from 'react-router-dom'
-import Router from './routes'
+import Router from '@/routes'
+import { MediaQueryProvider } from '@/contexts/MediaQueryContext'
 
 function App() {
 	return (
-		<BrowserRouter>
-			<Router />
-		</BrowserRouter>
+		<MediaQueryProvider>
+			<BrowserRouter>
+				<Router />
+			</BrowserRouter>
+		</MediaQueryProvider>
 	)
 }
 
