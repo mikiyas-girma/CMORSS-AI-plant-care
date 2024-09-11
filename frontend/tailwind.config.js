@@ -7,20 +7,22 @@ export default {
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
       },
+
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+
       colors: {
         'primary-green': '#20a144',
         'primary-orange': '#f38d5a',
         'secondary-blue': '#2082A1',
-        white: '#FFFFFF',
-        'green-neutral': '#E4F3E8',
         'gray-full': '#595959',
-        'gray-neutral': '#F0F0F0',
         'danger-red': '#fe0101',
+        'green-neutral': '#E4F3E8',
+        'gray-neutral': '#F0F0F0',
+        white: '#FFFFFF',
 
         // ShadCN
         background: 'hsl(var(--background))',
