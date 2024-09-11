@@ -1,10 +1,17 @@
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import ContainerLayout from './ContainerLayout';
 
 const AuthLayout = () => {
+  const user = true;
+  const pathname = useLocation().pathname;
+
+  if (user) return <Navigate to={'/dashboard'} />;
+  if (pathname === '/auth') return <Navigate to={'/auth/login'} />;
+
   return (
-    <main>
+    <ContainerLayout>
       <Outlet />
-    </main>
+    </ContainerLayout>
   );
 };
 
