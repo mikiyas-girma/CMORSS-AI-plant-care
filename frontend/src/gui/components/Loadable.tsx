@@ -1,15 +1,15 @@
 import { Suspense } from 'react';
-import { JSX } from 'react/jsx-runtime';
+import AnimatedLogo from './AnimatedLogo';
 
-const Loadable = (Component: JSX.IntrinsicAttributes) => (
-    function (props: JSX.IntrinsicAttributes) {
+const Loadable = (Component) => (
+    function (props: {[key: string]: unknown}) {
 
         return (
-            <Suspense
-                fallback={<Loader />}
-            >
+            <Suspense fallback={<AnimatedLogo width={250} height={250} />}>
                 <Component {...props} />
             </Suspense>
         )
     }
 )
+
+export default Loadable;
