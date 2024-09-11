@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import AnimatedLogo from './AnimatedLogo';
+import AnimatedLogo from '../../assets/common/AnimatedLogo';
 
 const Loadable = (Component) => (
     function (props: {[key: string]: unknown}) {
