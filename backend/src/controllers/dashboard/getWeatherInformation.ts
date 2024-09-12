@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { formatWeatherURL } from '../../utils/formatWeatherURL';
+import { formatWeatherURL } from '../../utils/formatWeatherURL.js';
 import axios from 'axios';
 
 export const getWeatherData = async (req: Request, res: Response) => {
