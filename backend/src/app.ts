@@ -2,6 +2,8 @@ import express, { Application } from "express";
 import connectDB from "./config/db.js";
 import cors from "cors";
 import "dotenv/config";
+import plantRoutes from "./routes/plantRoutes.js";
+
 
 import { getWeatherData } from "./controllers/dashboard/getWeatherInformation.js";
 
@@ -14,6 +16,8 @@ app.use(
     origin: process.env.CORS_ORIGIN || "http://localhost:5173",
   })
 );
+
+app.use("/api", plantRoutes);
 
 // routes
 app.get("/", (req, res) => {
