@@ -21,23 +21,23 @@ const NotFound: React.FC<NotFoundProp> = ({
   buttonText,
 }) => {
   return (
-    <div className="flex items-center justify-center p-5 mx-auto rounded-lg font-poppins z-20">
+    <div className="z-20 mx-auto flex items-center justify-center rounded-lg p-5 font-poppins">
       <div className="max-w-md text-center">
         {/* Not found image */}
-        <div className="w-[80%] mx-auto overflow-hidden rounded-lg mb-3">
-          <img src={NotFoundImage} />
+        <div className="mx-auto mb-3 w-[80%] rounded-lg object-cover">
+          <img src={NotFoundImage} className="w-full" />
         </div>
 
         {/* Paragraph */}
         <p className="text-2xl font-semibold">
           {title || "Sorry, we couldn't find this page."}
         </p>
-        <p className="mb-8 sm:text-base text-xs w-[80%] mx-auto">
+        <p className="mx-auto mb-8 w-[80%] text-xs sm:text-base">
           {subtext || 'Please confirm the url you entered.'}
         </p>
         <Link
           to={route || '/'}
-          className="px-6 py-3 rounded-lg font-semibold text-xs sm:text-base text-white bg-primary-orange hover:bg-primary-green transition-colors duration-300 ease-in-out inline-block"
+          className="inline-block rounded-lg bg-primary-orange px-6 py-3 text-xs font-semibold text-white transition-colors duration-300 ease-in-out hover:bg-primary-green sm:text-base"
         >
           {buttonText || 'Back to Homepage'}
         </Link>

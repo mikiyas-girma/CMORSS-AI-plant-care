@@ -9,6 +9,7 @@ export const AUTH_PATH = {
   root: ROOTS_AUTH,
   login: path(ROOTS_AUTH, '/login'),
   register: path(ROOTS_AUTH, '/register'),
+  forgotPassword: path(ROOTS_AUTH, '/forgot-password'),
 };
 
 export const DASHBOARD_PATH = {
@@ -16,6 +17,7 @@ export const DASHBOARD_PATH = {
   home: path(ROOTS_DASHBOARD, '/home'),
   chat: path(ROOTS_DASHBOARD, '/chat'),
   journal: path(ROOTS_DASHBOARD, '/journal'),
+  community: path(ROOTS_DASHBOARD, '/community'),
   settings: path(ROOTS_DASHBOARD, '/settings'),
   plantIdentification: {
     root: path(ROOTS_DASHBOARD, '/plant-identification'),

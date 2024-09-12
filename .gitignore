@@ -1,0 +1,36 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Express.js
+.env
+
+# React.js
+build/
+dist/
+
+# IDE/Editor specific
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+logs/
+*.log
+
+# Dependency directories
+jspm_packages/
+bower_components/
+
+# Build artifacts
+*.min.js
+*.min.css
+
+# Testing
+coverage/
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
