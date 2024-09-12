@@ -27,6 +27,9 @@ const SignUp = Loadable(lazy(() => import('@/gui/pages/auth/Register')));
 const DashboardHome = Loadable(
   lazy(() => import('@/gui/pages/dashboard/Home'))
 );
+const DashboardMyPlants = Loadable(
+  lazy(() => import('@/gui/pages/dashboard/MyPlants'))
+);
 const DashboardChat = Loadable(
   lazy(() => import('@/gui/pages/dashboard/Chat'))
 );
@@ -75,6 +78,7 @@ export default function Router() {
       children: [
         { index: true, element: <Navigate to="/dashboard/home" replace /> },
         { path: 'home', element: <DashboardHome /> },
+        { path: 'myplants', element: <DashboardMyPlants /> },
         { path: 'chat', element: <DashboardChat /> },
         {
           path: 'plant-identification',
