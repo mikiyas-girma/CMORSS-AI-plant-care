@@ -72,3 +72,33 @@
   margin: 0 auto;
   scroll-behavior: smooth;
 }
+
+/* Styling for both vertical and horizontal scrollbars */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #b8b5b5 #f1f1f1;
+  scroll-behavior: smooth;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #b8b5b5;
+  border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.scrollbar-thin {
+  overflow-y: auto;
+}

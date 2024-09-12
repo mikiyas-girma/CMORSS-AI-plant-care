@@ -1,7 +1,7 @@
 import LogoHeader from '@/gui/components/common/LogoHeader';
 import ProfileShortcut from '@/gui/components/common/ProfileShortcut';
 import { useLocation } from 'react-router-dom';
-import { navigationLinks } from './constants/index';
+import { navigationLinks } from '../../pages/dashboard/constants/index';
 import NavLink from '@/gui/components/common/NavLinks';
 
 /**
@@ -13,7 +13,7 @@ const NavigationDesktop = () => {
   const pathname = useLocation().pathname;
 
   return (
-    <aside className="hidden h-full w-[300px] min-w-[300px] flex-col justify-between bg-white p-6 sm:flex">
+    <aside className="hidden h-full w-[300px] min-w-[300px] flex-col justify-between overflow-y-auto bg-white p-6 sm:flex">
       <section>
         {/* Logo Header */}
         <LogoHeader />
@@ -23,7 +23,7 @@ const NavigationDesktop = () => {
           <ul className="flex flex-col gap-2">
             {navigationLinks.map((link, index) => (
               <NavLink
-                index={index}
+                key={index}
                 route={link.route}
                 pathname={pathname}
                 label={link.label}

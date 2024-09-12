@@ -7,7 +7,7 @@ type ProfileProp = {
 
 const ProfileShortcut: React.FC<ProfileProp> = ({ username, profilePhoto }) => {
   return (
-    <section className="flex items-center justify-between rounded-lg bg-gray-neutral p-2 cursor-default">
+    <section className="flex cursor-default items-center justify-between rounded-lg bg-gray-neutral p-2">
       <div className="flex items-center gap-2">
         <img
           src={profilePhoto || '/image-04.jpg'}
@@ -17,7 +17,7 @@ const ProfileShortcut: React.FC<ProfileProp> = ({ username, profilePhoto }) => {
       </div>
 
       <button
-        className="cursor-pointer hover:opacity-65 transition-opacity duration-300 ease-in z-10"
+        className="z-10 cursor-pointer transition-opacity duration-300 ease-in hover:opacity-65"
         onClick={() => alert('Log out button clicked')}
       >
         <LogOut color="red" size={18} />

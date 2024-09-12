@@ -1,6 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import NavigationDesktop from '../pages/dashboard/NavigationDesktop';
-import ContainerLayout from './ContainerLayout';
+import NavigationDesktop from '../components/dashboard-home/NavigationDesktop';
 
 // Dashboard Layout Component
 const DashboardLayout = () => {
@@ -10,12 +9,14 @@ const DashboardLayout = () => {
   if (!user) return <Navigate to={'/auth/login'} />;
 
   return (
-    <main className="w-full max-w-[1300px] h-[calc(100dvh-80px)] bg-gray-neutral rounded-lg overflow-hidden flex gap-3">
+    <main className="flex h-screen w-full max-w-[1300px] gap-3 overflow-hidden bg-gray-neutral font-poppins sm:h-[calc(100dvh-80px)] sm:rounded-lg">
       {/* Navigation for Desktop - Might create a separate one for Mobile  < sm:breakpoint */}
       <NavigationDesktop />
 
       {/* Render Children layout nested within the dashboard */}
-      <Outlet />
+      <section className="w-full overflow-y-auto">
+        <Outlet />
+      </section>
     </main>
   );
 };

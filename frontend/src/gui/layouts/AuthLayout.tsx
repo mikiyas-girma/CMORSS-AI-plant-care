@@ -1,3 +1,4 @@
+
 import { useMemo } from 'react';
 import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { Button, buttonVariants } from '@/gui/components/ui/button';
@@ -31,6 +32,7 @@ const AuthLayout = () => {
   }, [pathname]);
 
   if (user) return <Navigate to={'/dashboard'} />;
+
 
   return (
     <Card className="max-w-[400px]">

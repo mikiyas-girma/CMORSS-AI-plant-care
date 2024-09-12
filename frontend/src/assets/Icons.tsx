@@ -13,7 +13,6 @@ import {
   CircleX,
   ImageUp,
   LoaderCircle,
-
 } from 'lucide-react';
 
 // Export the conponents out
