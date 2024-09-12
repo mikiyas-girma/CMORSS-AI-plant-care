@@ -22,6 +22,7 @@ export default {
         'danger-red': '#fe0101',
         'green-neutral': '#E4F3E8',
         'gray-neutral': '#F0F0F0',
+        'Secondary-blue': '#2082a1',
         white: '#FFFFFF',
 
         // ShadCN
