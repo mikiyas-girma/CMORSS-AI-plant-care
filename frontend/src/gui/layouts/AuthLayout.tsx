@@ -1,5 +1,4 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import ContainerLayout from './ContainerLayout';
 
 const AuthLayout = () => {
   const user = true;
@@ -8,11 +7,8 @@ const AuthLayout = () => {
   if (user) return <Navigate to={'/dashboard'} />;
   if (pathname === '/auth') return <Navigate to={'/auth/login'} />;
 
-  return (
-    <ContainerLayout>
-      <Outlet />
-    </ContainerLayout>
-  );
+  // Return Children routes as Outlet
+  return <Outlet />;
 };
 
 export default AuthLayout;

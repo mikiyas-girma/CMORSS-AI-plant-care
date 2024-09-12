@@ -66,7 +66,75 @@ export default {
           5: 'hsl(var(--chart-5))',
         },
       },
+      // Custom Animation
+      animation: {
+        fadein: 'fadein .5s ease-in-out forwards',
+        fadepage: 'fadepage .5s ease-in-out forwards',
+        loading: 'loading .5s ease-in-out forwards',
+        scaling: 'scaling 3s ease-in-out infinite',
+        animateBtn: 'animateBtn 3s ease-in-out infinite',
+        bounce: 'bounce 0.5s linear',
+        rotateLogo: 'rotate 1s normal linear infinite 4s',
+      },
       keyframes: {
+        fadepage: {
+          '0%': {
+            opacity: 0,
+            transform: 'translateY(300px)',
+          },
+          '100%': {
+            opacity: 1,
+            transform: 'translateX(0px)',
+          },
+        },
+
+        fadein: {
+          '0%': {
+            opacity: 0.5,
+          },
+          '100%': {
+            opacity: 1,
+          },
+        },
+
+        loading: {
+          '0%': {
+            width: '0%',
+          },
+          '100%': {
+            width: '100%',
+          },
+        },
+        scaling: {
+          '0%, 100%': {
+            transform: 'scale(1)',
+          },
+          '50%': {
+            transform: 'scale(1.2)',
+          },
+        },
+        animateBtn: {
+          '0%, 100%': {
+            transform: 'scale(1)',
+          },
+          '50%': {
+            transform: 'scaleX(1.05)',
+          },
+        },
+        bounce: {
+          '0%': {
+            transform: 'translate(0, 0) scale(1)',
+          },
+          '50%': {
+            transform: 'translate(0, 0) scale(0.5)',
+          },
+          '70%': {
+            transform: 'translate(0, 0) scale(0.85)',
+          },
+          '100%': {
+            transform: 'translate(0, 0) scale(1)',
+          },
+        },
         rotateLogo: {
           '0%': {
             transform: 'perspective(3000px) rotateY(0)',
@@ -85,10 +153,8 @@ export default {
           },
         },
       },
-      animation: {
-        rotateLogo: 'rotate 1s normal linear infinite 4s',
-      },
     },
   },
+  safelist: ['scrollbar-thin'],
   plugins: [require('tailwindcss-animate')],
 };

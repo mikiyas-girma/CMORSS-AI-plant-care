@@ -1,26 +1,27 @@
 import { AnimatedLogo } from '@/assets';
 import { Link } from 'react-router-dom';
+import Separator from './Separator';
 
 const LogoHeader = () => {
   return (
     <Link to={'/'}>
-      <section className="text-left flex gap-3 items-center cursor-pointer">
+      <section className="flex cursor-pointer items-center gap-3 text-left">
         {/* Logo */}
-        <div className="w-[50px] h-[50px] object-contain">
+        <div className="h-[50px] w-[50px] object-contain">
           <AnimatedLogo width={50} height={50} />
         </div>
 
         {/* Text */}
         <div>
-          <h1 className="text-[22px] text-primary-green font-bold">
+          <h1 className="text-[22px] font-bold text-primary-green">
             AgriCare AI App
           </h1>
-          <p className="text-xs text-right text-slate-600 -mt-1">
+          <p className="-mt-1 text-right text-xs text-slate-600">
             ...digitizing plant care.
           </p>
         </div>
       </section>
-      <hr className="h-[1px] w-full bg-slate-300 my-4" />
+      <Separator />
     </Link>
   );
 };

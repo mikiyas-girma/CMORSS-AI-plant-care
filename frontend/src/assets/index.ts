@@ -7,6 +7,9 @@ import EmptyBox from './common/empty_box.png';
 import ImageUpload from './common/image_upload.png';
 
 // Weather Widget: Use in an img tag
+import SunnyDay from './weather/sun_gold.png';
+import BrightMoon from './weather/moon.png';
+import Cloudy from './weather/cloudy.png';
 import MoonCloudMidRain from './weather/moon_cloud_mid_rain.png';
 import MoonCloudWind from './weather/moon_cloud_wind.png';
 import SunCloudMidRain from './weather/sun_cloud_mid_rain.png';
@@ -25,6 +28,9 @@ export {
   AppLogo,
   EmptyBox,
   ImageUpload,
+  SunnyDay,
+  BrightMoon,
+  Cloudy,
   MoonCloudMidRain,
   MoonCloudWind,
   SunCloudMidRain,
