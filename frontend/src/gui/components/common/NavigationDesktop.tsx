@@ -13,7 +13,7 @@ const NavigationDesktop = () => {
   const pathname = useLocation().pathname;
 
   return (
-    <aside className="hidden h-full w-[300px] min-w-[300px] flex-col justify-between overflow-y-auto bg-white p-6 sm:flex">
+    <aside className="hidden h-full w-[300px] min-w-[250px] md:min-w-[300px] flex-col justify-between overflow-y-auto bg-white p-6 sm:flex">
       <section>
         {/* Logo Header */}
         <LogoHeader />

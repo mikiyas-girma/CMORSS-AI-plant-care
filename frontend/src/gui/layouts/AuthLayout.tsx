@@ -1,7 +1,6 @@
-
 import { useMemo } from 'react';
 import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
-import { Button, buttonVariants } from '@/gui/components/ui/button';
+import { buttonVariants } from '@/gui/components/ui/button';
 import {
   Card,
   CardContent,
@@ -18,21 +17,19 @@ const AuthLayout = () => {
   const { pathname } = useLocation();
 
   const title = useMemo(() => {
-    if (pathname.includes(AUTH_PATH.login))
-      return 'Login to your account';
+    if (pathname.includes(AUTH_PATH.login)) return 'Login to your account';
     else if (pathname.includes(AUTH_PATH.register))
-      return 'Welcome to AgriCare!'
+      return 'Welcome to AgriCare!';
   }, [pathname]);
 
   const description = useMemo(() => {
     if (pathname.includes(AUTH_PATH.login))
       return 'Welcome back. Please login to continue.';
     else if (pathname.includes(AUTH_PATH.register))
-      return 'We are excited to have you in our community. Please fill out the information below to get started.'
+      return 'We are excited to have you in our community. Please fill out the information below to get started.';
   }, [pathname]);
 
   if (user) return <Navigate to={'/dashboard'} />;
-
 
   return (
     <Card className="max-w-[400px]">
@@ -54,10 +51,11 @@ const AuthLayout = () => {
               to={AUTH_PATH.register}
               className={buttonVariants({
                 variant: 'link',
-                className: 'text-primary-green !p-0'
-                })
-              }
-            >Register here</Link>
+                className: 'text-primary-green !p-0',
+              })}
+            >
+              Register here
+            </Link>
           </>
         ) : pathname.includes(AUTH_PATH.register) ? (
           <>
@@ -66,7 +64,7 @@ const AuthLayout = () => {
               to={AUTH_PATH.login}
               className={buttonVariants({
                 variant: 'link',
-                className: 'text-primary-green !p-0'
+                className: 'text-primary-green !p-0',
               })}
             >
               Login here

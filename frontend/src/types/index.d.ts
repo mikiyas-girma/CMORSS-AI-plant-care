@@ -45,3 +45,10 @@ export type WeatherData = {
   name: string;
   cod: number;
 };
+
+export type PlantFact = {
+  name: string;
+  timestamp: string;
+  image: string;
+  description: string;
+};
