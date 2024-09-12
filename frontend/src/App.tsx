@@ -4,15 +4,18 @@ import Router from '@/routes';
 import { MediaQueryProvider } from '@/contexts/MediaQueryContext';
 import ContainerLayout from '@/gui/layouts/ContainerLayout';
 import AuthGuard from '@/gui/components/AuthGuard';
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
 	return (
 		<MediaQueryProvider>
 			<BrowserRouter>
 				<ContainerLayout>
-					<AuthGuard>
-						<Router />
-					</AuthGuard>
+					<AuthProvider>
+						<AuthGuard>
+							<Router />
+						</AuthGuard>
+					</AuthProvider>
 				</ContainerLayout>
 			</BrowserRouter>
 		</MediaQueryProvider>
