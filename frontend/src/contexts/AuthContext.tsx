@@ -1,38 +1,39 @@
-import { createContext, ReactNode, useMemo, useState } from "react";
+import { createContext, ReactNode, useMemo, useState } from 'react';
 
 /* TODO: create authentification methods */
 const defaultAuthContext = {
-	user: {
-		username: ''
-	},
-	signup: null,
-	login: null,
-	loginWithGoogle: null,
-	logout: null,
-	resetPassword: null,
-	listenAuthStateChanged: null,
-	updateUserProfile: null,
-	updateUserPassword: null,
-	deleteUser: null,
-}
+  user: {
+    username: '',
+  },
+  signup: null,
+  login: null,
+  loginWithGoogle: null,
+  logout: null,
+  resetPassword: null,
+  listenAuthStateChanged: null,
+  updateUserProfile: null,
+  updateUserPassword: null,
+  deleteUser: null,
+};
 
-export const AuthContext = createContext<typeof defaultAuthContext>(defaultAuthContext);
+export const AuthContext =
+  createContext<typeof defaultAuthContext>(defaultAuthContext);
 
-export const AuthProvider = ({children}: {children: ReactNode}) => {
-	const [user, setUser] = useState({
-		username: 'JohnDoe',
-	});
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user] = useState({
+    username: 'JohnDoe',
+  });
 
-	const authContextValue = useMemo(() => {
-		return {
-			...defaultAuthContext,
-			user: {...user},
-		}
-	}, [user]);
+  const authContextValue = useMemo(() => {
+    return {
+      ...defaultAuthContext,
+      user: { ...user },
+    };
+  }, [user]);
 
-	return (
-		<AuthContext.Provider value={authContextValue}>
-			{children}
-		</AuthContext.Provider>
-	);
-}
+  return (
+    <AuthContext.Provider value={authContextValue}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
