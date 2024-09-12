@@ -1,6 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+export interface UserState {
+  currentUser: null | object;
+  isAuthenticated: boolean;
+  error: null | object | string;
+  loading: boolean;
+};
+
+const initialState: UserState = {
   currentUser: null,
   isAuthenticated: false,
   error: null,
@@ -12,7 +19,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     signInStart: (state) => {
-     state.loading = true;
+      state.loading = true;
       state.error = null;
     },
     signInSuccess: (state, action) => {
