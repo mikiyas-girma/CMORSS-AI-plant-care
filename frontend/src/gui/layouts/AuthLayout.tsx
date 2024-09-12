@@ -33,7 +33,7 @@ const AuthLayout = () => {
   if (user) return <Navigate to={'/dashboard'} />;
 
   return (
-    <Card className="w-[400px]">
+    <Card className="max-w-[400px]">
       <CardHeader className="text-center">
         <CardTitle className="flex flex-col items-center text-primary-green text-3xl">
           <AppLogo width={50} height={50} />
@@ -61,7 +61,7 @@ const AuthLayout = () => {
           <>
             Already have an account?{' '}
             <Link
-              to={AUTH_PATH.register}
+              to={AUTH_PATH.login}
               className={buttonVariants({
                 variant: 'link',
                 className: 'text-primary-green !p-0'
