@@ -1,11 +1,15 @@
-import express, { Application } from 'express';
-import connectDB from './config/db.js';
-import cors from 'cors';
-import 'dotenv/config';
+import express, { Application } from "express";
+import connectDB from "./config/db.js";
+import userRoutes from "./routes/user.route.js";
+import authRoutes from "./routes/auth.route.js";
+import cors from "cors";
+import "dotenv/config";
 
-import { getWeatherData } from './controllers/dashboard/getWeatherInformation.js';
+import { getWeatherData } from "./controllers/dashboard/getWeatherInformation.js";
+import { globalErrorMiddleware } from "./utils/errorMiddleware.js";
 import getDailyPlantFact from './controllers/dashboard/getDailyPlantFact.js';
 import createNewJournal from './controllers/user/createNewJournal.js';
+
 
 const app: Application = express();
 
@@ -22,6 +26,9 @@ app.get('/', (req, res) => {
   res.send('Root endpoint check ');
 });
 
+app.use('/api/user', userRoutes);
+app.use('/api/auth', authRoutes);
+
 // Implement dashboard route for needed data fetching
 app.get('/dashboard/weather-data', getWeatherData);
 app.get('/dashboard/daily-fact', getDailyPlantFact);
@@ -29,6 +36,7 @@ app.get('/dashboard/daily-fact', getDailyPlantFact);
 // User related actions
 app.post('/user/journal/create', createNewJournal);
 
+app.use(globalErrorMiddleware);
 // connect to database
 connectDB();
 
