@@ -9,6 +9,7 @@ export const AUTH_PATH = {
   root: ROOTS_AUTH,
   login: path(ROOTS_AUTH, '/login'),
   register: path(ROOTS_AUTH, '/register'),
+  forgotPassword: path(ROOTS_AUTH, '/forgot-password'),
 };
 
 export const DASHBOARD_PATH = {
