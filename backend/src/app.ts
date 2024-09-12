@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
+import plantRoutes from "./routes/plant.route.js";
 import cors from "cors";
 import "dotenv/config";
 
@@ -23,8 +24,9 @@ app.get("/", (req, res) => {
   res.send("Root endpoint check ");
 });
 
-app.use('/api/user', userRoutes);
-app.use('/api/auth', authRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/plants", plantRoutes);
 
 // Implement dashboard route for needed data fetching
 app.get("/dashboard/weather-data", getWeatherData);
