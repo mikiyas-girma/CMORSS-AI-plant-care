@@ -49,7 +49,7 @@ const WeatherWidget = () => {
 
   //   Return JSX
   return (
-    <div className="relative flex flex-col items-center justify-center gap-1 overflow-hidden rounded-xl bg-primary-green bg-[url(/cloud_bg.png)] bg-cover object-cover p-3 py-4 text-white">
+    <div className="relative flex flex-col items-center justify-center gap-1 overflow-hidden rounded-xl bg-primary-green bg-[url(/cloud_bg.png)] bg-cover object-cover p-3 py-4 text-white w-full lg:w-auto">
       {loading && (
         <div className="flex h-[200px] w-[200px] flex-col items-center justify-center text-white">
           <LoaderCircle

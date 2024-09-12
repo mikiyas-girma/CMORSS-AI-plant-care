@@ -31,7 +31,7 @@ export default function DashboardHome() {
       {/* Shortcut to Other Sections */}
       <SectionHeader title="Quick Shortcuts" />
 
-      <section className="flex flex-wrap gap-4">
+      <section className="flex flex-wrap gap-4 md:justify-start justify-center">
         {quickShortcuts.map((item, index) => (
           <QuickLink
             key={index}

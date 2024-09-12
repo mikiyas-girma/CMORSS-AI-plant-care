@@ -1,6 +1,6 @@
 interface AnimatedLogoProps {
-    width: number;
-    height: number;
+    width?: number;
+    height?: number;
 }
 
 const AnimatedLogo = ({width, height}: AnimatedLogoProps) => {

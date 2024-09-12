@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import NavigationDesktop from '../components/dashboard-home/NavigationDesktop';
+import NavigationDesktop from '../components/common/NavigationDesktop';
 
 // Dashboard Layout Component
 const DashboardLayout = () => {
