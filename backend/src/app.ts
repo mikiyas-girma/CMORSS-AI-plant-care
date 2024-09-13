@@ -6,6 +6,7 @@ import plantRoutes from "./routes/plant.route.js";
 import cors from "cors";
 import "dotenv/config";
 
+
 import { getWeatherData } from "./controllers/dashboard/getWeatherInformation.js";
 import { globalErrorMiddleware } from "./utils/errorMiddleware.js";
 import getDailyPlantFact from './controllers/dashboard/getDailyPlantFact.js';
@@ -21,6 +22,8 @@ app.use(
     origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   })
 );
+
+app.use("/api", plantRoutes);
 
 // Routes
 app.get('/', (req, res) => {
