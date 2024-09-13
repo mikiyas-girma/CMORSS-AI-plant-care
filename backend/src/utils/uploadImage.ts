@@ -3,7 +3,7 @@ import "dotenv/config";
 
 /**
  * Uploads an image to Cloudinary and returns the upload result object and optimized image URL.
- * @param image - The image to be uploaded.
+ * @param image - The image to be uploaded. (base64 encoded)
  * @param name - The name to be assigned to the uploaded image.
  * @param folder - The folder in which the image should be stored. (make sure to include the trailing slash)
  * @returns An object containing the upload result and the optimized image URL.
