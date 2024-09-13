@@ -1,13 +1,22 @@
 // src/pages/SignIn.tsx
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { AuthContext } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
   const [passwordError, setPasswordError] = useState<string>('');
+  const [loginError, setLoginError] = useState<string>('');
 
-  const submitHandler = (e: React.FormEvent) => {
+  const authContext = useContext(AuthContext);
+  const login = authContext?.login;
+  const user = authContext?.user;
+  const navigate = useNavigate();
+
+  const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Reset errors
@@ -33,8 +42,22 @@ const SignIn: React.FC = () => {
     if (isValid) {
       console.log('Form submitted successfully:', { email, password });
       // Handle form submission here
+        try {
+            await login({ email, password });
+            console.log('login successful')
+        } catch (error) {
+            setLoginError('Failed to login. Please check your credentials.');
+            console.error('Login error:', error);
+        }
     }
   };
+
+  useEffect(() => {
+    if (user.isAuthenticated) {
+        console.log(user)
+      navigate('/dashboard'); // Navigate to dashboard when the user is authenticated
+    }
+  }, [user.isAuthenticated, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-green-200">
@@ -92,6 +115,10 @@ const SignIn: React.FC = () => {
             <p className="text-red-500 text-sm mt-1">{passwordError}</p>
           )}
         </div>
+                {/* Display login errors */}
+                {loginError && (
+          <p className="text-red-500 text-sm mb-4">{loginError}</p>
+        )}
 
         {/* Sign In Button */}
         <button

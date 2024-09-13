@@ -43,7 +43,7 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
 			login: async (credentials) => {
 				dispatch(signInStart());
 				try {
-					const response = await axiosForApiCall.post('/auth/login', credentials);
+					const response = await axiosForApiCall.post('/auth/signin', credentials);
 					dispatch(signInSuccess(response.data));
 				} catch (err) {
 					dispatch(signInFailure(err));
