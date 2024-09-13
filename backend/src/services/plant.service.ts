@@ -1,6 +1,6 @@
 import { IPlant } from "../interfaces/IPlant.js";
 import { Plant } from "../models/plant.model.js";
-import User from "../models/userModel.js";
+import User from "../models/user.model.js";
 
 function validateFields<T>(
   data: Partial<T>,
