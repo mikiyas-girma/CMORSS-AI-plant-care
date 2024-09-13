@@ -1,23 +1,21 @@
+import { ChangeEvent, FormEvent, useState } from "react";
+import { Link } from "react-router-dom";
 import { Button, buttonVariants } from "@/gui/components/ui/button";
 import { Checkbox } from "@/gui/components/ui/checkbox";
 import { Input } from "@/gui/components/ui/input";
 import { Label } from "@/gui/components/ui/label";
+import DangerWrapper from "@/gui/components/common/DangerWrapper";
 import { cn } from "@/lib/utils";
 import { AUTH_PATH } from "@/routes/paths";
-import { ChangeEvent, FormEvent, useState } from "react";
-import { Link } from "react-router-dom";
-
-interface SignInFormData {
-  email: string;
-  password: string;
-  remember: boolean;
-}
+import { SignInFormData } from "@/types/form";
+import { signinValidation } from "@/lib/formsValidation";
 
 /**
  * Sign in Route Component
  * @returns JSX Component for the page.
  */
 const SignIn = () => {
+  const [errors, setErrors] = useState<{[key in keyof SignInFormData]: string} | null>(null);
   const [formData, setFormData] = useState<SignInFormData>({
     email: '',
     password: '',
@@ -33,17 +31,25 @@ const SignIn = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const validationErrors = signinValidation(formData);
+
+    if (Object.values(validationErrors).find(e => e !== '')) {
+      setErrors({...validationErrors});
+      return;
+    }
   }
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <div className="grid w-full max-w-sm items-center gap-1.5">
-        <Label htmlFor="email">Email <span className="text-danger-red">*</span></Label>
+        <Label htmlFor="email">Email <DangerWrapper>*</DangerWrapper></Label>
         <Input autoComplete="email" type="email" id="email" placeholder="email" onChange={handleChange}/>
+        {errors?.email && <DangerWrapper>{errors.email}</DangerWrapper>}
       </div>
       <div className="grid w-full max-w-sm items-center gap-1.5">
-        <Label htmlFor="email">Password <span className="text-danger-red">*</span></Label>
+        <Label htmlFor="email">Password <DangerWrapper>*</DangerWrapper></Label>
         <Input autoComplete="current-password" type="password" id="password" placeholder="password" onChange={handleChange}/>
+        {errors?.password && <DangerWrapper>{errors.password}</DangerWrapper>}
       </div>
       <div className="flex justify-between">
         <div className="flex items-center space-x-2">
