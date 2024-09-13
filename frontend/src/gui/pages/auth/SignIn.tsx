@@ -12,7 +12,7 @@ const SignIn: React.FC = () => {
   const [loginError, setLoginError] = useState<string>('');
 
   const authContext = useContext(AuthContext);
-  const login = authContext?.login;
+  const signIn: any = authContext?.signIn;
   const user = authContext?.user;
   const navigate = useNavigate();
 
@@ -43,8 +43,8 @@ const SignIn: React.FC = () => {
       console.log('Form submitted successfully:', { email, password });
       // Handle form submission here
         try {
-            await login({ email, password });
-            console.log('login successful')
+            await signIn({ email, password }) as any;
+            console.log('signin successful')
         } catch (error) {
             setLoginError('Failed to login. Please check your credentials.');
             console.error('Login error:', error);
@@ -53,11 +53,11 @@ const SignIn: React.FC = () => {
   };
 
   useEffect(() => {
-    if (user.isAuthenticated) {
+    if (user?.isAuthenticated) {
         console.log(user)
       navigate('/dashboard'); // Navigate to dashboard when the user is authenticated
     }
-  }, [user.isAuthenticated, navigate]);
+  }, [user?.isAuthenticated, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-green-200">
