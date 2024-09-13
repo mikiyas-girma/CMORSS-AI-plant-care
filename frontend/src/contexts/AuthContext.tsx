@@ -1,23 +1,34 @@
 import { createContext, ReactNode, useEffect, useMemo } from "react";
-import { AppDispatch, RootState } from "@/redux/store";
-import { signInFailure, signInStart, signInSuccess, UserState } from "@/redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 import { axiosForApiCall } from "@/lib/axios";
+import { userActions, UserState } from "@/redux/user/userSlice";
 
-/* TODO: create authentification methods */
+const {
+	signInFailure,
+	signInStart,
+	signInSuccess,
+	signOutFailure,
+	signOutSuccess,
+	signUpFailure,
+	signUpStart,
+	signUpSuccess,
+	updateFailure,
+	updateStart,
+	updateSuccess
+} = userActions;
+
 interface AuthContextValue {
 	user: {
 		isAuthenticated: boolean,
 		data: object | null
 	},
-	signup: (userData) => Promise<void>,
-	login: (credentials) => Promise<void>,
-	loginWithGoogle: () => Promise<void>,
-	logout: () => Promise<void>,
-	resetPassword: () => Promise<void>,
-	listenAuthStateChanged: () => Promise<void>,
-	updateUserProfile: () => Promise<void>,
-	updateUserPassword: () => Promise<void>,
+	signUp: (userData) => Promise<void>,
+	signIn: (credentials) => Promise<void>,
+	signInWithGoogle: () => Promise<void>,
+	signOut: () => Promise<void>,
+	updateUserProfile: (newData) => Promise<void>,
+	updateUserPassword: (newPassword) => Promise<void>,
 	deleteUser: () => Promise<void>,
 }
 
@@ -33,35 +44,67 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
 				isAuthenticated: isAuthenticated,
 				data: currentUser
 			},
-			signup: async (userData) => {
+			signUp: async (userData) => {
+				dispatch(signUpStart());
 				try {
 					await axiosForApiCall.post('/auth/signup', userData);
+					dispatch(signUpSuccess());
 				} catch (err) {
 					console.error(err);
+					dispatch(signUpFailure(err));
 				}
 			},
-			login: async (credentials) => {
+			signIn: async (credentials) => {
 				dispatch(signInStart());
 				try {
-					const response = await axiosForApiCall.post('/auth/login', credentials);
+					const response = await axiosForApiCall.post('/auth/signin', credentials);
 					dispatch(signInSuccess(response.data));
 				} catch (err) {
+					console.log(err)
 					dispatch(signInFailure(err));
 				}
 			},
-			logout: async () => {
+			signOut: async () => {
+				dispatch(signInStart());
+				try {
+					await axiosForApiCall.post('/auth/signout');
+					dispatch(signOutSuccess());
+				} catch (err) {
+					console.log(err)
+					dispatch(signOutFailure(err));
+				}
 			},
-			loginWithGoogle: async () => {
+			signInWithGoogle: async () => {
 			},
-			resetPassword: async () => {
+			updateUserProfile: async (newData) => {
+				dispatch(updateStart());
+				try {
+					const response = await axiosForApiCall.put('/user/update', newData);
+					dispatch(updateSuccess(response.data));
+				} catch (err) {
+					console.log(err);
+					dispatch(updateFailure(err));
+				}
 			},
-			listenAuthStateChanged: async () => {
-			},
-			updateUserProfile: async () => {
-			},
-			updateUserPassword: async () => {
+			updateUserPassword: async (newPassword) => {
+				dispatch(updateStart());
+				try {
+					await axiosForApiCall.put('/user/update-password', {newPassword});
+					dispatch(updateSuccess(currentUser));
+				} catch (err) {
+					console.log(err);
+					dispatch(updateFailure(err));
+				}
 			},
 			deleteUser: async () => {
+				try {
+					dispatch(updateStart());
+					await axiosForApiCall.post('/user/delete');
+					dispatch(updateSuccess({}));
+				} catch (err) {
+					console.log(err)
+					dispatch(updateFailure(err));
+				}
 			},
 		};
 	}, [currentUser, dispatch, isAuthenticated]);
