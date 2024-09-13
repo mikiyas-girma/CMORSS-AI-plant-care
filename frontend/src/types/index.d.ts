@@ -52,3 +52,11 @@ export type PlantFact = {
   image: string;
   description: string;
 };
+
+
+export type PlantData = {
+    _id: number,
+    name: string,
+    species: string,
+    location: string,
+};

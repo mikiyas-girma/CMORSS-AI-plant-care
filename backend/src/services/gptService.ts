@@ -29,10 +29,10 @@ export const getCareSuggestion = async (species: string, weatherData: any) => {
 };
 
 const parseCareSuggestion = (text: string) => {
-  // Parse the AI's response into a structured format
+
   return {
-    waterFrequency: '2-3 days', // Example
-    sunlightHours: '6 hours',   // Example
-    additionalTips: 'Ensure good drainage.', // Example
+    waterFrequency: '2-3 days',
+    sunlightHours: '6 hours',
+    additionalTips: 'Ensure good drainage.',
   };
 };
