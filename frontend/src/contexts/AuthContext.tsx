@@ -84,9 +84,10 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
 		checkAuthState();
 	}, [dispatch]);
 
-	return (
-		<AuthContext.Provider value={authContextValue}>
-			{children}
-		</AuthContext.Provider>
-	);
-}
+
+  return (
+    <AuthContext.Provider value={authContextValue}>
+      {children}
+    </AuthContext.Provider>
+  );
+};

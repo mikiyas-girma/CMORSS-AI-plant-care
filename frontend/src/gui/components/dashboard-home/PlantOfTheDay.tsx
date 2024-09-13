@@ -11,7 +11,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
 import { Link } from 'react-router-dom';
-import { LoaderCircle } from '@/assets/Icons';
+import LoadingComp from '../common/LoadingComp';
 
 const PlantOfTheDay = () => {
   const [loading, setLoading] = useState(true);
@@ -38,11 +38,12 @@ const PlantOfTheDay = () => {
     <section className="min-h-[200px] min-w-[300px] flex-grow rounded-xl bg-primary-orange w-[50%] p-7">
       {loading && (
         <div className="flex h-[200px] w-[200px] flex-col items-center justify-center text-white">
-          <LoaderCircle
-            size={36}
-            className="animate-spin duration-300 ease-linear"
+          <LoadingComp
+            message="Loading Weather"
+            iconType="ring"
+            iconColor="white"
+            className="h-[100%] w-full mx-auto"
           />
-          <p className="text-xs">Loading Plant fact...</p>
         </div>
       )}
       {/* Unable to retrieve */}

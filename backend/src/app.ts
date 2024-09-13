@@ -7,27 +7,34 @@ import "dotenv/config";
 
 import { getWeatherData } from "./controllers/dashboard/getWeatherInformation.js";
 import { globalErrorMiddleware } from "./utils/errorMiddleware.js";
+import getDailyPlantFact from './controllers/dashboard/getDailyPlantFact.js';
+import createNewJournal from './controllers/user/createNewJournal.js';
+
 
 const app: Application = express();
-const PORT = process.env.PORT || 3000;
 
+// Add Middle Ware
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   })
 );
 
-// routes
-app.get("/", (req, res) => {
-  res.send("Root endpoint check ");
+// Define Routes + Router
+app.get('/', (req, res) => {
+  res.send('Root endpoint check ');
 });
 
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 
 // Implement dashboard route for needed data fetching
-app.get("/dashboard/weather-data", getWeatherData);
+app.get('/dashboard/weather-data', getWeatherData);
+app.get('/dashboard/daily-fact', getDailyPlantFact);
+
+// User related actions
+app.post('/user/journal/create', createNewJournal);
 
 app.use(globalErrorMiddleware);
 // connect to database

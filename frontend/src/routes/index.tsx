@@ -10,6 +10,7 @@ import DashboardLayout from '@/gui/layouts/DashboardLayout';
 // components
 import Loadable from '@/gui/components/Loadable';
 import NotFound from '@/gui/pages/NotFound';
+import Journal from '@/gui/pages/dashboard/Journal';
 
 // Import Components
 
@@ -76,6 +77,7 @@ export default function Router() {
         { index: true, element: <Navigate to="/dashboard/home" replace /> },
         { path: 'home', element: <DashboardHome /> },
         { path: 'chat', element: <DashboardChat /> },
+        { path: 'journal', element: <Journal /> },
         {
           path: 'plant-identification',
           element: <DashboardPlantIdentificationChat />,
