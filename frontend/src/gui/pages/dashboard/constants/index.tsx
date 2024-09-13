@@ -5,6 +5,7 @@ import {
   Leaf,
   NotebookPen,
   UserCog,
+  List,
 } from '@/assets/Icons';
 
 import { Chat3D, Community3D, Journal3D, Plant3D } from '@/assets';
@@ -14,6 +15,11 @@ export const navigationLinks = [
     label: 'Dashboard',
     route: DASHBOARD_PATH.home,
     icon: LayoutDashboard,
+  },
+  {
+    label: 'My Plants',
+    route: DASHBOARD_PATH.myplants,
+    icon: List,
   },
 
   {
