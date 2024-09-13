@@ -13,6 +13,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google/generative-ai": "^0.19.0",
     "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.4.0",
@@ -21,7 +22,8 @@
     "dotenv": "^16.4.5",
     "express": "^5.0.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.6.1"
+    "mongoose": "^8.6.1",
+    "openai": "^4.59.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
