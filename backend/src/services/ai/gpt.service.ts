@@ -1,6 +1,7 @@
 import OpenAI from "openai";
-import { plantJsonFormat } from "../constants/index.js";
-import { parseJson } from "../utils/parseJson.js";
+import { plantJsonFormat } from "../../constants/index.js";
+import { parseJson } from "../../utils/parseJson.js";
+import { PlantDetails } from "../../types/models/plant.types.js";
 
 const openai = new OpenAI();
 
@@ -53,5 +54,5 @@ export const gptImageData = async (images: string[], description = "") => {
   });
 
   const response = completion.choices[0].message.content;
-  return parseJson(response);
+  return parseJson(response) as PlantDetails & { is_plant: boolean };
 };

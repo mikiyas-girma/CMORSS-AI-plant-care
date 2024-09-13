@@ -1,45 +1,63 @@
 import { Request, Response } from "express";
-import { gptImageData } from "../services/openai.js";
-import { geminiImageData } from "../services/gemini.js";
-import { plantIdImageData } from "../services/plantId.js";
+import {
+  createPlantService,
+  getAllPlantsService,
+  getPlantService,
+  getUserPlantsService,
+  updatePlantService,
+  deletePlantService
+} from "../services/plant.service.js";
 
-let model: "plantId" | "gpt" | "gemini";
-
-export const identifyPlant = async (req: Request, res: Response) => {
+export const createPlant = async (req: Request, res: Response) => {
   try {
-    const images = req.body.images;
-    if (!images || images.length === 0)
-      return res.status(400).json({ message: "No image provided" });
+    const plant = await createPlantService(req.body);
+    res.status(201).json(plant);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-    if (
-      !Array.isArray(images) ||
-      !images.every((image) => typeof image === "string")
-    ) {
-      return res.status(400).json({ message: "Invalid image format" });
-    }
-    if (images.length > 3)
-      return res.status(400).json({ message: "Too many images provided" });
+export const getPlant = async (req: Request, res: Response) => {
+  try {
+    const plant = await getPlantService(req.params.id);
+    res.status(200).json(plant);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message });
+  }
+};
 
-    model = req.body.model;
-    if (!model) model = "plantId";
-    if (model !== "plantId" && model !== "gpt" && model !== "gemini")
-      return res.status(400).json({ message: "Invalid model" });
+export const getAllPlants = async (req: Request, res: Response) => {
+  try {
+    const plants = await getAllPlantsService();
+    res.status(200).json(plants);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message });
+  }
+};
 
-    const getImageData =
-      model === "gpt"
-        ? gptImageData
-        : model === "gemini"
-        ? geminiImageData
-        : model === "plantId"
-        ? plantIdImageData
-        : () => null;
+export const getUserPlants = async (req: Request, res: Response) => {
+  try {
+    const plants = await getUserPlantsService(req.params.userId);
+    res.status(200).json(plants);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message });
+  }
+};
 
-    const data = await getImageData(images);
-    if (!data)
-      return res.status(500).json({ message: "Error retrieving image data" });
-    return res.status(200).json(data);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+export const updatePlant = async (req: Request, res: Response) => {
+  try {
+    const plant = await updatePlantService(req.params.id, req.body);
+    res.status(200).json(plant);
+  } catch (error: any) {
+    res.status(404).json({ error: error.message });
+  }
+};
+
+export const deletePlant = async (req: Request, res: Response) => {
+  try {
+    await deletePlantService(req.params.id);
+    res.status(200).json({ message: `Plant ${req.params.id} deleted` });
+  } catch (error: any) {
+    res.status(404).json({ error: error.message });
   }
 };

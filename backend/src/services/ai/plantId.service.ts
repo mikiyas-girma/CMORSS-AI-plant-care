@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { PlantDetails } from "../types/models/plant.types";
-import { sanitizeObject } from "../utils/sanitizeObject.js";
+import { PlantDetails } from "../../types/models/plant.types";
+import { sanitizeObject } from "../../utils/sanitizeObject.js";
 const details = `?details=common_names,description,images,edible_parts,best_light_condition,best_soil_type,common_uses,cultural_significance,toxicity,best_watering,url`;
 
 export const plantIdImageData = async (images: string[]) => {
@@ -27,7 +27,7 @@ export const plantIdImageData = async (images: string[]) => {
     const name = response.name;
 
     const sanitizedData = sanitizeObject({ name, images: newImages, ...data });
-    return sanitizedData as PlantDetails;
+    return sanitizedData as PlantDetails & { is_plant: boolean };
   } catch (error) {
     console.error(error);
   }

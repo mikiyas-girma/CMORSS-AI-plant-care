@@ -1,5 +1,5 @@
-export function parseJson(inputStr: string | null): object | string {
-  if (!inputStr) return "No JSON string";
+export function parseJson(inputStr: string | null): object {
+  if (!inputStr) return { message: "No JSON string" };
   // Remove the ```json\n and trailing ```\n
   const cleanedStr = inputStr.replace(/```json\n/g, "").replace(/\n```$/, "");
 
@@ -8,6 +8,6 @@ export function parseJson(inputStr: string | null): object | string {
     const jsonObject = JSON.parse(cleanedStr);
     return jsonObject;
   } catch (e) {
-    return `Error decoding JSON: ${(e as Error).message}`;
+    return { message: `Error decoding JSON: ${(e as Error).message}` };
   }
 }

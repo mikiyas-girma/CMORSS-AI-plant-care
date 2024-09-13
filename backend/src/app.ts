@@ -12,6 +12,7 @@ import { globalErrorMiddleware } from "./utils/errorMiddleware.js";
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware
 app.use(express.json());
 app.use(
   cors({
@@ -19,7 +20,7 @@ app.use(
   })
 );
 
-// routes
+// Routes
 app.get("/", (req, res) => {
   res.send("Root endpoint check ");
 });
@@ -32,7 +33,8 @@ app.use("/api/plants", plantRoutes);
 app.get("/dashboard/weather-data", getWeatherData);
 
 app.use(globalErrorMiddleware);
-// connect to database
+
+// Connect to database
 connectDB();
 
 export default app;

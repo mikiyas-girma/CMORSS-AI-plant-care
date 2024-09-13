@@ -1,4 +1,4 @@
-export const plantJsonFormat = `{ 
+export const plantJsonFormat = `{
     "name": string,
     "images": string[],
     "common_names": string[],
@@ -11,4 +11,5 @@ export const plantJsonFormat = `{
     "toxicity": string,
     "best_watering": string,
     "url": string,
+    "is_plant": boolean,
   }`;
