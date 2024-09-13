@@ -1,38 +1,38 @@
 import axios from 'axios';
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
 
 export const getCareSuggestion = async (species: string, weatherData: any) => {
+    
   try {
-    const apiKey = process.env.OPENAI_API_KEY;
+    const res = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+            { role: "system", content: "You are a plant care expert."},
+            { role: "system", content: "make your answer concise since you can only respond max of 150 words."},
+            { role: "user", 
+              content: "What is the best way to care for a " + species + 
+                        " plant" + " in " + weatherData.temperature + "°C" + " and " +
+                        weatherData.humidity + "% humidity?" + " The plant will receive " +
+                        weatherData.sunlightHours + " hours of sunlight per day."
+            },
+        ],
+        stream: false,
+        max_completion_tokens: 250,
+        n: 1,
+        temperature: 0.4,
 
-    const prompt = `Give care suggestions for a ${species} plant based on the following weather data: 
-                    Temperature: ${weatherData.temperature}, 
-                    Humidity: ${weatherData.humidity}, 
-                    Sunlight Hours: ${weatherData.sunlightHours}`;
+    });
 
-    const response = await axios.post(
-      'https://api.openai.com/v1/completions',
-      {
-        model: 'gpt-3.5-turbo',
-        prompt,
-        max_tokens: 100,
-      },
-      {
-        headers: { Authorization: `Bearer ${apiKey}` },
-      }
-    );
+    const careSuggestions = res.choices[0].message.content as string;
 
-    const careSuggestions = response.data.choices[0].text;
-    return parseCareSuggestion(careSuggestions);
+    return careSuggestions;
+    
   } catch (error) {
     throw new Error('Failed to get care suggestion from AI');
   }
 };
 
-const parseCareSuggestion = (text: string) => {
-
-  return {
-    waterFrequency: '2-3 days',
-    sunlightHours: '6 hours',
-    additionalTips: 'Ensure good drainage.',
-  };
-};

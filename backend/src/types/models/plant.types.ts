@@ -7,11 +7,7 @@ interface ICareSuggestion {
     humidity: number;
     sunlightHours: number;
   };
-  suggestion: {
-    waterFrequency: string;
-    sunlightHours: string;
-    additionalTips: string;
-  };
+  suggestion: string;
 }
 
 export interface PlantDoc extends Document {

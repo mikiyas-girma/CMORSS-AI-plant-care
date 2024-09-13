@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const getWeatherForLocation = async (location: string) => {
+export const getCurrentWeather = async (location: string) => {
   const apiKey = process.env.OPEN_WEATHER_API_KEY;
 
   try {
@@ -10,6 +10,7 @@ export const getWeatherForLocation = async (location: string) => {
 
     const { temp, humidity } = response.data.main;
     const sunlightHours = calculateSunlightHours(response.data);
+    console.log('Sunlight hours:', sunlightHours.toFixed(2), typeof sunlightHours);
 
     return { temperature: temp, humidity, sunlightHours };
   } catch (error) {
@@ -18,6 +19,9 @@ export const getWeatherForLocation = async (location: string) => {
 };
 
 const calculateSunlightHours = (data: any): number => {
-  // Placeholder for actual sunlight hours calculation logic
-  return 6; // Replace with actual logic
+    const sunrise = new Date(data.sys.sunrise * 1000);
+    const sunset = new Date(data.sys.sunset * 1000);
+    
+    const diff = sunset.getTime() - sunrise.getTime();
+    return diff / 36e5;
 };

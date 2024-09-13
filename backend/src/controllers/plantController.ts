@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Plant from '../models/Plant.js';
-import { getWeatherForLocation } from '../services/weatherService.js';
+import { getCurrentWeather } from '../services/weatherService.js';
 import { getCareSuggestion } from '../services/gptService.js';
 
 // Create a new plant
@@ -21,6 +21,7 @@ export const createPlant = async (req: Request, res: Response) => {
   }
 };
 
+
 // Fetch care suggestions for a plant
 export const getCareSuggestionForPlant = async (req: Request, res: Response) => {
   const { plantId } = req.params;
@@ -31,7 +32,7 @@ export const getCareSuggestionForPlant = async (req: Request, res: Response) => 
       return res.status(404).json({ message: 'Plant not found' });
     }
 
-    const weatherData = await getWeatherForLocation(plant.location);
+    const weatherData = await getCurrentWeather(plant.location);
     const careSuggestion = await getCareSuggestion(plant.species, weatherData);
 
     const newSuggestion = {
@@ -54,6 +55,7 @@ export const getCareSuggestionForPlant = async (req: Request, res: Response) => 
   }
 };
 
+
 // Get all plants
 export const getAllPlants = async (req: Request, res: Response) => {
   try {
@@ -63,6 +65,7 @@ export const getAllPlants = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error fetching plants', error });
   }
 };
+
 
 // Delete a plant
 export const deletePlant = async (req: Request, res: Response) => {

@@ -38,20 +38,12 @@ const PlantSchema: Schema = new mongoose.Schema({
             required: true,
           },
         },
-        suggestion: {
-          waterFrequency: {
-            type: String,
-            required: true,
-          },
-          sunlightHours: {
-            type: String,
-            required: true,
-          },
-          additionalTips: {
-            type: String,
-            required: true,
-          },
-        },
+        suggestion: [
+            {
+                type: String,
+                required: true,
+            },
+        ]
       },
     ],
     createdAt: {
