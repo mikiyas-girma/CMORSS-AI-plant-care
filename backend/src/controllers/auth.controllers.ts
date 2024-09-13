@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/errorHandler.js";
-import jwt from "jsonwebtoken";
+import jwt, { JsonWebTokenError } from "jsonwebtoken";
 
 export const signup = async (req: Request, res: Response, next: NextFunction) => {
   const { firstName, lastName, email, password } = req.body;
@@ -56,4 +56,22 @@ export const signin = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
+export const checkAuth = (req: Request, res: Response) => {
+  const token = req.cookies.access_token;
 
+  if (!token) {
+    return res.status(401).json(null);
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET_KEY!, (err: any, decoded: any) => {
+    if (err) {
+      return res.status(401).json(null);
+    }
+    res.status(200).json({ email: decoded.email });
+  });
+};
+
+export const logout = (req: Request, res: Response) => {
+  res.clearCookie('access_token');
+  res.json({ message: 'logged out with success' });
+};

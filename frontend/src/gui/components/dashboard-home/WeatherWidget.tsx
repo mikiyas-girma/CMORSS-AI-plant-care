@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Droplets, CloudRainWind, LoaderCircle } from '@/assets/Icons';
+import { Droplets, CloudRainWind } from '@/assets/Icons';
 
 import InfoComp from './InfoComp';
 import { useEffect, useState } from 'react';
@@ -12,6 +12,7 @@ import { CircleAlert, Wind } from 'lucide-react';
 import { format } from 'date-fns';
 import { getWeatherImage } from '@/lib/getWeatherImage';
 import { ServerURL } from '@/lib/SERVERURL';
+import LoadingComp from '../common/LoadingComp';
 
 const WeatherWidget = () => {
   const [loading, setLoading] = useState(true);
@@ -51,13 +52,12 @@ const WeatherWidget = () => {
   return (
     <div className="relative flex flex-col items-center justify-center gap-1 overflow-hidden rounded-xl bg-primary-green bg-[url(/cloud_bg.png)] bg-cover object-cover p-3 py-4 text-white w-full lg:w-auto">
       {loading && (
-        <div className="flex h-[200px] w-[200px] flex-col items-center justify-center text-white">
-          <LoaderCircle
-            size={36}
-            className="animate-spin duration-300 ease-linear"
-          />
-          <p className="text-xs">Loading weather data...</p>
-        </div>
+        <LoadingComp
+          message="Loading Weather"
+          iconType="ring"
+          iconColor="white"
+          className="h-[100%] w-full"
+        />
       )}
 
       {loading && error && (
