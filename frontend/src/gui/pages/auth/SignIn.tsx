@@ -45,9 +45,15 @@ const SignIn: React.FC = () => {
         {/* Logo Section */}
         <div className="flex flex-col items-center mb-6">
           <div className="bg-green-500 p-4 rounded-full">
-            <img src="/path/to/logo.png" alt="AgriCare Logo" className="h-16 w-16" />
+            <img
+              src="/path/to/logo.png"
+              alt="AgriCare Logo"
+              className="h-16 w-16"
+            />
           </div>
-          <h1 className="text-2xl font-bold mt-4 text-green-700">Login to Your Account</h1>
+          <h1 className="text-2xl font-bold mt-4 text-green-700">
+            Login to Your Account
+          </h1>
           <p className="text-center text-gray-600 mt-2">
             Welcome back! Please login to continue.
           </p>
@@ -55,13 +61,18 @@ const SignIn: React.FC = () => {
 
         {/* Email Field */}
         <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700"
+          >
             Email Address*
           </label>
           <input
             type="email"
             id="email"
-            className={`mt-1 p-2 block w-full rounded-md border ${emailError ? 'border-red-500' : 'border-gray-300'} shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-400`}
+            className={`mt-1 p-2 block w-full rounded-md border ${
+              emailError ? 'border-red-500' : 'border-gray-300'
+            } shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-400`}
             placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -75,13 +86,18 @@ const SignIn: React.FC = () => {
 
         {/* Password Field */}
         <div className="mb-4">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700"
+          >
             Password*
           </label>
           <input
             type="password"
             id="password"
-            className={`mt-1 p-2 block w-full rounded-md border ${passwordError ? 'border-red-500' : 'border-gray-300'} shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-400`}
+            className={`mt-1 p-2 block w-full rounded-md border ${
+              passwordError ? 'border-red-500' : 'border-gray-300'
+            } shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-400`}
             placeholder="Enter password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -120,7 +136,6 @@ const SignIn: React.FC = () => {
         </div>
       </form>
     </div>
-
   );
 };
 

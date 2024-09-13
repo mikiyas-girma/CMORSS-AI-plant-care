@@ -1,6 +1,7 @@
 export type PlantJournalType = {
   name: string;
   title: string;
+  userId: string;
   species: string;
   dateAcquired: Date;
   location: 'Indoor' | 'Outdoor' | 'Greenhouse' | 'Farmland';

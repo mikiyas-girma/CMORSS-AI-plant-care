@@ -7,7 +7,9 @@ type AuthGuardProps = {
 };
 
 export default function AuthGuard({ children }: AuthGuardProps) {
-  const { user: { isAuthenticated } } = useAuth();
+  const {
+    user: { isAuthenticated },
+  } = useAuth();
   const { pathname } = useLocation();
 
   if (!isAuthenticated && pathname.includes(DASHBOARD_PATH.root))

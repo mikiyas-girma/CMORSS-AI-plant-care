@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { buttonVariants } from '@/gui/components/ui/button';
 import {
   Card,
@@ -13,7 +13,6 @@ import { AppLogo } from '@/assets';
 import { AUTH_PATH } from '@/routes/paths';
 
 const AuthLayout = () => {
-  const user = false;
   const { pathname } = useLocation();
 
   const title = useMemo(() => {
@@ -28,8 +27,6 @@ const AuthLayout = () => {
     else if (pathname.includes(AUTH_PATH.register))
       return 'We are excited to have you in our community. Please fill out the information below to get started.';
   }, [pathname]);
-
-  if (user) return <Navigate to={'/dashboard'} />;
 
   return (
     <Card className="max-w-[400px]">

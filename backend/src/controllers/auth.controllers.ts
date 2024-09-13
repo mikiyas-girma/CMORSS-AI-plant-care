@@ -1,20 +1,28 @@
-import { Request, Response, NextFunction } from "express";
-import User from "../models/userModel.js";
-import bcryptjs from "bcryptjs";
-import { errorHandler } from "../utils/errorHandler.js";
-import jwt, { JsonWebTokenError } from "jsonwebtoken";
+import { Request, Response, NextFunction } from 'express';
+import User from '../models/userModel.js';
+import bcryptjs from 'bcryptjs';
+import { errorHandler } from '../utils/errorHandler.js';
+import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 
-export const signup = async (req: Request, res: Response, next: NextFunction) => {
+export const signup = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { firstName, lastName, email, password } = req.body;
 
-  if (![firstName, lastName, email, password].every((field) => field && field.trim())) {
-    return next(errorHandler(400, "Please fill in all the required fields"));
+  if (
+    ![firstName, lastName, email, password].every(
+      (field) => field && field.trim()
+    )
+  ) {
+    return next(errorHandler(400, 'Please fill in all the required fields'));
   }
 
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return next(errorHandler(409, "Email is already in use"));
+      return next(errorHandler(409, 'Email is already in use'));
     }
 
     const hashedPassword = bcryptjs.hashSync(password, 10);
@@ -26,39 +34,55 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
     });
 
     await newUser.save();
-    return res.status(201).json("User created successfully");
+    return res.status(201).json('User created successfully');
   } catch (error) {
     return next(error);
   }
 };
 
-export const signin = async (req: Request, res: Response, next: NextFunction) => {
+export const signin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { email, password } = req.body;
   if (![email, password].every((field) => field && field.trim())) {
-    return next(errorHandler(400, "Please fill in all the required fields"));
+    return next(errorHandler(400, 'Please fill in all the required fields'));
   }
   try {
     const validUser = await User.findOne({ email });
     if (!validUser) {
-      return next(errorHandler(404, "User not found"));
+      return next(errorHandler(404, 'User not found'));
     }
     const validPassword = bcryptjs.compareSync(password, validUser.password!);
     if (!validPassword) {
-      return next(errorHandler(400, "Invalid email or password. Please try again"));
+      return next(
+        errorHandler(400, 'Invalid email or password. Please try again')
+      );
     }
-    const token = jwt.sign({ email: validUser.email }, process.env.JWT_SECRET_KEY!);
+    const token = jwt.sign(
+      { email: validUser.email },
+      process.env.JWT_SECRET_KEY!
+    );
     const { password: pass, ...user } = validUser.toObject();
-    return res.status(200).cookie("access_token", token, {
-      httpOnly: true,
-    }).json(user);
+    return res
+      .status(200)
+      .cookie('access_token', token, {
+        httpOnly: true,
+        partitioned: true,
+        secure: false,
+        sameSite: 'lax',
+      })
+      .json(user);
   } catch (error) {
     next(error);
   }
 };
 
 export const checkAuth = (req: Request, res: Response) => {
+  console.log('ACCESS TOKEN: ', req.cookies);
   const token = req.cookies.access_token;
-
+  console.log('TOKEN: ', token);
   if (!token) {
     return res.status(401).json(null);
   }

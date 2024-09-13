@@ -55,6 +55,7 @@ export type PlantFact = {
 
 export type PlantJournalType = {
   name: string;
+  userId: string;
   title: string;
   species: string;
   dateAcquired: Date;
@@ -72,4 +73,11 @@ export type PlantJournalType = {
   }[];
   updatedAt: Date;
   _id: string;
+};
+
+export type JournalCardType = {
+  _id: string;
+  title: string;
+  messageCount: number;
+  lastUpdate: Date;
 };

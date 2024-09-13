@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Plant Journalling
  * @returns JSX Component for the view
@@ -10,7 +11,8 @@ import CreateJournal from '@/gui/components/dashboard-journal/CreateJournal';
 import EmptyJournalHistory from '@/gui/components/dashboard-journal/EmptyJournalHistory';
 import JournalHistory from '@/gui/components/dashboard-journal/JournalHistory';
 import useToasts from '@/hooks/useToasts';
-import { PlantJournalType } from '@/types';
+import { axiosForApiCall } from '@/lib/axios';
+import { JournalCardType } from '@/types';
 import { useCallback, useEffect, useState } from 'react';
 
 /**
@@ -24,22 +26,32 @@ const Journal = () => {
   const [reload, setReload] = useState(0);
 
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [journals, setJournals] = useState<PlantJournalType[]>([]);
+  const [journals, setJournals] = useState<JournalCardType[]>([]);
   const [selectedJournal, setSelectedJournal] = useState<string | null>(null);
 
-  const { toastSuccess, toastWarning } = useToasts();
+  const { toastSuccess, toastWarning, toastError } = useToasts();
 
   // Make request to fetch Journals
   useEffect(() => {
     setLoading(true);
 
-    const timer = setTimeout(() => {
-      setLoading(false);
-      setJournals([]);
-    }, 4000);
-
-    return () => clearTimeout(timer);
-  }, [reload]);
+    (async () => {
+      try {
+        const res = await axiosForApiCall.get('/user/journal/get-all');
+        const journals = res.data.data;
+        setJournals(journals);
+      } catch (error: any) {
+        if (error.response) {
+          toastError(error.response?.data?.message);
+        } else {
+          toastError('Error occured. Unable to make network requests.');
+        }
+        setJournals([]);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [reload, toastError]);
 
   // Handle Journal Search Action
   const handleSearch = useCallback(async () => {
@@ -52,7 +64,7 @@ const Journal = () => {
 
   // Return JSX Component
   return (
-    <section className="scrollbar-thin h-full w-full p-3 md:p-8 flex flex-col justify-center items-center relative">
+    <section className="scrollbar-thin h-full w-full p-3 md:p-8 flex flex-col relative">
       <h2 className="text-xl md:text-2xl font-bold text-gray-full text-center md:w-[80%] mx-auto">
         Keep a Private Journal of your Plant Activities or Record New Entries
         Based on New Knowledge
