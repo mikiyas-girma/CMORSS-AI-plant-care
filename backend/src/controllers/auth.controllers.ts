@@ -57,15 +57,24 @@ export const signin = async (req: Request, res: Response, next: NextFunction) =>
 };
 
 export const checkAuth = (req: Request, res: Response) => {
-  const token = req.cookies.access_token;
+  const token = req.cookies?.access_token;
 
   if (!token) {
     return res.status(401).json(null);
   }
 
-  jwt.verify(token, process.env.JWT_SECRET_KEY!, (err: any, decoded: any) => {
+  jwt.verify(token, process.env.JWT_SECRET_KEY!, async (err: any, decoded: any) => {
     if (err) {
       return res.status(401).json(null);
+    }
+    try {
+      const user = await User.findOne({email: decoded.email}, {email: 1, lastName: 1, firstName: 1});
+      if (!user) {
+        return res.status(401).json(null);
+      }
+      res.status(200).json({...user});
+    } catch (err) {
+      res.status(401).json(null);
     }
     res.status(200).json({ email: decoded.email });
   });
