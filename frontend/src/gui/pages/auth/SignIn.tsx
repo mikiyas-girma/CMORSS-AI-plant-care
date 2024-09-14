@@ -6,12 +6,13 @@ import { Checkbox } from '@/gui/components/ui/checkbox';
 import { Input } from '@/gui/components/ui/input';
 import { Label } from '@/gui/components/ui/label';
 import DangerWrapper from '@/gui/components/common/DangerWrapper';
-import { cn } from '@/lib/utils';
+// import { cn } from '@/lib/utils';
 import { AUTH_PATH } from '@/routes/paths';
 import { SignInFormData } from '@/types/form';
 import { signinValidation } from '@/lib/formsValidation';
 import useAuth from '@/hooks/useAuth';
 import { Loader2 } from 'lucide-react';
+import OAuth from "@/gui/components/OAuth";
 
 /**
  * Sign in Route Component
@@ -58,6 +59,7 @@ const SignIn = () => {
   };
 
   return (
+    <>
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <div className="grid w-full max-w-sm items-center gap-1.5">
         <Label htmlFor="email">
@@ -114,7 +116,7 @@ const SignIn = () => {
           )}
           Login to your account
         </Button>
-        <Link
+        {/* <Link
           to={'#'}
           className={cn(
             buttonVariants({ size: 'lg' }),
@@ -122,9 +124,13 @@ const SignIn = () => {
           )}
         >
           Sign in with google
-        </Link>
+        </Link> */}
       </div>
     </form>
+    <div className="flex flex-col items-stretch mt-2 gap-2">
+        <OAuth />
+      </div>
+    </>
   );
 };
 
