@@ -15,6 +15,7 @@ export const AUTH_PATH = {
 export const DASHBOARD_PATH = {
   root: ROOTS_DASHBOARD,
   home: path(ROOTS_DASHBOARD, '/home'),
+  profile: path(ROOTS_DASHBOARD, '/settings'),
   myplants: path(ROOTS_DASHBOARD, '/myplants'),
   chat: path(ROOTS_DASHBOARD, '/chat'),
   journal: path(ROOTS_DASHBOARD, '/journal'),
