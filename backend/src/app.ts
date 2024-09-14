@@ -26,8 +26,6 @@ app.use(
   })
 );
 
-app.use("/api", plantRoutes);
-
 // Routes
 app.get('/', (req, res) => {
   res.send('Root endpoint check ');
