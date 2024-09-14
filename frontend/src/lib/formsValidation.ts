@@ -2,20 +2,20 @@ import { SignInFormData, SignUpFormData } from "@/types/form";
 
 export function signupValidation(formData: SignUpFormData): {[key in keyof SignUpFormData]: string} {
     const errors: {[key in keyof SignUpFormData]: string} = {
-        firstname: '',
-        lastname: '',
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
         confirmedPassword: '',
         acceptPolicy: ''
     }
 
-    if (formData.firstname === '') {
-        errors.firstname = 'First name is required';
+    if (formData.firstName === '') {
+        errors.firstName = 'First name is required';
     }
 
-    if (formData.lastname === '') {
-        errors.lastname = 'Last name is required';
+    if (formData.lastName === '') {
+        errors.lastName = 'Last name is required';
     }
   
     if (formData.email === '')

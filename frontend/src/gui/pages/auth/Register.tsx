@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Button, buttonVariants } from "@/gui/components/ui/button";
 import { Checkbox } from "@/gui/components/ui/checkbox";
@@ -10,6 +10,8 @@ import { cn } from "@/lib/utils";
 import { SignUpFormData } from "@/types/form";
 import { signupValidation } from "@/lib/formsValidation";
 import useAuth from "@/hooks/useAuth";
+import { DASHBOARD_PATH } from "@/routes/paths";
+import { Loader2 } from "lucide-react";
 
 /**
  * Sign in Route Component
@@ -18,15 +20,16 @@ import useAuth from "@/hooks/useAuth";
 const SignIn = () => {
   const [errors, setErrors] = useState<{[key in keyof SignUpFormData]: string} | null>(null);
   const [formData, setFormData] = useState<SignUpFormData>({
-    firstname: '',
-    lastname: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmedPassword: '',
     acceptPolicy: false,
   });
 
-  const { signUp } = useAuth();
+  const { signUp, user: {isProccessing} } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -48,9 +51,11 @@ const SignIn = () => {
     try {
       await signUp(formData);
       toast.success("Your account was register with success. Welcome to the familly");
-    } catch (error) {
-      toast.error("An unknow error occurs will register your account please retry.");
+      navigate(DASHBOARD_PATH.home);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       console.error(error);
+      toast.error(error.message);
     }
   }
 
@@ -58,14 +63,14 @@ const SignIn = () => {
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <div className="flex gap-4">
         <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label htmlFor="firstname">First name <DangerWrapper>*</DangerWrapper></Label>
-          <Input autoComplete="name" type="text" id="firstname" placeholder="John" onChange={handleChange}/>
-          {errors?.firstname && <DangerWrapper>{errors.firstname}</DangerWrapper>}
+          <Label htmlFor="firstName">First name <DangerWrapper>*</DangerWrapper></Label>
+          <Input autoComplete="name" type="text" id="firstName" placeholder="John" onChange={handleChange}/>
+          {errors?.firstName && <DangerWrapper>{errors.firstName}</DangerWrapper>}
         </div>
         <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label htmlFor="lastname">Last name <DangerWrapper>*</DangerWrapper></Label>
-          <Input autoComplete="family-name" type="text" id="lastname" placeholder="DOE" onChange={handleChange}/>
-          {errors?.lastname && <DangerWrapper>{errors.lastname}</DangerWrapper>}
+          <Label htmlFor="lastName">Last name <DangerWrapper>*</DangerWrapper></Label>
+          <Input autoComplete="family-name" type="text" id="lastName" placeholder="DOE" onChange={handleChange}/>
+          {errors?.lastName && <DangerWrapper>{errors.lastName}</DangerWrapper>}
         </div>
       </div>
       <div className="grid w-full max-w-sm items-center gap-1.5">
@@ -106,7 +111,9 @@ const SignIn = () => {
           size="lg"
           type="submit"
           className="!bg-primary-green hover:!bg-opacity-85 uppercase"
+          disabled={isProccessing}
         >
+          {isProccessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Register your account
         </Button>
         <Link

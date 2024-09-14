@@ -7,6 +7,7 @@ const axiosForApiCall = axios.create({
         'Content-Type': 'application/json',
     },
     timeout: 30000,
+    withCredentials: true
 });
 
 axiosForApiCall.interceptors.response.use(

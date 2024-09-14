@@ -11,6 +11,7 @@ import { AUTH_PATH } from "@/routes/paths";
 import { SignInFormData } from "@/types/form";
 import { signinValidation } from "@/lib/formsValidation";
 import useAuth from "@/hooks/useAuth";
+import { Loader2 } from "lucide-react";
 
 /**
  * Sign in Route Component
@@ -44,9 +45,10 @@ const SignIn = () => {
 
     try {
       await signIn(formData);
-      toast.success("Welcome back " + user?.data?.firstname + ' ' + user?.data?.lastname);
-    } catch (error) {
-      toast.error("An unknow error occurs will register your account please retry.");
+      toast.success("Welcome back " + user?.data?.firstName + ' ' + user?.data?.lastName);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast.error(error.message);
       console.error(error);
     }
   }
@@ -82,7 +84,9 @@ const SignIn = () => {
           size="lg"
           type="submit"
           className="!bg-primary-green hover:!bg-opacity-85 uppercase"
+          disabled={user.isProccessing}
         >
+          {user.isProccessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Login to your account
         </Button>
         <Link
