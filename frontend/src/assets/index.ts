@@ -22,6 +22,7 @@ import Community3D from './dashboard/community_icon.png';
 import Journal3D from './dashboard/journal_icon.png';
 import Plant3D from './dashboard/plant_icon.png';
 
+import plantImage1 from './common/plant1.png';
 // // Export all Icons and Image assets
 export {
   AnimatedLogo,
@@ -40,4 +41,5 @@ export {
   Community3D,
   Journal3D,
   Plant3D,
+  plantImage1
 };

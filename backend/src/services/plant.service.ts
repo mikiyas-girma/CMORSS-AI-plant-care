@@ -24,11 +24,9 @@ function validateFields<T>(
 
 export const createPlantService = async (plantData: any) => {
   const requiredFields: Array<keyof IPlant> = [
-    "title",
-    "plantImages",
-    "details",
-    "plantLocation",
-    "health",
+    "userId",
+    "plantName",
+    "geoLocation",
   ];
   validateFields<IPlant>(plantData, requiredFields);
   // Validate nested details fields
@@ -47,8 +45,11 @@ export const createPlantService = async (plantData: any) => {
     "url",
   ];
 
-  validateFields<IPlant["details"]>(plantData.details, requiredDetailsFields);
+  if (plantData.details)
+    validateFields<IPlant["details"]>(plantData.details, requiredDetailsFields);
 
+  const user = await User.findById(plantData.userId);
+  if (!user) throw new Error("User not found");
   const newPlant = new Plant(plantData);
   await newPlant.save();
   return newPlant;
@@ -79,7 +80,7 @@ export const updatePlantService = async (plantId: string, plantData: any) => {
   if (!plant) throw new Error("Plant not found");
   const allowedFields: Array<keyof IPlant> = [
     "title",
-    "plantLocation",
+    "locationDetails",
     "health",
     "notes",
     "careHistory",

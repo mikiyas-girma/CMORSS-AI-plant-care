@@ -12,7 +12,8 @@ import { useEffect, useState } from "react";
 import { ServerURL } from "@/lib/SERVERURL";
 import axios from "axios";
 import { PlantData } from "@/types";
-import { LoaderCircle } from '@/assets/Icons'
+import { LoaderCircle } from '@/assets/Icons';
+
 
 export default function Component() {
   const [data, setData] = useState<PlantData[]>([]);
@@ -42,6 +43,7 @@ export default function Component() {
     })();
   }, []);
 
+  
   return (
     <div className="container mx-auto py-10">
       {loading && (
@@ -57,8 +59,8 @@ export default function Component() {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead className="hidden sm:table-cell">Species</TableHead>
+            <TableHead>Plant Name</TableHead>
+            <TableHead className="hidden sm:table-cell">Location</TableHead>
             <TableHead className="">Get Help</TableHead>
           </TableRow>
         </TableHeader>
@@ -69,14 +71,14 @@ export default function Component() {
               className={index % 2 === 0 ? "bg-muted/100" : ""}
             >
               <TableCell className="font-medium">{index + 1}</TableCell>
-              <TableCell>{item.name}</TableCell>
+              <TableCell>{item.plantName}</TableCell>
               <TableCell className="hidden sm:table-cell">
-                {item.species}
+                {item.geoLocation}
               </TableCell>
               <TableCell className="text-right">
                 {/* this will be changed to route to chat with this plant  */}
                 <Link
-                  to={`/dashboard/myplants/${item._id}`}
+                  to={`/dashboard/chat/${item._id}`}
                   className="text-primary"
                 >
                   <BotMessageSquare className="w-10 h-7" color="green" />
