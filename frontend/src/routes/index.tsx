@@ -34,7 +34,7 @@ const DashboardMyPlants = Loadable(
 const DashboardChat = Loadable(
   lazy(() => import('@/gui/pages/dashboard/Chat'))
 );
-const DashboardPlantIdentificationChat = Loadable(
+const DashboardPlantIdentification = Loadable(
   lazy(() => import('@/gui/pages/dashboard/PlantIdentification'))
 );
 
@@ -84,7 +84,7 @@ export default function Router() {
         { path: 'journal', element: <Journal /> },
         {
           path: 'plant-identification',
-          element: <DashboardPlantIdentificationChat />,
+          element: <DashboardPlantIdentification />,
         },
         {
           path: '*',
