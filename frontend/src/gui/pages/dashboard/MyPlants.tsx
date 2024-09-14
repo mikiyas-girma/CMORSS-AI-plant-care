@@ -12,7 +12,8 @@ import { useEffect, useState } from "react";
 import { ServerURL } from "@/lib/SERVERURL";
 import axios from "axios";
 import { PlantData } from "@/types";
-import { LoaderCircle } from '@/assets/Icons'
+import { LoaderCircle } from '@/assets/Icons';
+
 
 export default function Component() {
   const [data, setData] = useState<PlantData[]>([]);
@@ -42,6 +43,7 @@ export default function Component() {
     })();
   }, []);
 
+  
   return (
     <div className="container mx-auto py-10">
       {loading && (
@@ -76,7 +78,7 @@ export default function Component() {
               <TableCell className="text-right">
                 {/* this will be changed to route to chat with this plant  */}
                 <Link
-                  to={`/dashboard/myplants/${item._id}`}
+                  to={`/dashboard/chat/${item._id}`}
                   className="text-primary"
                 >
                   <BotMessageSquare className="w-10 h-7" color="green" />

@@ -66,6 +66,7 @@ export default function Router() {
         { index: true, element: <Navigate to="/dashboard/home" replace /> },
         { path: 'home', element: <DashboardHome /> },
         { path: 'myplants', element: <DashboardMyPlants /> },
+        { path: 'chat/:plantId', element: <DashboardChat /> },
         { path: 'chat', element: <DashboardChat /> },
         { path: 'journal', element: <Journal /> },
         {

@@ -20,6 +20,10 @@ export const getCareSuggestionForPlant = async (req: Request, res: Response) => 
     // Get care suggestion from the AI service based on plant name and weather data
     const careSuggestion = await getCareSuggestion(plant.plantName, weatherData);
 
+    if (!careSuggestion) {
+        return res.status(500).json({ message: "Failed to get care suggestion from AI" });
+        }
+
     // Find the existing CareSuggestion document for this plant
     let careSuggestionDoc = await CareSuggestion.findOne({ plantId });
 
@@ -50,7 +54,8 @@ export const getCareSuggestionForPlant = async (req: Request, res: Response) => 
       message: "Care suggestion successfully saved",
       plantName: plant.plantName,
       location: plant.geoLocation,
-      careSuggestions: careSuggestionDoc.care, // Return all care suggestions
+      gptReply: careSuggestion,
+
     });
   } catch (error) {
     res.status(500).json({ message: "Error fetching care suggestion", error });

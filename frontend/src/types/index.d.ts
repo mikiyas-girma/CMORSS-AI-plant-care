@@ -55,7 +55,7 @@ export type PlantFact = {
 
 
 export type PlantData = {
-    _id: number,
+    _id: string,
     plantName: string,
     geoLocation: string,
 
