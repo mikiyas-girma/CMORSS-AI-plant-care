@@ -4,7 +4,7 @@ import { PlantDetails } from "../types/models/plant.types.js";
 
 export interface IPlant extends Document {
   userId: Schema.Types.ObjectId;
-  title: string;
+  plantName: string;
   plantImages: string[];
   details: PlantDetails;
   dateAcquired: Date;
