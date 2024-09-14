@@ -27,7 +27,7 @@ export const createPlantService = async (plantData: any) => {
     "title",
     "plantImages",
     "details",
-    "plantLocation",
+    "geoLocation",
     "locationDetails",
     "health",
   ];
