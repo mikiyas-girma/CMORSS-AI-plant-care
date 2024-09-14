@@ -1,11 +1,12 @@
 export type PlantJournalType = {
   name: string;
   title: string;
+  userId: string;
   species: string;
   dateAcquired: Date;
   location: 'Indoor' | 'Outdoor' | 'Greenhouse' | 'Farmland';
   health: 'Excellent' | 'Good' | 'Fair' | 'Poor';
-  notes: { date: Date; content: string }[];
+  notes: { date: Date; content: string; type: 'image' | 'text' }[];
   images: { url: string; date: Date }[];
   careHistory: {
     action:

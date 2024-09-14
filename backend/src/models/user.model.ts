@@ -7,17 +7,23 @@ const userSchema: Schema<IUser> = new Schema(
     firstName: {
       type: String,
       trim: true,
-      required: function () { return !this.fullName; },
+      required: function () {
+        return !this.fullName;
+      },
     },
     lastName: {
       type: String,
       trim: true,
-      required: function () { return !this.fullName; },
+      required: function () {
+        return !this.fullName;
+      },
     },
     fullName: {
       type: String,
       trim: true,
-      required: function () { return !this.firstName || !this.lastName; },
+      required: function () {
+        return !this.firstName || !this.lastName;
+      },
     },
     email: {
       type: String,
@@ -34,14 +40,18 @@ const userSchema: Schema<IUser> = new Schema(
     googleID: {
       type: String,
     },
-    chats: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Chat',
-    }],
-    journals: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Journal',
-    }],
+    chats: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Chat',
+      },
+    ],
+    journals: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Journal',
+      },
+    ],
   },
   {
     timestamps: true,

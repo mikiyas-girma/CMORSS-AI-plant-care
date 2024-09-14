@@ -40,8 +40,7 @@ import {
 
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
-import axios from 'axios';
-import { ServerURL } from '@/lib/SERVERURL';
+import { axiosForApiCall } from '@/lib/axios';
 
 /**
  * Create Journal Component
@@ -74,15 +73,18 @@ const CreateJournal: React.FC<TCreateComp> = ({ closeModal, setReload }) => {
 
   // Submit Form values
   async function onSubmit(values: z.infer<typeof journalFormSchema>) {
+    if (extra.location.length === 0)
+      return toastError('Please select a location.');
+
+    if (extra.health.length === 0)
+      return toastError('Please the health status of the plant.');
+
+    if (!extra.dateAcquired)
+      return toastError('Please select the date you acquired the plant.');
+
     const fullData = { ...values, ...extra };
     try {
-      const res = await axios.post(
-        `${ServerURL}/user/journal/create`,
-        fullData
-      );
-
-      const data = res.data;
-      console.log('DATA: ', data);
+      await axiosForApiCall.post(`/user/journal/create`, fullData);
 
       toastSuccess('Form Submitted!!');
       setReload((prev) => ++prev);

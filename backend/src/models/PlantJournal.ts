@@ -8,29 +8,36 @@ const plantJournalSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    // userId: { type: Schema.Types.ObjectId, ref: 'User' },
+    userId: { type: String, required: true },
     title: {
       type: String,
       required: true,
       trim: true,
     },
+
     species: {
       type: String,
       trim: true,
     },
+
     dateAcquired: {
       type: Date,
       default: Date,
     },
+
     location: {
       type: String,
       enum: ['Indoor', 'Outdoor', 'Greenhouse'],
       required: true,
     },
+
     health: {
       type: String,
       enum: ['Excellent', 'Good', 'Fair', 'Poor'],
       default: 'Good',
     },
+
     notes: [
       {
         date: {
@@ -41,8 +48,10 @@ const plantJournalSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
+        type: { type: String, enum: ['image', 'text'], default: 'text' },
       },
     ],
+
     images: [
       {
         url: {
@@ -56,6 +65,7 @@ const plantJournalSchema = new mongoose.Schema(
         caption: String,
       },
     ],
+
     careHistory: [
       {
         action: {

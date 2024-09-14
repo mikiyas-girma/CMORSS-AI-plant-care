@@ -58,4 +58,33 @@ export type PlantData = {
     _id: number,
     plantName: string,
     geoLocation: string,
+
+}
+
+export type PlantJournalType = {
+  name: string;
+  title: string;
+  species: string;
+  dateAcquired: Date;
+  location: 'Indoor' | 'Outdoor' | 'Greenhouse' | 'Farmland';
+  health: 'Excellent' | 'Good' | 'Fair' | 'Poor';
+  notes: { date: Date; content: string }[];
+  images: { url: string; date: Date }[];
+  careHistory: {
+    action:
+      | 'Watered'
+      | 'Fertilized'
+      | 'Pruned'
+      | 'Repotted'
+      | 'Treated for Pests';
+  }[];
+  updatedAt: Date;
+  _id: string;
+};
+
+export type JournalCardType = {
+  _id: string;
+  title: string;
+  messageCount: number;
+  lastUpdate: Date;
 };
