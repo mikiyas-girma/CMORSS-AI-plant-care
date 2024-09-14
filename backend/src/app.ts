@@ -38,7 +38,6 @@ app.get('/', (req, res) => {
 
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
-app.use("/api/google", authRoutes);
 app.use('/api/plants', plantRoutes);
 
 
