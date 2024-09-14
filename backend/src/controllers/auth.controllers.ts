@@ -1,8 +1,8 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, CookieOptions } from "express";
 import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/errorHandler.js";
-import jwt, { JsonWebTokenError } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 export const signup = async (req: Request, res: Response, next: NextFunction) => {
   const { firstName, lastName, email, password } = req.body;
@@ -33,7 +33,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
 };
 
 export const signin = async (req: Request, res: Response, next: NextFunction) => {
-  const { email, password } = req.body;
+  const { email, password, remember } = req.body;
   if (![email, password].every((field) => field && field.trim())) {
     return next(errorHandler(400, "Please fill in all the required fields"));
   }
@@ -48,9 +48,17 @@ export const signin = async (req: Request, res: Response, next: NextFunction) =>
     }
     const token = jwt.sign({ email: validUser.email }, process.env.JWT_SECRET_KEY!);
     const { password: pass, ...user } = validUser.toObject();
-    return res.status(200).cookie("access_token", token, {
+    const cookieOptions: CookieOptions = {
       httpOnly: true,
-    }).json(user);
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict'
+    }
+
+    if (!remember) {
+      //make the cookie invalid after 1 day
+      cookieOptions.expires = new Date(Date.now() + 1000 * 60 * 60 * 24);
+    }
+    return res.status(200).cookie("access_token", token, cookieOptions).json(user);
   } catch (error) {
     next(error);
   }
@@ -72,11 +80,10 @@ export const checkAuth = (req: Request, res: Response) => {
       if (!user) {
         return res.status(401).json(null);
       }
-      res.status(200).json({...user});
+      return res.status(200).json({...user});
     } catch (err) {
-      res.status(401).json(null);
+      return res.status(500).json({error: 'SERVER ERROR'});
     }
-    res.status(200).json({ email: decoded.email });
   });
 };
 

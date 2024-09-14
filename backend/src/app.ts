@@ -11,12 +11,14 @@ import { getWeatherData } from "./controllers/dashboard/getWeatherInformation.js
 import { globalErrorMiddleware } from "./utils/errorMiddleware.js";
 import getDailyPlantFact from './controllers/dashboard/getDailyPlantFact.js';
 import createNewJournal from './controllers/user/createNewJournal.js';
+import cookieParser from "cookie-parser";
 
 
 const app: Application = express();
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
