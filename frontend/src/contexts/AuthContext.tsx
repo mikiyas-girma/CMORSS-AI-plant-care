@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { axiosForApiCall } from "@/lib/axios";
 import { userActions, UserState } from "@/redux/user/userSlice";
+import { SignInFormData, SignUpFormData } from "@/types/form";
+import { User } from "@/types/user";
 
 const {
 	signInFailure,
@@ -21,10 +23,11 @@ const {
 interface AuthContextValue {
 	user: {
 		isAuthenticated: boolean,
-		data: object | null
+		isProccessing: boolean,		
+		data: User | null
 	},
-	signUp: (userData) => Promise<void>,
-	signIn: (credentials) => Promise<void>,
+	signUp: (userData: SignUpFormData) => Promise<void>,
+	signIn: (credentials: SignInFormData) => Promise<void>,
 	signInWithGoogle: () => Promise<void>,
 	signOut: () => Promise<void>,
 	updateUserProfile: (newData) => Promise<void>,
@@ -36,15 +39,16 @@ export const AuthContext = createContext<AuthContextValue | null>(null);
 
 export const AuthProvider = ({children}: {children: ReactNode}) => {
 	const dispatch = useDispatch<AppDispatch>();
-  	const { currentUser, isAuthenticated } = useSelector<RootState, UserState>(state => state.user);
+  	const { currentUser, isAuthenticated, loading } = useSelector<RootState, UserState>(state => state.user);
 
 	const authContextValue = useMemo(() => {
 		return {
 			user: {
 				isAuthenticated: isAuthenticated,
+				isProccessing: loading,
 				data: currentUser
 			},
-			signUp: async (userData) => {
+			signUp: async (userData: SignUpFormData) => {
 				dispatch(signUpStart());
 				try {
 					await axiosForApiCall.post('/auth/signup', userData);
@@ -52,9 +56,10 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
 				} catch (err) {
 					console.error(err);
 					dispatch(signUpFailure(err));
+					throw new Error('An error occured while signing up, please retry');
 				}
 			},
-			signIn: async (credentials) => {
+			signIn: async (credentials: SignInFormData) => {
 				dispatch(signInStart());
 				try {
 					const response = await axiosForApiCall.post('/auth/signin', credentials);
@@ -62,6 +67,7 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
 				} catch (err) {
 					console.log(err)
 					dispatch(signInFailure(err));
+					throw new Error('An error occured while signing in, please retry');
 				}
 			},
 			signOut: async () => {
@@ -72,6 +78,7 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
 				} catch (err) {
 					console.log(err)
 					dispatch(signOutFailure(err));
+					throw new Error('An error occured while signing out, please retry');
 				}
 			},
 			signInWithGoogle: async () => {
@@ -80,10 +87,11 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
 				dispatch(updateStart());
 				try {
 					const response = await axiosForApiCall.put('/user/update', newData);
-					dispatch(updateSuccess(response.data));
+					dispatch(updateSuccess({...currentUser, ...response.data}));
 				} catch (err) {
 					console.log(err);
 					dispatch(updateFailure(err));
+					throw new Error('An error occured while updating user profile, please retry');
 				}
 			},
 			updateUserPassword: async (newPassword) => {
@@ -94,20 +102,22 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
 				} catch (err) {
 					console.log(err);
 					dispatch(updateFailure(err));
+					throw new Error('An error occured while updating your profile, please retry');
 				}
 			},
 			deleteUser: async () => {
 				try {
 					dispatch(updateStart());
 					await axiosForApiCall.post('/user/delete');
-					dispatch(updateSuccess({}));
+					dispatch(updateSuccess(null));
 				} catch (err) {
 					console.log(err)
 					dispatch(updateFailure(err));
+					throw new Error('An error occured while deleting your account, please retry');
 				}
 			},
 		};
-	}, [currentUser, dispatch, isAuthenticated]);
+	}, [currentUser, dispatch, isAuthenticated, loading]);
 
 	useEffect(() => {
 		const checkAuthState = async () => {
@@ -118,9 +128,11 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
 					dispatch(signInSuccess(response.data));
 				} else {
 					dispatch(signInFailure('No user found'));
+					throw new Error('No user found');
 				}
 			} catch (err) {
 				dispatch(signInFailure(err));
+				throw new Error('No user found');
 			}
 		};
 

@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import { Button, buttonVariants } from "@/gui/components/ui/button";
 import { Checkbox } from "@/gui/components/ui/checkbox";
 import { Input } from "@/gui/components/ui/input";
@@ -9,6 +10,8 @@ import { cn } from "@/lib/utils";
 import { AUTH_PATH } from "@/routes/paths";
 import { SignInFormData } from "@/types/form";
 import { signinValidation } from "@/lib/formsValidation";
+import useAuth from "@/hooks/useAuth";
+import { Loader2 } from "lucide-react";
 
 /**
  * Sign in Route Component
@@ -22,6 +25,8 @@ const SignIn = () => {
     remember: false,
   });
 
+  const { signIn, user } = useAuth();
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -29,13 +34,22 @@ const SignIn = () => {
     });
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = signinValidation(formData);
 
     if (Object.values(validationErrors).find(e => e !== '')) {
       setErrors({...validationErrors});
       return;
+    }
+
+    try {
+      await signIn(formData);
+      toast.success("Welcome back " + user?.data?.firstName + ' ' + user?.data?.lastName);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast.error(error.message);
+      console.error(error);
     }
   }
 
@@ -70,7 +84,9 @@ const SignIn = () => {
           size="lg"
           type="submit"
           className="!bg-primary-green hover:!bg-opacity-85 uppercase"
+          disabled={user.isProccessing}
         >
+          {user.isProccessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Login to your account
         </Button>
         <Link

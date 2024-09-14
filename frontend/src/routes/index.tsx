@@ -39,20 +39,6 @@ const DashboardPlantIdentificationChat = Loadable(
 );
 
 /**
- * Define Root Redirect
- */
-// Root redirection component
-const RootRedirect = () => {
-  // Check Auth Status and redirect appropriately
-  const isAuthenticated = false;
-  return isAuthenticated ? (
-    <Navigate to="/dashboard" replace />
-  ) : (
-    <Navigate to="/auth/login" replace />
-  );
-};
-
-/**
  * Define Router for the Application
  * @returns Router Component for Navigation.
  */
@@ -60,7 +46,7 @@ export default function Router() {
   return useRoutes([
     {
       path: '/',
-      element: <RootRedirect />,
+      element: <Navigate to="/dashboard" replace />,
     },
     {
       path: 'auth',
