@@ -72,6 +72,7 @@ const JournalDetail: React.FC<JournalIDType> = ({ journalId }) => {
         noteData = {
           content: fileUrl,
           type: 'image',
+          text: noteText,
           userId: 'Stephen',
           journalId,
         };
@@ -118,14 +119,14 @@ const JournalDetail: React.FC<JournalIDType> = ({ journalId }) => {
 
   //   Return JsX
   return (
-    <div className="bg-white h-[80%] min-h-[700px] p-8 rounded-lg w-full max-w-[650px]">
+    <div className="bg-white h-full min-h-[700px] p-4 sm:p-8 rounded-lg w-full max-w-[650px]">
       {!loading && !journal && (
         <EmptyJournalHistory message="Unable to retrieve journal data..." />
       )}
 
       {journal && (
-        <div className="h-full relative">
-          <h3 className="text-xl font-semibold text-slate-700">
+        <div className="h-full relative pt-3 sm:pt-0">
+          <h3 className="text-xl text-center sm:text-left font-semibold text-slate-700">
             {journal.title}
           </h3>
 
@@ -140,7 +141,7 @@ const JournalDetail: React.FC<JournalIDType> = ({ journalId }) => {
           <Separator />
 
           {/* Render Journal Notes */}
-          <div className="w-full h-[58%] overflow-auto scrollbar-thin">
+          <div className="w-full h-[55%] sm:h-[50%] lg:h-[64%] overflow-auto scrollbar-thin">
             {journal.notes.map((note, index) => (
               <NoteCard
                 key={index}
@@ -152,7 +153,7 @@ const JournalDetail: React.FC<JournalIDType> = ({ journalId }) => {
           </div>
 
           {/* Input field container */}
-          <div className=" bottom-0 left-0 absolute w-full">
+          <div className=" bottom-0 left-0 absolute w-full bg-white">
             <SendNote
               text={noteText}
               setText={setNoteText}

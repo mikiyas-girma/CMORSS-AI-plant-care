@@ -7,11 +7,12 @@ interface AddNoteRequest extends Request {
     journalId: string;
     content: string;
     type: 'text' | 'image';
+    text: string;
   };
 }
 
 const addNoteToPlantJournal = async (req: AddNoteRequest, res: Response) => {
-  const { userId, journalId, content, type } = req.body;
+  const { userId, journalId, content, type, text } = req.body;
 
   try {
     const noteToAdd = {
@@ -20,9 +21,19 @@ const addNoteToPlantJournal = async (req: AddNoteRequest, res: Response) => {
       type,
     };
 
+    let extraNote: any | null = null;
+
+    if (type === 'image' && text.length > 2) {
+      extraNote = { date: new Date(), content: text, type: 'text' };
+    }
+
     const updatedJournal = await PlantJournal.findOneAndUpdate(
       { _id: journalId, userId: userId },
-      { $push: { notes: noteToAdd } },
+      {
+        $push: {
+          notes: { $each: extraNote ? [noteToAdd, extraNote] : [noteToAdd] },
+        },
+      },
       { new: true, runValidators: true }
     );
 

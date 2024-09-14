@@ -4,7 +4,7 @@ import { ObjectId } from 'mongoose';
 export interface IChat extends Document {
   userId: ObjectId;
   messages: {
-    role: "User" | "Assistant";
+    role: 'User' | 'Assistant';
     message: string;
     timestamp: Date;
   }[];

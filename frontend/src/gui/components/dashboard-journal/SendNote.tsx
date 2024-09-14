@@ -21,14 +21,14 @@ const SendNote: React.FC<SendNoteType> = ({
         value={text}
         onChange={(event) => setText(event.currentTarget.value)}
         placeholder="Record a new note..."
-        className="resize-none text-base rounded-none min-w-[300px] w-full"
+        className="resize-none sm:text-base rounded-none md:min-w-[300px] w-full"
       />
 
       <button
         type="button"
         disabled={sending}
         onClick={handleSend}
-        className="bg-primary-green flex place-items-center px-4 disabled:bg-gray-full disabled:cursor-not-allowed"
+        className="bg-primary-green flex place-items-center px-2 sm:px-4 disabled:bg-gray-full disabled:cursor-not-allowed text-xs sm:text-base"
       >
         {!sending && <Send color="white" />}
         {sending && <LoaderCircle color="white" className="animate-spin" />}
