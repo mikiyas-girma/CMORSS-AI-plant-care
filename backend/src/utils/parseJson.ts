@@ -1,7 +1,7 @@
 export function parseJson(inputStr: string | null): object {
-  if (!inputStr) return { message: "No JSON string" };
+  if (!inputStr) return { message: 'No JSON string' };
   // Remove the ```json\n and trailing ```\n
-  const cleanedStr = inputStr.replace(/```json\n/g, "").replace(/\n```$/, "");
+  const cleanedStr = inputStr.replace(/```json\n/g, '').replace(/\n```$/, '');
 
   try {
     // Parse the cleaned string into a JSON object

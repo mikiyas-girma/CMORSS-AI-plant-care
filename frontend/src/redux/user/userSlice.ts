@@ -6,11 +6,11 @@ export interface UserState {
   isAuthenticated: boolean;
   error: null | object | string;
   loading: boolean;
-};
+}
 
 const initialState: UserState = {
   currentUser: null,
-  isAuthenticated: false,
+  isAuthenticated: true,
   error: null,
   loading: false,
 };
@@ -71,8 +71,9 @@ const userSlice = createSlice({
     updateFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
-    }
-}});
+    },
+  },
+});
 
 export const userActions = userSlice.actions;
 export default userSlice.reducer;
