@@ -21,7 +21,7 @@ import addNoteToPlantJournal from './controllers/user/addNoteToJournal.js';
 const app: Application = express();
 
 // Middleware
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(cookieParser());
 app.use(
   cors({

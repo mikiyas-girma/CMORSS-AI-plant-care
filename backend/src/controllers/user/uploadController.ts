@@ -21,7 +21,7 @@ export const uploadImageController = async (
     // Call the utility function to upload the image
     const uploadResult = await uploadImage({
       image,
-      name: fileName,
+      name: fileName.split('.')[0],
       folder: `${username}/journal/`,
     });
 
