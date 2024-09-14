@@ -48,6 +48,7 @@ const plantJournalSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
+        type: { type: String, enum: ['image', 'text'], default: 'text' },
       },
     ],
 

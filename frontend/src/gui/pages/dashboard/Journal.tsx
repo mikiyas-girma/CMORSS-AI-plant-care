@@ -9,6 +9,7 @@ import LoadingComp from '@/gui/components/common/LoadingComp';
 import ActionBar from '@/gui/components/dashboard-journal/ActionBar';
 import CreateJournal from '@/gui/components/dashboard-journal/CreateJournal';
 import EmptyJournalHistory from '@/gui/components/dashboard-journal/EmptyJournalHistory';
+import JournalDetail from '@/gui/components/dashboard-journal/JournalDetail';
 import JournalHistory from '@/gui/components/dashboard-journal/JournalHistory';
 import useToasts from '@/hooks/useToasts';
 import { axiosForApiCall } from '@/lib/axios';
@@ -98,12 +99,18 @@ const Journal = () => {
 
       {/* Show Modal for for Selected Journal */}
       {selectedJournal && (
-        <div>
-          <p>{selectedJournal}</p>
-        </div>
+        <CustomModal closeModal={() => setSelectedJournal(null)}>
+          <JournalDetail
+            closeModal={() => setShowCreateModal(false)}
+            journalId={selectedJournal}
+          />
+        </CustomModal>
       )}
 
-      {!loading && journals.length === 0 && <EmptyJournalHistory />}
+      {!loading && journals.length === 0 && (
+        <EmptyJournalHistory message="You have not recorded any entry." />
+      )}
+
       {!loading && journals.length > 0 && (
         <JournalHistory
           journals={journals}
