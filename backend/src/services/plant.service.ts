@@ -48,6 +48,8 @@ export const createPlantService = async (plantData: any) => {
   if (plantData.details)
     validateFields<IPlant["details"]>(plantData.details, requiredDetailsFields);
 
+  const user = await User.findById(plantData.userId);
+  if (!user) throw new Error("User not found");
   const newPlant = new Plant(plantData);
   await newPlant.save();
   return newPlant;
