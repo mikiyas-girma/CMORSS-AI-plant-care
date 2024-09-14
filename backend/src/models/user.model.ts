@@ -27,6 +27,7 @@ const userSchema: Schema<IUser> = new Schema(
       trim: true,
       match: [/.+\@.+\..+/, 'Please provide a valid email address'],
     },
+    photo: String,
     password: {
       type: String,
       minlength: 8,
