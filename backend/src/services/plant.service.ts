@@ -28,6 +28,7 @@ export const createPlantService = async (plantData: any) => {
     "plantImages",
     "details",
     "plantLocation",
+    "locationDetails",
     "health",
   ];
   validateFields<IPlant>(plantData, requiredFields);
@@ -79,7 +80,7 @@ export const updatePlantService = async (plantId: string, plantData: any) => {
   if (!plant) throw new Error("Plant not found");
   const allowedFields: Array<keyof IPlant> = [
     "title",
-    "plantLocation",
+    "locationDetails",
     "health",
     "notes",
     "careHistory",
