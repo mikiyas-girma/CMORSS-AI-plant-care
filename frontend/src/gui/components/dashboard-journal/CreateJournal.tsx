@@ -234,7 +234,7 @@ const CreateJournal: React.FC<TCreateComp> = ({ closeModal, setReload }) => {
                     {extra.dateAcquired ? (
                       format(extra.dateAcquired, 'PPP')
                     ) : (
-                      <span>Pick a date</span>
+                      <span>When was it planted?</span>
                     )}
                   </Button>
                 </PopoverTrigger>

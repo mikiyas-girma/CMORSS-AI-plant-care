@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
-import { Button } from "@/gui/components/ui/button";
-import { Input } from "@/gui/components/ui/input";
-import { ScrollArea } from "@/gui/components/common/scroll-area";
+import { useState, useEffect, useRef } from 'react';
+import { Button } from '@/gui/components/ui/button';
+import { Input } from '@/gui/components/ui/input';
+import { ScrollArea } from '@/gui/components/common/scroll-area';
 // import  Separator  from "@/gui/components/common/Separator"
 import { Avatar, AvatarFallback } from "@/gui/components/common/avatar";
 import { Send, Bot, User, Plus, Loader } from "lucide-react";
@@ -110,7 +110,7 @@ export default function DashboardChatbot() {
         const newMessage: Message = {
           id: Date.now(),
           text: input,
-          sender: "user",
+          sender: 'user',
         };
         const newChatHistory: ChatHistory = {
           id: newChatId,
@@ -145,7 +145,7 @@ export default function DashboardChatbot() {
         const newMessage: Message = {
           id: Date.now(),
           text: input,
-          sender: "user",
+          sender: 'user',
         };
         setMessages((prev) => [...prev, newMessage]);
         setChatHistories((prev) =>
@@ -179,7 +179,7 @@ export default function DashboardChatbot() {
         }, 1000);
       }
 
-      setInput("");
+      setInput('');
     }
   };
 
