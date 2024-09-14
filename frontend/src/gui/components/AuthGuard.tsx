@@ -8,12 +8,21 @@ type AuthGuardProps = {
 
 export default function AuthGuard({ children }: AuthGuardProps) {
   const { user } = useAuth();
+
   const { pathname } = useLocation();
 
-  if (!user.isAuthenticated && !user.isProccessing && pathname.includes(DASHBOARD_PATH.root))
+  if (
+    !user.isAuthenticated &&
+    !user.isProccessing &&
+    pathname.includes(DASHBOARD_PATH.root)
+  )
     return <Navigate to={AUTH_PATH.login} />;
 
-  if (user.isAuthenticated && !user.isProccessing && pathname.includes(AUTH_PATH.root))
+  if (
+    user.isAuthenticated &&
+    !user.isProccessing &&
+    pathname.includes(AUTH_PATH.root)
+  )
     return <Navigate to={DASHBOARD_PATH.root} />;
 
   return <>{user.isProccessing ? null : children}</>;

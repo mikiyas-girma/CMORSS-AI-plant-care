@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 // Define Journal Form Schema
 export const journalFormSchema = z.object({
-  title: z.string().min(10).max(50),
+  title: z.string().min(10).max(66),
   name: z.string().min(3).max(20),
   species: z.string(),
   //   dateAcquired: z.date(),

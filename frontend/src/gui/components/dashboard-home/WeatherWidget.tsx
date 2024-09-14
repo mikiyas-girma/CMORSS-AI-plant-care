@@ -4,15 +4,14 @@ import { Droplets, CloudRainWind } from '@/assets/Icons';
 import InfoComp from './InfoComp';
 import { useEffect, useState } from 'react';
 import useGeolocation from '@/hooks/useGeoLocatioin';
-import axios from 'axios';
 import { capitalizeWords, formatTemperature } from '@/lib/utils';
 import { WeatherData } from '@/types';
 import { CircleAlert, Wind } from 'lucide-react';
 
 import { format } from 'date-fns';
 import { getWeatherImage } from '@/lib/getWeatherImage';
-import { ServerURL } from '@/lib/SERVERURL';
 import LoadingComp from '../common/LoadingComp';
+import { axiosForApiCall } from '@/lib/axios';
 
 const WeatherWidget = () => {
   const [loading, setLoading] = useState(true);
@@ -27,7 +26,7 @@ const WeatherWidget = () => {
 
     (async () => {
       try {
-        const res = await axios.get(`${ServerURL}/dashboard/weather-data`, {
+        const res = await axiosForApiCall.get(`/dashboard/weather-data`, {
           params: { longitude, latitude },
         });
 
