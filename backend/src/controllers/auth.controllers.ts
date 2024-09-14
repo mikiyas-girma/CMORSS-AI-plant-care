@@ -120,3 +120,34 @@ export const logout = (req: Request, res: Response) => {
   res.clearCookie('access_token');
   res.json({ message: 'logged out with success' });
 };
+
+export const google = async (req: Request, res: Response, next: NextFunction) => {
+  const { firstName, lastName, email } = req.body;
+  if (!firstName || !lastName || !email) {
+    return res.status(400).json({ message: 'Missing required fields: firstName, lastName, or email' });
+  }
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      const token = jwt.sign({ email: existingUser.email }, process.env.JWT_SECRET_KEY!);
+      const { password: pass, ...user } = existingUser.toObject();
+      return res.status(200).cookie("access_token", token, {
+        httpOnly: true,
+      }).json(user);      
+    } else {
+      const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+      const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+      const newUser = new User({
+        firstName,
+        lastName,
+        email,
+        password: hashedPassword,
+      });
+      await newUser.save();
+      return res.status(201).json("User created successfully");
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+

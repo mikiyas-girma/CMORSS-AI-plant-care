@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       signOut: async () => {
         dispatch(signInStart());
         try {
-          await axiosForApiCall.post('/auth/signout');
+          await axiosForApiCall.post('/auth/logout');
           dispatch(signOutSuccess());
         } catch (err) {
           console.log(err);
