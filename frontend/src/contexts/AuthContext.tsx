@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { axiosForApiCall } from "@/lib/axios";
 import { userActions, UserState } from "@/redux/user/userSlice";
+import { SignInFormData, SignUpFormData } from "@/types/form";
+import { User } from "@/types/user";
 
 const {
 	signInFailure,
@@ -21,10 +23,10 @@ const {
 interface AuthContextValue {
 	user: {
 		isAuthenticated: boolean,
-		data: object | null
+		data: User | null
 	},
-	signUp: (userData) => Promise<void>,
-	signIn: (credentials) => Promise<void>,
+	signUp: (userData: SignUpFormData) => Promise<void>,
+	signIn: (credentials: SignInFormData) => Promise<void>,
 	signInWithGoogle: () => Promise<void>,
 	signOut: () => Promise<void>,
 	updateUserProfile: (newData) => Promise<void>,
@@ -44,7 +46,7 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
 				isAuthenticated: isAuthenticated,
 				data: currentUser
 			},
-			signUp: async (userData) => {
+			signUp: async (userData: SignUpFormData) => {
 				dispatch(signUpStart());
 				try {
 					await axiosForApiCall.post('/auth/signup', userData);
@@ -54,7 +56,7 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
 					dispatch(signUpFailure(err));
 				}
 			},
-			signIn: async (credentials) => {
+			signIn: async (credentials: SignInFormData) => {
 				dispatch(signInStart());
 				try {
 					const response = await axiosForApiCall.post('/auth/signin', credentials);

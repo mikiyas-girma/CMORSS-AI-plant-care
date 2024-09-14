@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import { Button, buttonVariants } from "@/gui/components/ui/button";
 import { Checkbox } from "@/gui/components/ui/checkbox";
 import { Input } from "@/gui/components/ui/input";
@@ -8,6 +9,7 @@ import DangerWrapper from "@/gui/components/common/DangerWrapper";
 import { cn } from "@/lib/utils";
 import { SignUpFormData } from "@/types/form";
 import { signupValidation } from "@/lib/formsValidation";
+import useAuth from "@/hooks/useAuth";
 
 /**
  * Sign in Route Component
@@ -24,6 +26,8 @@ const SignIn = () => {
     acceptPolicy: false,
   });
 
+  const { signUp } = useAuth();
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -31,7 +35,7 @@ const SignIn = () => {
     });
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = signupValidation(formData);
     
@@ -39,6 +43,14 @@ const SignIn = () => {
     if (Object.values(validationErrors).find(e => e !== '')) {
       setErrors({...validationErrors});
       return;
+    }
+
+    try {
+      await signUp(formData);
+      toast.success("Your account was register with success. Welcome to the familly");
+    } catch (error) {
+      toast.error("An unknow error occurs will register your account please retry.");
+      console.error(error);
     }
   }
 

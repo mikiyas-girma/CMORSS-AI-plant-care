@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { User } from '@/types/user';
 
 export interface UserState {
-  currentUser: null | object;
+  currentUser: null | User;
   isAuthenticated: boolean;
   error: null | object | string;
   loading: boolean;
@@ -50,6 +51,7 @@ const userSlice = createSlice({
     },
     signOutSuccess: (state) => {
       state.currentUser = null;
+      state.isAuthenticated = false;
       state.loading = false;
       state.error = null;
     },

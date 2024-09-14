@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import { Button, buttonVariants } from "@/gui/components/ui/button";
 import { Checkbox } from "@/gui/components/ui/checkbox";
 import { Input } from "@/gui/components/ui/input";
@@ -9,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { AUTH_PATH } from "@/routes/paths";
 import { SignInFormData } from "@/types/form";
 import { signinValidation } from "@/lib/formsValidation";
+import useAuth from "@/hooks/useAuth";
 
 /**
  * Sign in Route Component
@@ -22,6 +24,8 @@ const SignIn = () => {
     remember: false,
   });
 
+  const { signIn, user } = useAuth();
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -29,13 +33,21 @@ const SignIn = () => {
     });
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = signinValidation(formData);
 
     if (Object.values(validationErrors).find(e => e !== '')) {
       setErrors({...validationErrors});
       return;
+    }
+
+    try {
+      await signIn(formData);
+      toast.success("Welcome back " + user?.data?.firstname + ' ' + user?.data?.lastname);
+    } catch (error) {
+      toast.error("An unknow error occurs will register your account please retry.");
+      console.error(error);
     }
   }
 
