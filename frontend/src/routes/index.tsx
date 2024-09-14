@@ -15,12 +15,6 @@ import Journal from '@/gui/pages/dashboard/Journal';
 // Import Components
 
 // Authentication
-const ResetPassword = Loadable(
-  lazy(() => import('@/gui/pages/auth/ResetPassword'))
-);
-const NewPassword = Loadable(
-  lazy(() => import('@/gui/pages/auth/NewPassword'))
-);
 const SignIn = Loadable(lazy(() => import('@/gui/pages/auth/SignIn')));
 const SignUp = Loadable(lazy(() => import('@/gui/pages/auth/Register')));
 
@@ -37,6 +31,9 @@ const DashboardChat = Loadable(
 const DashboardPlantIdentificationChat = Loadable(
   lazy(() => import('@/gui/pages/dashboard/PlantIdentification'))
 );
+const DashboardProfileSettings = Loadable(
+  lazy(() => import('@/gui/pages/dashboard/ProfileSettings'))
+)
 
 /**
  * Define Router for the Application
@@ -55,8 +52,6 @@ export default function Router() {
         { index: true, element: <Navigate to="/auth/login" replace /> },
         { path: 'login', element: <SignIn /> },
         { path: 'register', element: <SignUp /> },
-        { path: 'reset-password', element: <ResetPassword /> },
-        { path: 'new-password', element: <NewPassword /> },
       ],
     },
     {
@@ -72,6 +67,7 @@ export default function Router() {
           path: 'plant-identification',
           element: <DashboardPlantIdentificationChat />,
         },
+        { path: 'settings', element: <DashboardProfileSettings /> },
         {
           path: '*',
           element: (
