@@ -31,7 +31,7 @@ const JournalPlantStat: React.FC<JournalStatType> = ({
   );
 
   return (
-    <div className="flex gap-2 flex-wrap text-xs mt-3 cursor-default">
+    <div className="flex gap-2 flex-wrap text-[11px] sm:text-xs mt-3 cursor-default  md:justify-start justify-center">
       <StatItem label="Plant Name" value={name} />
       <StatItem label="Species" value={species} />
       <StatItem

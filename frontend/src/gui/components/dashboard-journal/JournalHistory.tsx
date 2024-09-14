@@ -16,7 +16,6 @@ const JournalHistory: React.FC<THistory> = ({
         <JournalHistoryCard
           key={index}
           title={journal.title}
-          messageCount={journal.messageCount}
           date={new Date(journal.lastUpdate).toISOString()}
           onClick={setSelectedJournal}
           journalId={journal._id}

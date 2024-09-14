@@ -32,7 +32,7 @@ const FilePickerButton: React.FC<FilePickerType> = ({
   };
 
   return (
-    <div className="text-sm mt-1 flex gap-2 items-center">
+    <div className="text-xs sm:text-sm mt-1 flex gap-2 items-center">
       <button
         className={`rounded-lg  hover:bg-primary-orange transition-colors duration-500 ease-in border p-2 ${
           file ? 'bg-red-500 text-white' : 'bg-gray-neutral'
