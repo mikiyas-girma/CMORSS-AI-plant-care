@@ -86,8 +86,3 @@ export const checkAuth = (req: Request, res: Response) => {
     }
   });
 };
-
-export const logout = (req: Request, res: Response) => {
-  res.clearCookie('access_token');
-  res.json({ message: 'logged out with success' });
-};
