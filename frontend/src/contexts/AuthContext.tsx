@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       updateUserProfile: async (newData) => {
         dispatch(updateStart());
         try {
-          const response = await axiosForApiCall.put('/user/update', newData);
+          const response = await axiosForApiCall.put('/user/update-profile', newData);
           dispatch(updateSuccess({ ...currentUser, ...response.data }));
         } catch (err) {
           console.log(err);

@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/gui/components/ui/ta
 export default function ProfileSettings () {
 
 	return (
-		<Tabs defaultValue="account" className="w-full">
+		<Tabs defaultValue="account">
 			<TabsList className="grid w-full grid-cols-2">
 				<TabsTrigger value="account">Account</TabsTrigger>
 				<TabsTrigger value="password">Password</TabsTrigger>

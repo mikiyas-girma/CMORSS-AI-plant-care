@@ -42,7 +42,7 @@ const NagivationMobile = () => {
       </section>
 
       {/* Profile Detail and Logout */}
-      <ProfileShortcut username="CMORSS Teammates" />
+      <ProfileShortcut />
     </aside>
   );
 };
