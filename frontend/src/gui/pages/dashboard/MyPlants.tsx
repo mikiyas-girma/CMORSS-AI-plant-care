@@ -57,8 +57,8 @@ export default function Component() {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead className="hidden sm:table-cell">Species</TableHead>
+            <TableHead>Plant Name</TableHead>
+            <TableHead className="hidden sm:table-cell">Location</TableHead>
             <TableHead className="">Get Help</TableHead>
           </TableRow>
         </TableHeader>
@@ -69,9 +69,9 @@ export default function Component() {
               className={index % 2 === 0 ? "bg-muted/100" : ""}
             >
               <TableCell className="font-medium">{index + 1}</TableCell>
-              <TableCell>{item.name}</TableCell>
+              <TableCell>{item.plantName}</TableCell>
               <TableCell className="hidden sm:table-cell">
-                {item.species}
+                {item.geoLocation}
               </TableCell>
               <TableCell className="text-right">
                 {/* this will be changed to route to chat with this plant  */}

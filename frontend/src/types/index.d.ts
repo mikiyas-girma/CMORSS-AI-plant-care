@@ -53,6 +53,14 @@ export type PlantFact = {
   description: string;
 };
 
+
+export type PlantData = {
+    _id: number,
+    plantName: string,
+    geoLocation: string,
+
+}
+
 export type PlantJournalType = {
   name: string;
   title: string;
