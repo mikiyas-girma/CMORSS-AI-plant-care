@@ -129,7 +129,6 @@ export const google = async (req: Request, res: Response, next: NextFunction) =>
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      console.log(`User with email ${email} already exists`);
       const token = jwt.sign({ email: existingUser.email }, process.env.JWT_SECRET_KEY!);
       const { password: pass, ...user } = existingUser.toObject();
       return res.status(200).cookie("access_token", token, {
