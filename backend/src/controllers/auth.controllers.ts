@@ -109,9 +109,11 @@ export const checkAuth = (req: Request, res: Response) => {
           return res.status(401).json(null);
         }
         return res.status(200).json({
+          id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
+          photo: user.photo
         });
       } catch (err) {
         return res.status(500).json({ error: 'SERVER ERROR' });
