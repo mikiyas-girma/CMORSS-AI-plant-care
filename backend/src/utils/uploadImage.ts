@@ -36,13 +36,13 @@ export default async function ({
   // Ensure the base64 string is correctly formatted
   const base64Prefix = `data:${mime};base64,`; // Add the correct data URI prefix based on the MIME type
   const base64Image = image.startsWith("data:") ? image : base64Prefix + image;
-
   // Upload the image to Cloudinary
   const uploadResult = await cloudinary.uploader
     .upload(base64Image, {
       public_id: `agricare/${folder}${name}`,
     })
     .catch((error) => {
+      console.log("AN ERROR OCCURED IN UPLOAD: ");
       console.log(error);
     });
 

@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 type ModalType = {
   children: ReactNode;
-  closeModal: () => void;
+  closeModal?: () => void;
 };
 
 const CustomModal: React.FC<ModalType> = ({ children, closeModal }) => {
@@ -13,7 +13,7 @@ const CustomModal: React.FC<ModalType> = ({ children, closeModal }) => {
 
       <div
         role="button"
-        onClick={closeModal}
+        onClick={closeModal && closeModal}
         className="absolute right-5 px-3 py-1 text-center top-4 text-white border rounded-xl cursor-pointer hover:bg-white hover:bg-opacity-20 hover:text-black transition-all hover:scale-95"
       >
         <p>Close</p>

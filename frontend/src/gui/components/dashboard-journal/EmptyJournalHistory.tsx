@@ -1,10 +1,14 @@
 import EmptyJournal from '@/assets/common/empty_box.png';
+
+type TEmpty = {
+  message: string;
+};
 /**
  * REnders the Empty
  * Journal Illustration
  * @returns
  */
-const EmptyJournalHistory = () => {
+const EmptyJournalHistory: React.FC<TEmpty> = ({ message }) => {
   return (
     <div className="flex flex-col justify-center items-center animate-fadein text-center ">
       <img
@@ -15,9 +19,7 @@ const EmptyJournalHistory = () => {
       <h2 className="text-4xl md:text-7xl font-black text-slate-700 -mt-12 mb-4">
         Ooops!
       </h2>
-      <p className="md:text-base text-sm">
-        You have not recorded any entry on our journal.
-      </p>
+      <p className="md:text-base text-sm">{message}</p>
     </div>
   );
 };

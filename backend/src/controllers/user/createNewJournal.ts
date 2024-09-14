@@ -14,6 +14,8 @@ const createNewJournal = async (req: Request, res: Response) => {
   const { title, name, species, dateAcquired, location, health, message } =
     req.body as PlantJournalType & { message: string };
 
+  const userId = 'Stephen';
+
   const data = {
     name,
     title,
@@ -21,6 +23,7 @@ const createNewJournal = async (req: Request, res: Response) => {
     dateAcquired,
     location,
     health,
+    userId,
     notes: [{ date: new Date(), content: message }],
     images: [],
     careHistory: [],

@@ -5,13 +5,12 @@
 
  */
 
-import { ServerURL } from '@/lib/SERVERURL';
 import { PlantFact } from '@/types';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
 import { Link } from 'react-router-dom';
 import LoadingComp from '../common/LoadingComp';
+import { axiosForApiCall } from '@/lib/axios';
 
 const PlantOfTheDay = () => {
   const [loading, setLoading] = useState(true);
@@ -21,7 +20,7 @@ const PlantOfTheDay = () => {
     (async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`${ServerURL}/dashboard/daily-fact`);
+        const res = await axiosForApiCall.get(`/dashboard/daily-fact`);
         setData(res.data);
       } catch (error: any) {
         if (error.response) {
@@ -63,7 +62,7 @@ const PlantOfTheDay = () => {
             </Link>
           </div>
           {/* Plant Image */}
-          <div className="w-full md:w-[50%]  max-w-[300px]  object-cover rounded-2xl overflow-hidden shadow-xl hover:scale-90 transition-transform ease-in-out duration-300 mx-auto">
+          <div className="w-full md:w-[50%]  max-w-[300px]  object-cover rounded-2xl overflow-hidden shadow-xl hover:scale-90 transition-transform ease-in-out duration-300 mx-auto max-h-[200px]">
             <img
               src={data.image}
               alt={data.name}
