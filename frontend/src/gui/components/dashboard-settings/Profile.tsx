@@ -1,8 +1,8 @@
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
-import { z } from "zod"
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 import {
 	Form,
 	FormControl,
@@ -10,16 +10,17 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/gui/components/ui/form"
-import { Input } from "@/gui/components/ui/input"
-import { Button } from "@/gui/components/ui/button"
-import FileUploader from "@/gui/components/common/FileUploader"
-import UserAvatar from "@/gui/components/common/UserAvater"
-import useAuth from "@/hooks/useAuth"
-import { Loader2 } from "lucide-react"
+} from "@/gui/components/ui/form";
+import { Input } from "@/gui/components/ui/input";
+import { Button } from "@/gui/components/ui/button";
+import FileUploader from "@/gui/components/common/FileUploader";
+import UserAvatar from "@/gui/components/common/UserAvatar";
+import useAuth from "@/hooks/useAuth";
+import { Loader2 } from "lucide-react";
 
 const Profile = () => {
-	const [imgUrl, setImgUrl] = useState<string | null>(null);
+	const { updateUserProfile, user } = useAuth();
+	const [imgUrl, setImgUrl] = useState<string | null | undefined>(user.data?.photo);
 	const profileFormSchema = z.object({
 		firstName: z.string().min(2, {
 			message: "Username must be at least 2 characters.",
@@ -29,24 +30,23 @@ const Profile = () => {
 		}),
 		email: z.string().email(),
 		photo: z.string()
-    .regex(/^data:image\/(jpeg|png|gif);base64,/, {
+    .regex(/^data:image\/(jpeg|png|gif);base64,|^$/, {
       message: "Your photo should be a valid format: JPEG, PNG or GIF.",
-    }).optional()
+    })
+		.optional()
     .refine((data) => {
-			// Check size
-			if (data) {
-				const base64String = data.split(',')[1];
-				const size = (base64String.length * 3) / 4;
-				return size <= 5 * 1024 * 1024;
-			} else {
-				return true;
-			}
+		// Check size
+		if (data) {
+			const base64String = data.split(',')[1];
+			const size = (base64String.length * 3) / 4;
+			return size <= 5 * 1024 * 1024;
+		} else {
+			return true;
+		}
     }, {
       message: "The file uploaded must be less than 5Mo.",
     }),
-	})
-
-	const { updateUserProfile, user } = useAuth();
+	});
 
 	const form = useForm<z.infer<typeof profileFormSchema>>({
 		resolver: zodResolver(profileFormSchema),
@@ -54,19 +54,21 @@ const Profile = () => {
 			firstName: user.data?.firstName,
 			lastName: user.data?.lastName,
 			email: user.data?.email,
-			photo: user.data?.photo
+			photo: undefined
 		},
 	});
 
-  const onSubmit = async (values: z.infer<typeof profileFormSchema>) => {
+	const onSubmit = async (values: z.infer<typeof profileFormSchema>) => {
 		try {
 			updateUserProfile(values);
 			toast.success("Profile informations updated with success.");
 		} catch (error) {
-			toast.error("Oops something went wrong, cannot update your profile, please retry later.");
+			toast.error(
+				"Oops something went wrong, cannot update your profile, please retry later."
+			);
 			console.error(error);
 		}
-  }
+	}
 
 	return (
 		<div>
@@ -143,7 +145,7 @@ const Profile = () => {
 							type="submit"
 							className="w-3/4 bg-primary-green hover:opacity-85 hover:bg-primary-green hover:text-white"
 						>
-							{user.isProccessing && (
+							{user.isProcessing && (
 								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
 							)}
 							Update my profile

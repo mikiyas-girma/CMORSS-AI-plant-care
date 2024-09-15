@@ -14,7 +14,7 @@ const UserAvatar = ({size, url, className}: UserAvatarProps) => {
 	url = url ? url : user.data?.photo ? user.data?.photo : `https://ui-avatars.com/api/?background=random&name=${user.data?.firstName}+${user.data?.lastName}&rounded=true`;
 	size = size ? size : 64
 
-	return !user.data && user.isProccessing  ? (
+	return !user.data && user.isProcessing  ? (
 		<CircleUserRound size={size} />
 	) : (
 		<div style={{width: `${size}${typeof size === 'number' && 'px'}`, height: `${size}${typeof size === 'number' && 'px'}`}}>

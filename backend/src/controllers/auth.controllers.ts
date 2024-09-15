@@ -103,15 +103,18 @@ export const checkAuth = (req: Request, res: Response) => {
       try {
         const user = await User.findOne(
           { email: decoded.email },
-          { email: 1, lastName: 1, firstName: 1 }
+          { email: 1, lastName: 1, firstName: 1, photo: 1 }
         );
         if (!user) {
           return res.status(401).json(null);
         }
+
         return res.status(200).json({
+          id: user._id,
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
+          photo: user.photo
         });
       } catch (err) {
         return res.status(500).json({ error: 'SERVER ERROR' });
