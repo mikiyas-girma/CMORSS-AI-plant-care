@@ -1,7 +1,6 @@
 import { formatRelativeTime } from '@/lib/utils';
 import React, { useState } from 'react';
 import CustomModal from '../common/CustomModal';
-import Separator from '../common/Separator';
 
 type NoteCardType = {
   date: string | Date;
@@ -12,7 +11,7 @@ type NoteCardType = {
 const NoteCard: React.FC<NoteCardType> = ({ date, content, type }) => {
   const [showFullImage, setShowFullImage] = useState(false);
 
-  //   Return State
+  //   Return jsx
   return (
     <div
       className={`${
@@ -50,8 +49,7 @@ const NoteCard: React.FC<NoteCardType> = ({ date, content, type }) => {
         <p className="whitespace-pre-wrap text-sm sm:text-base">{content}</p>
       )}
 
-      <Separator />
-      <p className="sm:mt-2 rounded-lg bg-white w-fit text-xs py-1 px-2 cursor-default">
+      <p className="mt-1 m:mt-2 rounded-lg bg-white w-fit text-[10px] sm:text-xs py-1 px-2 cursor-default">
         {formatRelativeTime(new Date(date))}
       </p>
     </div>

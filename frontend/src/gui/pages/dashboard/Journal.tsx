@@ -66,7 +66,7 @@ const Journal = () => {
   // Return JSX Component
   return (
     <section className="scrollbar-thin h-full w-full p-3 md:p-8 flex flex-col relative">
-      <h2 className="text-xl md:text-2xl font-bold text-gray-full text-center md:w-[80%] mx-auto">
+      <h2 className="text-2xl font-bold text-gray-full text-center md:w-[80%] mx-auto">
         Keep a Private Journal of your Plant Activities or Record New Entries
         Based on New Knowledge
       </h2>

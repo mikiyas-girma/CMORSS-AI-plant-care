@@ -13,7 +13,7 @@ const LogoHeader = () => {
 
         {/* Text */}
         <div>
-          <h1 className="text-[18px] md:text-[22px] font-bold text-primary-green">
+          <h1 className="text-[18px] md:text-[20px] font-bold text-primary-green">
             AgriCare AI App
           </h1>
           <p className="-mt-1 text-right text-[10px] md:text-xs text-slate-600">
