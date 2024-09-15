@@ -31,7 +31,7 @@ jobs:
         working-directory: ./frontend
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
-          VITE_SOCKET_SERVER: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
         run: |
           npm run build
 
