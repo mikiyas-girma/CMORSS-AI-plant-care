@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, response, Response } from "express";
 import redisClient from "../../config/redisClient.js";
 import { Plant } from "../../models/plant.model.js";
 import { CareSuggestion } from "../../models/careSuggestion.model.js"; // New collection
@@ -89,17 +89,35 @@ export const chatWithAI = async (req: Request, res: Response) => {
     }
 
     // Get the current chat history for the user, or initialize a new one
-    const userChatHistory = chatHistories[userId] || [];
+    // const userChatHistory = chatHistories[userId] || [];
+    const historyKey = `chatHistory:${userId}`;
+    let fullChatHistory = await redisClient.lRange(historyKey, 0, -1);
 
-    // Call the AI chat service with the user's query and current chat history
-    const updatedChatHistory = await aiChatService(userQuery, userChatHistory);
+    // parse redis data back into json
+    fullChatHistory = fullChatHistory.map((entry: string) => JSON.parse(entry));
 
-    // Update the chat history for the user (keeping a max of 4 exchanges)
-    chatHistories[userId] = updatedChatHistory;
+    // push new user query to redis
+    const newUserMessage = { role: "user", content: userQuery };
+    await redisClient.rPush(historyKey, JSON.stringify(newUserMessage));
 
-    // Send the AI's response back to the user
-    const aiResponse = updatedChatHistory[updatedChatHistory.length - 1].content;
-    res.status(200).json({ response: aiResponse, chatHistory: updatedChatHistory });
+    // retrieve only the last four for ai history context
+    const recentChatHistory = await redisClient.lRange(historyKey, -MAX_HISTORY, -1);
+    const parsedRecentHistory = recentChatHistory.map((entry: string) => JSON.parse(entry));
+
+    // call ai service with the last 4 chat messages
+    const updatedChatHistory = await aiChatService(userQuery, parsedRecentHistory);
+
+    // store the updated chat history in redis
+    const aiResponseMessage = {role: "assistant", content: updatedChatHistory[updatedChatHistory.length - 1].content};
+    await redisClient.rPush(historyKey, JSON.stringify(aiResponseMessage));
+
+    // Respond with the AI's reply and the full chat history;
+    const aiResponse = aiResponseMessage.content;
+    res.status(200)
+        .json({
+            response: aiResponse,
+            fullChatHistory: [...fullChatHistory, newUserMessage, aiResponseMessage]
+        });
 
   } catch (error) {
     console.error('Error in chatWithAI controller:', error);

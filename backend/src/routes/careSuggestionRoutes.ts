@@ -10,7 +10,7 @@ const router = Router();
 router.get("/plants/:plantId/", getCareSuggestionForPlant);
 
 // Follow up with the AI
-router.post('/plants/:plantId/follow-up', chatWithAI);
+router.post('/chat', chatWithAI);
 
 
 export default router;
