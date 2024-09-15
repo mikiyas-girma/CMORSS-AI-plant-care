@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import {
   Table,
   TableBody,
@@ -6,14 +6,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/gui/components/dashboard-myplants/Table";
-import { BotMessageSquare } from "lucide-react";
-import { useEffect, useState } from "react";
-import { ServerURL } from "@/lib/SERVERURL";
-import axios from "axios";
-import { PlantData } from "@/types";
+} from '@/gui/components/dashboard-myplants/Table';
+import { BotMessageSquare } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ServerURL } from '@/lib/SERVERURL';
+import axios from 'axios';
+import { PlantData } from '@/types';
 import { LoaderCircle } from '@/assets/Icons';
-
 
 export default function Component() {
   const [data, setData] = useState<PlantData[]>([]);
@@ -28,14 +27,13 @@ export default function Component() {
 
         const res = await axios.get(`${ServerURL}/api/plants`);
         const result = res.data;
-        console.log(result);
         setData(result);
       } catch (error: any) {
         if (error.response) {
           setError(error.response);
           console.log(error.response);
         } else {
-          console.log("An Error occured. Check network connection.");
+          console.log('An Error occured. Check network connection.');
         }
       } finally {
         setLoading(false);
@@ -43,7 +41,6 @@ export default function Component() {
     })();
   }, []);
 
-  
   return (
     <div className="container mx-auto py-10">
       {loading && (
@@ -68,7 +65,7 @@ export default function Component() {
           {data.map((item, index) => (
             <TableRow
               key={index}
-              className={index % 2 === 0 ? "bg-muted/100" : ""}
+              className={index % 2 === 0 ? 'bg-muted/100' : ''}
             >
               <TableCell className="font-medium">{index + 1}</TableCell>
               <TableCell>{item.plantName}</TableCell>

@@ -1,23 +1,34 @@
-import LogoHeader from '@/gui/components/common/LogoHeader';
 import ProfileShortcut from '@/gui/components/common/ProfileShortcut';
 import { Link, To, useLocation } from 'react-router-dom';
-import { navigationLinks } from './constants/index';
+
+import { navigationLinks } from '@/gui/pages/dashboard/constants';
+import Separator from './Separator';
+import TrendingMovies from './TrendingMovies';
+
+type MobileNavType = {
+  showNav: boolean;
+  setShowNav: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 /**
- * Nagivation Desktop
- * @returns Navigation Component for the Desktop View > 600px
+ * NavigationMobile
+ *
+ * Renders a mobile navigation sidebar.
+ *
+ * @param  showNav - Controls sidebar visibility
+ * @param setShowNav - Updates showNav state
+ * @returns JSX.Element Mobile navigation sidebar
  */
 
-const NagivationMobile = () => {
+const NavigationMobile: React.FC<MobileNavType> = ({ showNav, setShowNav }) => {
   const pathname = useLocation().pathname;
-  //   const [showMenu, setShowMenu] = useState(true);
-
   return (
-    <aside className="hidden h-full max-w-[300px] flex-col justify-between bg-white p-6 sm:flex">
-      <section>
-        {/* Logo Header */}
-        <LogoHeader />
-
+    <aside
+      className={`h-full w-full flex-col justify-between bg-white p-6 pt-8 absolute top-0 transition-all duration-500 ease-in-out ${
+        showNav ? 'left-0' : '-left-[100%]'
+      } z-10`}
+    >
+      <section className="mt-5">
         {/* Navigation */}
         <nav role="navigation" aria-label="Sidebar Navigation">
           <ul className="flex flex-col gap-2">
@@ -25,6 +36,7 @@ const NagivationMobile = () => {
               <li key={index}>
                 <Link
                   to={link.route as To}
+                  onClick={() => setShowNav((prev) => !prev)}
                   className={`flex gap-2 px-2 py-3 rounded-md transition-all duration-100 ease-in text-gray-full hover:opacity-75 ${
                     pathname === link.route &&
                     'bg-green-neutral text-primary-green font-bold'
@@ -32,7 +44,7 @@ const NagivationMobile = () => {
                 >
                   <link.icon
                     color={pathname === link.route ? '#20a144' : 'gray'}
-                  />{' '}
+                  />
                   <p>{link.label}</p>
                 </Link>
               </li>
@@ -41,10 +53,16 @@ const NagivationMobile = () => {
         </nav>
       </section>
 
+      <Separator />
+
+      <div className="my-5">
+        <TrendingMovies />
+      </div>
+
       {/* Profile Detail and Logout */}
       <ProfileShortcut username="CMORSS Teammates" />
     </aside>
   );
 };
 
-export default NagivationMobile;
+export default NavigationMobile;
