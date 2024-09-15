@@ -3,7 +3,6 @@ import { LucideProps } from 'lucide-react';
 import { Link, To } from 'react-router-dom';
 
 type LinkProp = {
-  index: number;
   route: To;
   pathname: string;
   label: string;
@@ -19,7 +18,6 @@ type LinkProp = {
  */
 
 const NavLink: React.FC<LinkProp> = ({
-  index,
   route,
   pathname,
   label,
@@ -27,10 +25,10 @@ const NavLink: React.FC<LinkProp> = ({
   className,
 }) => {
   return (
-    <li key={index}>
+    <li>
       <Link
         to={route as To}
-        className={`flex gap-2 px-2 py-3 rounded-md transition-all duration-100 ease-in text-gray-full hover:opacity-75 hover:bg-slate-50 ${className} ${
+        className={`flex gap-2 px-2 py-3 rounded-md text-sm items-center transition-all duration-100 ease-in text-gray-full hover:opacity-75 hover:bg-slate-50 ${className} ${
           pathname === route && 'bg-green-neutral text-primary-green font-bold'
         }`}
       >

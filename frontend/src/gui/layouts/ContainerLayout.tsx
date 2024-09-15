@@ -12,20 +12,20 @@ type ContainerProp = {
 
 const ContainerLayout: React.FC<ContainerProp> = ({ children }) => {
   return (
-    <div className="bg-primary-green w-full min-h-screen flex justify-center items-center relative p-10 overflow-hidden">
+    <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-primary-green sm:p-10">
       {/* Just vanity element hehe */}
       <div
-        className="w-[50%] min-w-[900px] h-[100%] bg-white bg-opacity-[5%] absolute rounded-[1000px] flex justify-center items-center"
+        className="absolute flex h-[100%] w-[50%] min-w-[900px] items-center justify-center rounded-[1000px] bg-white bg-opacity-[5%]"
         role="presentation"
       >
         <div
-          className="w-[70%] h-[70%] bg-white bg-opacity-[5%] absolute rounded-[1000px]"
+          className="absolute h-[70%] w-[70%] rounded-[1000px] bg-white bg-opacity-[5%]"
           role="presentation"
         ></div>
       </div>
 
       {/* Ender all other Route outlets */}
-      <div className="w-full mx-auto h-full z-10 flex flex-col justify-center items-center overflow-y-auto">
+      <div className="z-10 mx-auto flex h-full w-full flex-col items-center justify-center overflow-y-auto">
         {children}
       </div>
     </div>

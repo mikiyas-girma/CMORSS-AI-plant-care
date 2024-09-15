@@ -1,19 +1,29 @@
+import useAuth from '@/hooks/useAuth';
 import { AUTH_PATH, DASHBOARD_PATH } from '@/routes/paths';
-import { Navigate, useLocation } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom';
 
 type AuthGuardProps = {
-    children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
 export default function AuthGuard({ children }: AuthGuardProps) {
-    const isAuthenticated = false;
-    const { pathname } = useLocation();
+  const { user } = useAuth();
 
-    if (!isAuthenticated && pathname.includes(DASHBOARD_PATH.root))
-        return <Navigate to={AUTH_PATH.login} />
+  const { pathname } = useLocation();
 
-    if (isAuthenticated && pathname.includes(AUTH_PATH.root))
-        return <Navigate to={DASHBOARD_PATH.root} />
+  if (
+    !user.isAuthenticated &&
+    !user.isProcessing &&
+    pathname.includes(DASHBOARD_PATH.root)
+  )
+    return <Navigate to={AUTH_PATH.login} />;
 
-    return <>{children}</>
+  if (
+    user.isAuthenticated &&
+    !user.isProcessing &&
+    pathname.includes(AUTH_PATH.root)
+  )
+    return <Navigate to={DASHBOARD_PATH.root} />;
+
+  return <>{user.isProcessing ? null : children}</>;
 }

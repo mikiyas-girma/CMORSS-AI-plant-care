@@ -10,16 +10,11 @@ import DashboardLayout from '@/gui/layouts/DashboardLayout';
 // components
 import Loadable from '@/gui/components/Loadable';
 import NotFound from '@/gui/pages/NotFound';
+import Journal from '@/gui/pages/dashboard/Journal';
 
 // Import Components
 
 // Authentication
-const ResetPassword = Loadable(
-  lazy(() => import('@/gui/pages/auth/ResetPassword'))
-);
-const NewPassword = Loadable(
-  lazy(() => import('@/gui/pages/auth/NewPassword'))
-);
 const SignIn = Loadable(lazy(() => import('@/gui/pages/auth/SignIn')));
 const SignUp = Loadable(lazy(() => import('@/gui/pages/auth/Register')));
 
@@ -27,26 +22,18 @@ const SignUp = Loadable(lazy(() => import('@/gui/pages/auth/Register')));
 const DashboardHome = Loadable(
   lazy(() => import('@/gui/pages/dashboard/Home'))
 );
+const DashboardMyPlants = Loadable(
+  lazy(() => import('@/gui/pages/dashboard/MyPlants'))
+);
 const DashboardChat = Loadable(
   lazy(() => import('@/gui/pages/dashboard/Chat'))
 );
-const DashboardPlantIdentificationChat = Loadable(
+const DashboardPlantIdentification = Loadable(
   lazy(() => import('@/gui/pages/dashboard/PlantIdentification'))
 );
-
-/**
- * Define Root Redirect
- */
-// Root redirection component
-const RootRedirect = () => {
-  // Check Auth Status and redirect appropriately
-  const isAuthenticated = false;
-  return isAuthenticated ? (
-    <Navigate to="/dashboard" replace />
-  ) : (
-    <Navigate to="/auth/login" replace />
-  );
-};
+const DashboardProfileSettings = Loadable(
+  lazy(() => import('@/gui/pages/dashboard/ProfileSettings'))
+)
 
 /**
  * Define Router for the Application
@@ -56,7 +43,7 @@ export default function Router() {
   return useRoutes([
     {
       path: '/',
-      element: <RootRedirect />,
+      element: <Navigate to="/dashboard" replace />,
     },
     {
       path: 'auth',
@@ -65,8 +52,6 @@ export default function Router() {
         { index: true, element: <Navigate to="/auth/login" replace /> },
         { path: 'login', element: <SignIn /> },
         { path: 'register', element: <SignUp /> },
-        { path: 'reset-password', element: <ResetPassword /> },
-        { path: 'new-password', element: <NewPassword /> },
       ],
     },
     {
@@ -75,11 +60,15 @@ export default function Router() {
       children: [
         { index: true, element: <Navigate to="/dashboard/home" replace /> },
         { path: 'home', element: <DashboardHome /> },
+        { path: 'myplants', element: <DashboardMyPlants /> },
+        { path: 'chat/:plantId', element: <DashboardChat /> },
         { path: 'chat', element: <DashboardChat /> },
+        { path: 'journal', element: <Journal /> },
         {
           path: 'plant-identification',
-          element: <DashboardPlantIdentificationChat />,
+          element: <DashboardPlantIdentification />,
         },
+        { path: 'settings', element: <DashboardProfileSettings /> },
         {
           path: '*',
           element: (

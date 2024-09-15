@@ -7,6 +7,9 @@ import EmptyBox from './common/empty_box.png';
 import ImageUpload from './common/image_upload.png';
 
 // Weather Widget: Use in an img tag
+import SunnyDay from './weather/sun_gold.png';
+import BrightMoon from './weather/moon.png';
+import Cloudy from './weather/cloudy.png';
 import MoonCloudMidRain from './weather/moon_cloud_mid_rain.png';
 import MoonCloudWind from './weather/moon_cloud_wind.png';
 import SunCloudMidRain from './weather/sun_cloud_mid_rain.png';
@@ -19,12 +22,16 @@ import Community3D from './dashboard/community_icon.png';
 import Journal3D from './dashboard/journal_icon.png';
 import Plant3D from './dashboard/plant_icon.png';
 
+import plantImage1 from './common/plant1.png';
 // // Export all Icons and Image assets
 export {
   AnimatedLogo,
   AppLogo,
   EmptyBox,
   ImageUpload,
+  SunnyDay,
+  BrightMoon,
+  Cloudy,
   MoonCloudMidRain,
   MoonCloudWind,
   SunCloudMidRain,
@@ -34,4 +41,5 @@ export {
   Community3D,
   Journal3D,
   Plant3D,
+  plantImage1
 };

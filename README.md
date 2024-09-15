@@ -94,8 +94,8 @@ Before you begin, ensure you have the following installed:
    ```bash
    PORT=3000
    MONGODB_URI=your_mongodb_connection_string
-   OPENAI_API_KEY=your_openai_api_key
    WEATHER_API_KEY=your_weather_api_key
+   OPENAI_API_KEY=your_openai_api_key
    GOOGLE_MAPS_API_KEY=your_google_maps_api_key
    ```
 
