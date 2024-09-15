@@ -7,6 +7,7 @@ export interface IUser extends Document {
   lastName?: string;
   fullName?: string;
   email: string;
+  photo: string;
   password?: string;
   googleID?: string;
   chats: IChat[];

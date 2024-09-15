@@ -29,7 +29,7 @@ const SignIn = () => {
     acceptPolicy: false,
   });
 
-  const { signUp, user: {isProccessing} } = useAuth();
+  const { signUp, user: {isProcessing} } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -170,9 +170,9 @@ const SignIn = () => {
             size="lg"
             type="submit"
             className="!bg-primary-green hover:!bg-opacity-85 uppercase"
-            disabled={isProccessing}
+            disabled={isProcessing}
           >
-            {isProccessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Register your account
           </Button>
           {/* <Link

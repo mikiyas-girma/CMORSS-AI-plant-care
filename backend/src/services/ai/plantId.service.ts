@@ -20,13 +20,22 @@ export const plantIdImageData = async (images: string[]) => {
   };
 
   try {
-    const response = (await axios(config)).data.result.classification
-      .suggestions[0];
-    const { images, language, entity_id, ...data } = response.details;
+    const res = (await axios(config)).data;
+    const is_plant = res.result.is_plant.binary;
+    const response = res.result.classification.suggestions[0];
+    const { description, images, language, entity_id, ...data } =
+      response.details;
     const newImages = response.details.images.map((image: any) => image.value);
     const name = response.name;
 
-    const sanitizedData = sanitizeObject({ name, images: newImages, ...data });
+    const sanitizedData = sanitizeObject({
+      description: description.value,
+      is_plant,
+      name,
+      images: newImages,
+      ...data,
+    });
+
     return sanitizedData as PlantDetails & { is_plant: boolean };
   } catch (error) {
     console.error(error);

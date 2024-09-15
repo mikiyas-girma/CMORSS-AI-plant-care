@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { plantJsonFormat } from "../../constants/index.js";
 import { parseJson } from "../../utils/parseJson.js";
 import { PlantDetails } from "../../types/models/plant.types.js";
@@ -10,8 +10,8 @@ async function convertImageToBase64(imageUrl: string): Promise<string> {
     const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
     const buffer = Buffer.from(response.data, "binary");
     return buffer.toString("base64");
-  } catch (error) {
-    console.error("Error converting image to Base64:", error);
+  } catch (error: any) {
+    console.error("Error converting image to Base64:", error.message);
     throw error;
   }
 }
@@ -41,7 +41,7 @@ export const geminiImageData = async (images: string[], description = "") => {
   const imageParts = await Promise.all(
     images.map(async (imageUrl) => {
       const base64Image = await convertImageToBase64(imageUrl);
-      const extension = imageUrl.split('.').pop()?.toLowerCase(); 
+      const extension = imageUrl.split(".").pop()?.toLowerCase();
       return base64ToGenerativePart(base64Image, `image/${extension}`);
     })
   );
@@ -53,7 +53,10 @@ export const geminiImageData = async (images: string[], description = "") => {
 
   // Send the prompt and images to the Gemini model
   try {
-    const generatedContent = await model.generateContent([prompt, ...imageParts]);
+    const generatedContent = await model.generateContent([
+      prompt,
+      ...imageParts,
+    ]);
 
     const data = generatedContent.response.text();
 

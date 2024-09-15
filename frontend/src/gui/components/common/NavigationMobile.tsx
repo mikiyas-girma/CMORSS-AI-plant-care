@@ -60,7 +60,7 @@ const NavigationMobile: React.FC<MobileNavType> = ({ showNav, setShowNav }) => {
       </div>
 
       {/* Profile Detail and Logout */}
-      <ProfileShortcut username="CMORSS Teammates" />
+      <ProfileShortcut />
     </aside>
   );
 };

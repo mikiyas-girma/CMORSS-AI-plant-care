@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { gptImageData } from "../services/ai/gpt.service.js";
 import { geminiImageData } from "../services/ai/gemini.service.js";
 import { plantIdImageData } from "../services/ai/plantId.service.js";
+import uploadImage from "../utils/uploadImage.js";
+import { v2 as cloudinary } from "cloudinary";
 
 let model: "plantId" | "gpt" | "gemini";
 
@@ -11,6 +13,12 @@ export const identifyPlant = async (req: Request, res: Response) => {
     if (!images || images.length === 0)
       return res.status(400).json({ message: "No image provided" });
 
+    const imagesUrls = await Promise.all(
+      images.map(async (image: string, index: number) => {
+        return (await uploadImage({ image: image, name: `image-${index}` }))
+          .imageUrl;
+      })
+    );
     if (
       !Array.isArray(images) ||
       !images.every((image) => typeof image === "string")
@@ -34,7 +42,10 @@ export const identifyPlant = async (req: Request, res: Response) => {
         ? plantIdImageData
         : () => null;
 
-    const data = await getImageData(images);
+    const data = await getImageData(imagesUrls);
+    images.forEach(async (image: string, index: number) => {
+      await cloudinary.uploader.destroy(`agricare/image-${index}`);
+    });
     if (!data)
       return res.status(500).json({ message: "Error retrieving image data" });
 

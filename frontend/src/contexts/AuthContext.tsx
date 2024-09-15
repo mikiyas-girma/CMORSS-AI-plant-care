@@ -11,19 +11,19 @@ const {
   signInStart,
   signInSuccess,
   signOutFailure,
+  signOutStart,
   signOutSuccess,
   signUpFailure,
   signUpStart,
   signUpSuccess,
-  updateFailure,
-  updateStart,
   updateSuccess,
 } = userActions;
 
 interface AuthContextValue {
   user: {
     isAuthenticated: boolean;
-    isProccessing: boolean;
+    isProcessing: boolean;
+    processFail: boolean;
     data: User | null;
   };
   signUp: (userData: SignUpFormData) => Promise<void>;
@@ -33,13 +33,13 @@ interface AuthContextValue {
   updateUserProfile: (newData) => Promise<void>;
   updateUserPassword: (newPassword) => Promise<void>;
   deleteUser: () => Promise<void>;
-}
+};
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { currentUser, isAuthenticated, loading } = useSelector<
+  const { currentUser, isAuthenticated, loading, error } = useSelector<
     RootState,
     UserState
   >((state) => state.user);
@@ -48,7 +48,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return {
       user: {
         isAuthenticated: isAuthenticated,
-        isProccessing: loading,
+        isProcessing: loading,
+        processFail: !!error,
         data: currentUser,
       },
       signUp: async (userData: SignUpFormData) => {
@@ -77,7 +78,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       },
       signOut: async () => {
-        dispatch(signInStart());
+        dispatch(signOutStart());
         try {
           await axiosForApiCall.post('/auth/logout');
           dispatch(signOutSuccess());
@@ -89,26 +90,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       },
       signInWithGoogle: async () => {},
       updateUserProfile: async (newData) => {
-        dispatch(updateStart());
         try {
-          const response = await axiosForApiCall.put('/user/update', newData);
+          const response = await axiosForApiCall.put('/user/update-profile', {
+            id: currentUser?.id,
+            ...newData
+          });
           dispatch(updateSuccess({ ...currentUser, ...response.data }));
         } catch (err) {
           console.log(err);
-          dispatch(updateFailure(err));
           throw new Error(
             'An error occured while updating user profile, please retry'
           );
         }
       },
-      updateUserPassword: async (newPassword) => {
-        dispatch(updateStart());
+      updateUserPassword: async (passwords) => {
         try {
-          await axiosForApiCall.put('/user/update-password', { newPassword });
+          await axiosForApiCall.put('/user/update-password', {
+            id: currentUser?.id,
+            ...passwords
+          });
           dispatch(updateSuccess(currentUser));
         } catch (err) {
           console.log(err);
-          dispatch(updateFailure(err));
           throw new Error(
             'An error occured while updating your profile, please retry'
           );
@@ -116,19 +119,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       },
       deleteUser: async () => {
         try {
-          dispatch(updateStart());
+        //   dispatch(updateStart());
           await axiosForApiCall.post('/user/delete');
           dispatch(updateSuccess(null));
         } catch (err) {
           console.log(err);
-          dispatch(updateFailure(err));
+        //   dispatch(updateFailure(err));
           throw new Error(
             'An error occured while deleting your account, please retry'
           );
         }
       },
     };
-  }, [currentUser, dispatch, isAuthenticated, loading]);
+  }, [currentUser, dispatch, isAuthenticated, loading, error]);
 
   useEffect(() => {
     const checkAuthState = async () => {

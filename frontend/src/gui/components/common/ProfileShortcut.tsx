@@ -1,18 +1,15 @@
-import { useContext } from 'react';
 import { LogOut } from '@/assets/Icons';
-import { AuthContext } from '@/contexts/AuthContext';
+import useAuth from '@/hooks/useAuth';
+import UserAvatar from './UserAvatar';
 
-type ProfileProp = {
-  username: string;
-  profilePhoto?: string;
-};
+const ProfileShortcut = () => {
+  const {signOut, user: {data}} = useAuth();
+  const username = data?.firstName + ' ' + data?.lastName
 
-const ProfileShortcut: React.FC<ProfileProp> = ({ username, profilePhoto }) => {
-  const authContext = useContext(AuthContext);
   const handleLogout = async () => {
-    if (authContext) {
+    if (signOut) {
       try {
-        await authContext.signOut();
+        await signOut();
       } catch (error) {
         console.error('Error while logging out:', error);
       }
@@ -22,10 +19,7 @@ const ProfileShortcut: React.FC<ProfileProp> = ({ username, profilePhoto }) => {
   return (
     <section className="flex cursor-default items-center justify-between rounded-lg bg-gray-neutral p-2">
       <div className="flex items-center gap-2">
-        <img
-          src={profilePhoto || '/image-04.jpg'}
-          className="h-[50px] w-[50px] overflow-hidden rounded-full border-2 border-white"
-        />
+        <UserAvatar className="border-2 border-white" size={50}/>
         <p className="text-xs font-bold text-gray-full">{username}</p>
       </div>
 

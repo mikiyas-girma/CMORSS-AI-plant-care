@@ -39,7 +39,7 @@ const NavigationDesktop = () => {
       <TrendingMovies />
 
       {/* Profile Detail and Logout */}
-      <ProfileShortcut username="CMORSS Teammates" />
+      <ProfileShortcut />
     </aside>
   );
 };
