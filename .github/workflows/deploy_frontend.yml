@@ -8,6 +8,7 @@ on:
       - main
   repository_dispatch:
     types: [deploy_frontend]
+  workflow_dispatch:
 
 jobs:
   deploy-frontend:
@@ -29,6 +30,7 @@ jobs:
       - name: Build Frontend
         working-directory: ./frontend
         env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_SOCKET_SERVER: ${{ secrets.VITE_FIREBASE_API_KEY }}
         run: |
           npm run build
