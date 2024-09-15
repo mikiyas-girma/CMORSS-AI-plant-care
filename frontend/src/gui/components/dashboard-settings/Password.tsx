@@ -42,7 +42,7 @@ const Password = () => {
 		},
 	});
 
-	const { updateUserPassword, user: {isProccessing} } = useAuth();
+	const { updateUserPassword, user: {isProcessing} } = useAuth();
 
   const onSubmit = async (values: z.infer<typeof passwordFormSchema>) => {
 		try {
@@ -97,7 +97,7 @@ const Password = () => {
 							type="submit"
 							className="w-2/4 bg-red-500 hover:opacity-85 hover:bg-red-500 hover:text-white"
 						>
-							{isProccessing && (
+							{isProcessing && (
 								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
 							)}
 							Update my password

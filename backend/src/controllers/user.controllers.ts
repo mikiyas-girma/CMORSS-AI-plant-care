@@ -24,7 +24,7 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
       });
       photoUrl = imageUrl;
     }
-    console.log(photoUrl);
+    console.log('updating:', photoUrl);
     
     user.$set({
       email: email && email !== user.email ? email : user.email,
@@ -34,12 +34,12 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
     });
     await user.save();
 
-    return res.status(204).send({
+    return res.status(200).json({
       id: user._id,
-      email: email,
-      firstName: firstName,
-      lastName: lastName,
-      photo: photoUrl
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      photo: user.photo
     });
   } catch (error) {
     console.error('Cannot update user password', error);
@@ -49,21 +49,24 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
 
 const updatePassword = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email, password, confirmedPassword } = req.body;
-
-    if (![email, password, confirmedPassword].every((field) => field && field.trim())) {
+    const { id, password, confirmedPassword } = req.body;
+console.log(id, password, confirmedPassword)
+    if (!id || !password || !confirmedPassword) {
       return next(errorHandler(400, "Please fill in all the required fields"));
     }
 
+    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password) || password !== confirmedPassword) {
+      return next(errorHandler(400, "The password provided are not the same"));
+    }
     const hashedPassword = bcryptjs.hashSync(password, 10);
-    const user = await User.findOne({email});
+    const user = await User.findOne({_id: id});
     if (!user) {
       return next(errorHandler(404, "User not found"));
     }
 
     user.password = hashedPassword;
     user.save();
-    return res.status(204).send({message: 'Password updated with success'});
+    return res.status(204).send();
   } catch (error) {
     console.error('Cannot update user password', error);
     return res.status(500).send({error})

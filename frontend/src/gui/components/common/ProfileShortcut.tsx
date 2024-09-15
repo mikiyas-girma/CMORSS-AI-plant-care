@@ -1,6 +1,6 @@
 import { LogOut } from '@/assets/Icons';
 import useAuth from '@/hooks/useAuth';
-import UserAvatar from './UserAvater';
+import UserAvatar from './UserAvatar';
 
 const ProfileShortcut = () => {
   const {signOut, user: {data}} = useAuth();

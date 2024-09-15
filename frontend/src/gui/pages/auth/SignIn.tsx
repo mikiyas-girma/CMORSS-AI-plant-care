@@ -109,9 +109,9 @@ const SignIn = () => {
           size="lg"
           type="submit"
           className="!bg-primary-green hover:!bg-opacity-85 uppercase"
-          disabled={user.isProccessing}
+          disabled={user.isProcessing}
         >
-          {user.isProccessing && (
+          {user.isProcessing && (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           )}
           Login to your account
