@@ -12,6 +12,11 @@ export const gptImageData = async (images: string[], description = "") => {
   const completion = await openai.chat.completions.create({
     messages: [
       {
+        role: "system",
+        content:
+          "You are plant identification AI, if the image contains a plant, please provide the details in JSON format else reply with '{\"is_plant\": false}'",
+      },
+      {
         role: "user",
         content: [
           { type: "text", text: prompt },
