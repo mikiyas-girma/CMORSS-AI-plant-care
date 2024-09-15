@@ -10,7 +10,6 @@ export const getCurrentWeather = async (location: string) => {
 
     const { temp, humidity } = response.data.main;
     const sunlightHours = calculateSunlightHours(response.data);
-    console.log('Sunlight hours:', sunlightHours.toFixed(2), typeof sunlightHours);
 
     return { temperature: temp, humidity, sunlightHours };
   } catch (error) {
