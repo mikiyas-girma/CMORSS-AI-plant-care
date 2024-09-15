@@ -1,7 +1,7 @@
 import LogoHeader from '@/gui/components/common/LogoHeader';
 import ProfileShortcut from '@/gui/components/common/ProfileShortcut';
 import { Link, To, useLocation } from 'react-router-dom';
-import { navigationLinks } from './constants/index';
+import { navigationLinks } from '@/gui/pages/dashboard/constants/index.js';
 
 /**
  * Nagivation Desktop
