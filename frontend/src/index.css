@@ -102,3 +102,33 @@
 .scrollbar-thin {
   overflow-y: auto;
 }
+
+/* Scrollbar hide */
+.scrollbar-hide {
+  scrollbar-width: none;
+  scrollbar-color: #b8b5b5 #f1f1f1;
+  scroll-behavior: smooth;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+.scrollbar-hide::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.scrollbar-hide::-webkit-scrollbar-thumb {
+  background: #b8b5b5;
+  border-radius: 4px;
+}
+
+.scrollbar-hide::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.scrollbar-hide {
+  overflow-y: auto;
+}

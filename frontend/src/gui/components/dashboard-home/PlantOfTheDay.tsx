@@ -34,17 +34,18 @@ const PlantOfTheDay = () => {
 
   // Return JSX To View
   return (
-    <section className="min-h-[200px] min-w-[300px] flex-grow rounded-xl bg-primary-orange w-[50%] p-7">
+    <section className="min-h-[200px] sm:min-w-[300px] flex-grow rounded-xl bg-primary-orange w-[50%] p-7">
       {loading && (
-        <div className="flex h-[200px] w-[200px] flex-col items-center justify-center text-white">
+        <div className="flex h-[200px] w-[200px] flex-col items-center justify-center text-white mx-auto">
           <LoadingComp
-            message="Loading Weather"
+            message="Loading Plant of the Day"
             iconType="ring"
             iconColor="white"
             className="h-[100%] w-full mx-auto"
           />
         </div>
       )}
+
       {/* Unable to retrieve */}
       {!loading && !data && <div>Unable to retrieve data....</div>}
       {!loading && data && (

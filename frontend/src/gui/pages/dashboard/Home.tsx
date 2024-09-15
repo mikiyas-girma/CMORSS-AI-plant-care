@@ -18,12 +18,12 @@ export default function DashboardHome() {
 
   // Render Widgets
   return (
-    <div className="scrollbar-thin h-full w-full p-8">
+    <div className="scrollbar-thin h-full w-full p-4 sm:p-8">
       <DashboardHeader username={user.name} />
 
       <Separator className="h-[2px] bg-slate-300" />
 
-      <section className="flex flex-wrap gap-3">
+      <section className="flex flex-wrap gap-3 lg:-mb-2">
         <WeatherWidget />
         <PlantOfTheDay />
       </section>
@@ -31,7 +31,7 @@ export default function DashboardHome() {
       {/* Shortcut to Other Sections */}
       <SectionHeader title="Quick Shortcuts" />
 
-      <section className="flex flex-wrap gap-4 md:justify-start justify-center">
+      <section className="flex flex-wrap gap-4 md:justify-stretch justify-center xl:grid xl:grid-cols-4 xl:gap-4">
         {quickShortcuts.map((item, index) => (
           <QuickLink
             key={index}
