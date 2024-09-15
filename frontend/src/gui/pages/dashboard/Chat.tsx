@@ -103,7 +103,7 @@ export default function DashboardChatbot() {
     return responses[Math.floor(Math.random() * responses.length)];
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim()) {
       if (!currentChatId) {
         const newChatId = Date.now().toString();
@@ -119,11 +119,12 @@ export default function DashboardChatbot() {
         };
         setChatHistories((prev) => [...prev, newChatHistory]);
         setCurrentChatId(newChatId);
-
-        setTimeout(() => {
+  
+        try {
+          const response = await axiosForApiCall.post('/care-suggestions/chat', { userId: '2193', userQuery: input });
           const aiResponse: Message = {
             id: Date.now(),
-            text: simulateAIResponse(input),
+            text: response.data.response,
             sender: "ai",
           };
           setMessages((prev) =>
@@ -140,7 +141,9 @@ export default function DashboardChatbot() {
                 : chat
             )
           );
-        }, 1000);
+        } catch (error) {
+          console.error("Error fetching AI response:", error);
+        }
       } else {
         const newMessage: Message = {
           id: Date.now(),
@@ -155,11 +158,12 @@ export default function DashboardChatbot() {
               : chat
           )
         );
-
-        setTimeout(() => {
+  
+        try {
+          const response = await axiosForApiCall.post('/care-suggestions/chat', { userId: '2193', userQuery: input });
           const aiResponse: Message = {
             id: Date.now(),
-            text: simulateAIResponse(input),
+            text: response.data.response,
             sender: "ai",
           };
           setMessages((prev) =>
@@ -176,9 +180,11 @@ export default function DashboardChatbot() {
                 : chat
             )
           );
-        }, 1000);
+        } catch (error) {
+          console.error("Error fetching AI response:", error);
+        }
       }
-
+  
       setInput('');
     }
   };
