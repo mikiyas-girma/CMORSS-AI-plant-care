@@ -3,7 +3,7 @@ import connectDB from './config/db.js';
 import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
 import plantRoutes from './routes/plant.route.js';
-import careSuggestionRoutes from "./routes/careSuggestionRoutes.js";
+import careSuggestionRoutes from './routes/careSuggestionRoutes.js';
 import cors from 'cors';
 import 'dotenv/config';
 
@@ -18,6 +18,7 @@ import { uploadImageController } from './controllers/user/uploadController.js';
 import getAllJournals from './controllers/user/getAllJournals.js';
 import getSingleJournal from './controllers/user/getSingleJournal.js';
 import addNoteToPlantJournal from './controllers/user/addNoteToJournal.js';
+import { getTrendingMovies } from './controllers/movies/getTrendingMovies.js';
 
 const app: Application = express();
 
@@ -40,9 +41,8 @@ app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/plants', plantRoutes);
 
-
 // Care suggestion routes
-app.use("/api/care-suggestions", careSuggestionRoutes);
+app.use('/api/care-suggestions', careSuggestionRoutes);
 
 // Implement dashboard route for needed data fetching
 app.get('/api/dashboard/weather-data', getWeatherData);
@@ -56,6 +56,9 @@ app.post('/api/user/journal/add-note', addNoteToPlantJournal);
 
 // Image Upload
 app.post('/api/user/image-upload', uploadImageController);
+
+// Just for fun - Get Trending Movies
+app.get('/api/user/trending-movies', getTrendingMovies);
 
 app.use(globalErrorMiddleware);
 
