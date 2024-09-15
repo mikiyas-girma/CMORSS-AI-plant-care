@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
-import { Button } from '@/gui/components/ui/button';
-import { Input } from '@/gui/components/ui/input';
-import { ScrollArea } from '@/gui/components/common/scroll-area';
+import { useState, useEffect, useRef } from "react";
+import { Button } from "@/gui/components/ui/button";
+import { Input } from "@/gui/components/ui/input";
+import { ScrollArea } from "@/gui/components/common/scroll-area";
 // import  Separator  from "@/gui/components/common/Separator"
 import { Avatar, AvatarFallback } from "@/gui/components/common/avatar";
 import { Send, Bot, User, Plus, Loader } from "lucide-react";
@@ -59,7 +59,7 @@ export default function DashboardChatbot() {
             `/care-suggestions/plants/${plantId}`
           );
           console.log("response", response.data.gptReply);
-          setGptResponse(response.data.gptReply)
+          setGptResponse(response.data.gptReply);
         }
       } catch (error) {
         console.log(error);
@@ -110,7 +110,7 @@ export default function DashboardChatbot() {
         const newMessage: Message = {
           id: Date.now(),
           text: input,
-          sender: 'user',
+          sender: "user",
         };
         const newChatHistory: ChatHistory = {
           id: newChatId,
@@ -119,9 +119,12 @@ export default function DashboardChatbot() {
         };
         setChatHistories((prev) => [...prev, newChatHistory]);
         setCurrentChatId(newChatId);
-  
+
         try {
-          const response = await axiosForApiCall.post('/care-suggestions/chat', { userId: '2193', userQuery: input });
+          const response = await axiosForApiCall.post(
+            "/care-suggestions/chat",
+            { userId: "2193", userQuery: input }
+          );
           const aiResponse: Message = {
             id: Date.now(),
             text: response.data.response,
@@ -148,7 +151,7 @@ export default function DashboardChatbot() {
         const newMessage: Message = {
           id: Date.now(),
           text: input,
-          sender: 'user',
+          sender: "user",
         };
         setMessages((prev) => [...prev, newMessage]);
         setChatHistories((prev) =>
@@ -158,9 +161,12 @@ export default function DashboardChatbot() {
               : chat
           )
         );
-  
+
         try {
-          const response = await axiosForApiCall.post('/care-suggestions/chat', { userId: '2193', userQuery: input });
+          const response = await axiosForApiCall.post(
+            "/care-suggestions/chat",
+            { userId: "2193", userQuery: input }
+          );
           const aiResponse: Message = {
             id: Date.now(),
             text: response.data.response,
@@ -184,8 +190,8 @@ export default function DashboardChatbot() {
           console.error("Error fetching AI response:", error);
         }
       }
-  
-      setInput('');
+
+      setInput("");
     }
   };
 
@@ -207,6 +213,7 @@ export default function DashboardChatbot() {
   };
 
   const startNewChat = () => {
+    gptResponse && setGptResponse(null);
     saveChatHistory();
     setMessages([]);
     setCurrentChatId(null);
@@ -227,118 +234,118 @@ export default function DashboardChatbot() {
     <div className="flex min-h-full bg-gray-100">
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-      {loading ? (
-        <div className="flex flex-col h-full items-center justify-center space-x-2">
-          <Loader size={52} color="green" className="animate-spin" />
-          <p>Analyzing Your Weather</p>
-        </div>
-      ) : (
-        <div className="flex-1 overflow-hidden mt-16">
-          <div className="flex flex-col h-full">
-            {/* Chat messages */}
-            <ScrollArea className="flex-1">
-              <div className="p-4">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex ${
-                      message.sender === "user"
-                        ? "justify-end"
-                        : "justify-start"
-                    } mb-4`}
-                  >
+        {loading ? (
+          <div className="flex flex-col h-full items-center justify-center space-x-2">
+            <Loader size={52} color="green" className="animate-spin" />
+            <p>Analyzing Your Weather</p>
+          </div>
+        ) : (
+          <div className="flex-1 overflow-hidden mt-16">
+            <div className="flex flex-col h-full">
+              {/* Chat messages */}
+              <ScrollArea className="flex-1">
+                <div className="p-4">
+                  <div>
+                    {gptResponse && (
+                      <div className="flex justify-start mb-4">
+                        <div className="flex items-start flex-row">
+                          <Avatar className="w-8 h-8">
+                            <AvatarFallback>
+                              <Bot />
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="font-space_grotesk mx-2 px-7 leading-7 text-justify rounded-lg bg-gray-200 text-gray-800">
+                            {gptResponse}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  {messages.map((message) => (
                     <div
-                      className={`flex items-start ${
+                      key={message.id}
+                      className={`flex ${
                         message.sender === "user"
-                          ? "flex-row-reverse"
-                          : "flex-row"
-                      }`}
+                          ? "justify-end"
+                          : "justify-start"
+                      } mb-4`}
                     >
-                      <Avatar className="w-8 h-8">
-                        <AvatarFallback>
-                          {message.sender === "user" ? <User /> : <Bot />}
-                        </AvatarFallback>
-                      </Avatar>
                       <div
-                        className={`mx-2 p-3 rounded-lg ${
+                        className={`flex items-start ${
                           message.sender === "user"
-                            ? "bg-blue-500 text-white"
-                            : "bg-gray-200 text-gray-800"
+                            ? "flex-row-reverse"
+                            : "flex-row"
                         }`}
                       >
-                        {message.text}
+                        <Avatar className="w-8 h-8">
+                          <AvatarFallback>
+                            {message.sender === "user" ? <User color="red" /> : <Bot color="green" />}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div
+                          className={`font-space_grotesk mx-2 p-3 rounded-lg ${
+                            message.sender === "user"
+                              ? "bg-blue-500 text-white"
+                              : "bg-gray-200 text-gray-800"
+                          }`}
+                        >
+                          {message.text}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-                <div>
-                    {gptResponse && (
-                        <div className="flex justify-start mb-4">
-                            <div className="flex items-start flex-row">
-                                <Avatar className="w-8 h-8">
-                                    <AvatarFallback>
-                                        <Bot />
-                                        </AvatarFallback>
-                                        </Avatar>
-                                        <div className="mx-2 px-7 leading-7 text-justify rounded-lg bg-gray-200 text-gray-800">
-                                            {gptResponse}
-                                            </div>
-                    
-                            </div>
-                        </div>
-                    )}
-                                
-                </div>
-                <div ref={messagesEndRef} />
-              </div>
-            </ScrollArea>
-
-            <Sheet open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="sm" className="ml-auto">
-                  History
-                </Button>
-              </SheetTrigger>
-              <SheetContent>
-                <SheetHeader>
-                  <SheetTitle>Chat History</SheetTitle>
-                  <SheetDescription>Your saved conversations</SheetDescription>
-                </SheetHeader>
-                <ScrollArea className="h-[calc(100vh-8rem)] mt-4">
-                  <Button onClick={startNewChat} className="w-full mb-2">
-                    <Plus className="mr-2 h-4 w-4" /> New Chat
-                  </Button>
-                  {chatHistories.map((chat) => (
-                    <Button
-                      key={chat.id}
-                      variant="ghost"
-                      className="w-full justify-start mb-2 text-left"
-                      onClick={() => loadChatHistory(chat.id)}
-                    >
-                      {chat.title}
-                    </Button>
                   ))}
-                </ScrollArea>
-              </SheetContent>
-            </Sheet>
-            <div className="p-4 bg-white border-t border-gray-200">
-              <div className="flex space-x-2">
-                <Input
-                  type="text"
-                  placeholder="Type your message..."
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleSend()}
-                  className="flex-1"
-                />
-                <Button onClick={handleSend}>
-                  <Send className="h-4 w-4" />
-                  <span className="sr-only">Send</span>
-                </Button>
+                  <div ref={messagesEndRef} />
+                </div>
+              </ScrollArea>
+
+              <Sheet open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="sm" className="ml-auto">
+                    History
+                  </Button>
+                </SheetTrigger>
+                <SheetContent>
+                  <SheetHeader>
+                    <SheetTitle>Chat History</SheetTitle>
+                    <SheetDescription>
+                      Your saved conversations
+                    </SheetDescription>
+                  </SheetHeader>
+                  <ScrollArea className="h-[calc(100vh-8rem)] mt-4">
+                    <Button onClick={startNewChat} className="w-full mb-2">
+                      <Plus className="mr-2 h-4 w-4" /> New Chat
+                    </Button>
+                    {chatHistories.map((chat) => (
+                      <Button
+                        key={chat.id}
+                        variant="ghost"
+                        className="w-full justify-start mb-2 text-left"
+                        onClick={() => loadChatHistory(chat.id)}
+                      >
+                        {chat.title}
+                      </Button>
+                    ))}
+                  </ScrollArea>
+                </SheetContent>
+              </Sheet>
+              <div className="p-4 bg-white border-t border-gray-200">
+                <div className="flex space-x-2">
+                  <Input
+                    type="text"
+                    placeholder="Type your message..."
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={(e) => e.key === "Enter" && handleSend()}
+                    className="flex-1"
+                  />
+                  <Button onClick={handleSend}>
+                    <Send className="h-4 w-4" />
+                    <span className="sr-only">Send</span>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         )}
       </div>
     </div>

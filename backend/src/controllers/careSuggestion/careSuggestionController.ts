@@ -70,15 +70,13 @@ export const getCareSuggestionForPlant = async (
   }
 };
 
-// In-memory storage for chat histories (You can replace this with a database for persistence)
-let chatHistories: { [userId: string]: any[] } = {};
-
-const MAX_HISTORY = 4
 
 /**
  * Controller function to handle POST requests for chat with AI.
  * This function remembers up to the last 4 messages in the chat history.
- */
+*/
+const MAX_HISTORY = 4
+
 export const chatWithAI = async (req: Request, res: Response) => {
   try {
     const { userId, userQuery } = req.body;
@@ -89,7 +87,6 @@ export const chatWithAI = async (req: Request, res: Response) => {
     }
 
     // Get the current chat history for the user, or initialize a new one
-    // const userChatHistory = chatHistories[userId] || [];
     const historyKey = `chatHistory:${userId}`;
     let fullChatHistory = await redisClient.lRange(historyKey, 0, -1);
 

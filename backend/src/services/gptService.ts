@@ -69,8 +69,6 @@ export const aiChatService = async (userQuery: string, chatHistory: any[] = []) 
 
     // Get the AI's response
     const aiResponse = res.choices[0].message.content;
-    console.log('AI response:', aiResponse);
-
     // Return the updated chat history including the new user query and AI response
     return [...trimmedHistory, { role: "user", content: userQuery }, { role: "assistant", content: aiResponse }];
 
