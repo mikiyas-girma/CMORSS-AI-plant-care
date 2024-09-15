@@ -1,38 +1,82 @@
-import axios from 'axios';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-export const getCareSuggestion = async (species: string, weatherData: any) => {
-    
+export const getCareSuggestion = async (plantName: string, weatherData: any, chatHistory: any[] = []) => {
   try {
-    const res = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-            { role: "system", content: "You are a plant care expert."},
-            { role: "system", content: "make your answer concise since you can only respond max of 150 words."},
-            { role: "user", 
-              content: "What is the best way to care for a " + species + 
-                        " plant" + " in " + weatherData.temperature + "°C" + " and " +
-                        weatherData.humidity + "% humidity?" + " The plant will receive " +
-                        weatherData.sunlightHours + " hours of sunlight per day."
-            },
-        ],
-        stream: false,
-        max_completion_tokens: 250,
-        n: 1,
-        temperature: 0.4,
+    // Create the complete messages array by combining the system prompt and user inputs
+    const messages = [
+      { role: "system", content: "You are a plant care expert." },
+      { role: "system", content: "Make your answer concise, with a max of 200 words." },
+      ...chatHistory, // Add chat history if available
+      {
+        role: "user",
+        content: `What is the best way to care for a ${plantName} plant in ${weatherData.temperature}°C and ${weatherData.humidity}% humidity?
+                  The plant will receive ${weatherData.sunlightHours} hours of sunlight per day.`
+      },
+    ];
 
+    // Send the request to OpenAI
+    const res = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages, // Include the message array
+      stream: false,
+      max_tokens: 250,
+      n: 1,
+      temperature: 0.4,
     });
 
-    const careSuggestions = res.choices[0].message.content as string;
-
+    const careSuggestions = res.choices[0].message.content;
+    console.log('Care suggestion from AI:', careSuggestions);
     return careSuggestions;
-    
+
   } catch (error) {
+    console.error('Error while fetching care suggestion from AI:', error);
     throw new Error('Failed to get care suggestion from AI');
+  }
+};
+
+
+export const aiChatService = async (userQuery: string, chatHistory: any[] = []) => {
+  try {
+    // Prepare the messages array
+    const systemPrompt = [
+      { role: "system", content: "You are a helpful assistant." },
+      { role: "system", content: "Keep the responses concise, with a max of 200 words." },
+    ];
+
+    // Trim the chat history to keep only the last 4 entries
+    const trimmedHistory = chatHistory.slice(-4);
+
+    // Add the user's current query
+    const messages = [
+      ...systemPrompt,    // Include the system prompt
+      ...trimmedHistory,  // Include the last 4 entries of chat history
+      { role: "user", content: userQuery }, // Add the current user query
+    ];
+
+    // Send the request to OpenAI
+    const res = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages,
+      stream: false,
+      max_tokens: 250,
+      n: 1,
+      temperature: 0.4,
+    });
+
+    // Get the AI's response
+    const aiResponse = res.choices[0].message.content;
+    console.log('AI response:', aiResponse);
+
+    // Return the updated chat history including the new user query and AI response
+    return [...trimmedHistory, { role: "user", content: userQuery }, { role: "assistant", content: aiResponse }];
+
+  } catch (error) {
+    console.error('Error while communicating with AI:', error);
+    throw new Error('Failed to communicate with AI');
   }
 };
 
