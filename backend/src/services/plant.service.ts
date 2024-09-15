@@ -1,6 +1,7 @@
 import { IPlant } from "../interfaces/IPlant.js";
 import { Plant } from "../models/plant.model.js";
 import User from "../models/user.model.js";
+import uploadImage from "../utils/uploadImage.js";
 
 function validateFields<T>(
   data: Partial<T>,
@@ -50,7 +51,23 @@ export const createPlantService = async (plantData: any) => {
 
   const user = await User.findById(plantData.userId);
   if (!user) throw new Error("User not found");
-  const newPlant = new Plant(plantData);
+
+  const uploadedImages = await Promise.all(
+    plantData.plantImages.map(async (image: string, index: number) => {
+      const { imageUrl } = await uploadImage({
+        image,
+        name: `image-${plantData.plantName}-${index}`.replace(/\s/g, "-"),
+        folder:
+          `users/${plantData.userId}/plants/${plantData.plantName}`.replace(
+            /\s/g,
+            "-"
+          ),
+      });
+      return imageUrl;
+    })
+  );
+
+  const newPlant = new Plant({ ...plantData, plantImages: uploadedImages });
   await newPlant.save();
   return newPlant;
 };
