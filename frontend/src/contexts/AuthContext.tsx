@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       updateUserProfile: async (newData) => {
         dispatch(updateStart());
         try {
-          const response = await axiosForApiCall.put('/user/update-profile', newData);
+          const response = await axiosForApiCall.put('/user/update-profile', {id: currentUser?.id, ...newData});
           dispatch(updateSuccess({ ...currentUser, ...response.data }));
         } catch (err) {
           console.log(err);
@@ -136,6 +136,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         const response = await axiosForApiCall.get('/auth/check');
         if (response.data) {
+          console.log(response.data)
           dispatch(signInSuccess(response.data));
         } else {
           dispatch(signInFailure('No user found'));

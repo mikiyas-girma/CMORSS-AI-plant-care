@@ -36,13 +36,13 @@ const FileUploader = ({
 				fileName = file.name;
 				reader.readAsDataURL(file);
 			} else {
-				others.onChange('');
+				others.onChange(undefined);
 			}
 			if (fileNameRef.current)
 				fileNameRef.current.innerText = fileName;
 			setFileTempUrl(tempUrl);
 		} catch (error) {
-			others.onChange('');
+			others.onChange(undefined);
 			console.error(error);
 		}
 	}
@@ -74,7 +74,7 @@ const FileUploader = ({
 				variant="destructive"
 				onClick={() => {
 					setFileTempUrl(null);
-					others.onChange('');
+					others.onChange(undefined);
 					if (fileNameRef.current)
 						fileNameRef.current.innerText = "No file uploaded";
 				}}
