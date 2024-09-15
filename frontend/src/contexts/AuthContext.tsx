@@ -119,12 +119,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       },
       deleteUser: async () => {
         try {
-          dispatch(updateStart());
+        //   dispatch(updateStart());
           await axiosForApiCall.post('/user/delete');
           dispatch(updateSuccess(null));
         } catch (err) {
           console.log(err);
-          dispatch(updateFailure(err));
+        //   dispatch(updateFailure(err));
           throw new Error(
             'An error occured while deleting your account, please retry'
           );

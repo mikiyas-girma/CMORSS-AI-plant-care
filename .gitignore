@@ -27,6 +27,8 @@ bower_components/
 # Build artifacts
 *.min.js
 *.min.css
+tsconfig.app.tsbuildinfo
+tsconfig.node.tsbuildinfo
 
 # Testing
 coverage/
