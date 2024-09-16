@@ -42,7 +42,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/plants', plantRoutes);
 
 // Care suggestion routes
-app.use('/api/care-suggestions', careSuggestionRoutes);
+app.use('/api/chat', careSuggestionRoutes);
 
 // Implement dashboard route for needed data fetching
 app.get('/api/dashboard/weather-data', getWeatherData);
