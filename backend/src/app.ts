@@ -4,6 +4,7 @@ import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
 import plantRoutes from './routes/plant.route.js';
 import careSuggestionRoutes from './routes/careSuggestionRoutes.js';
+
 import cors from 'cors';
 import 'dotenv/config';
 

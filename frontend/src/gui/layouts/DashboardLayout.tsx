@@ -4,15 +4,15 @@ import NavigationMobile from '../components/common/NavigationMobile';
 import LogoHeader from '../components/common/LogoHeader';
 import { Menu } from 'lucide-react';
 import { useState } from 'react';
+import useAuth from '@/hooks/useAuth';
 
 // Dashboard Layout Component
 const DashboardLayout = () => {
-  const user = true;
-
   const [showMobileNav, setShowMobileNav] = useState(false);
+  const { user } = useAuth();
 
   // Implement route client protected route
-  if (!user) return <Navigate to={'/auth/login'} />;
+  if (!user?.isAuthenticated) return <Navigate to={'/auth/login'} />;
 
   return (
     <main className="flex h-screen w-full max-w-[1350px] gap-3 overflow-hidden bg-gray-neutral font-poppins sm:h-[calc(100dvh-80px)] sm:rounded-lg">
