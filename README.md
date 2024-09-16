@@ -92,17 +92,28 @@ Before you begin, ensure you have the following installed:
 1. Create a `.env` file in the `backend` directory with the following contents:
 
    ```bash
-   PORT=3000
-   MONGODB_URI=your_mongodb_connection_string
-   WEATHER_API_KEY=your_weather_api_key
-   OPENAI_API_KEY=your_openai_api_key
-   GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+   MONGO_URI = ''
+   JWT_SECRET_KEY = ""
+
+   CLOUDINARY_CLOUD_NAME=""
+   CLOUDINARY_API_KEY=""
+   CLOUDINARY_API_SECRET=""
+
+   OPEN_WEATHER_API_KEY=''
+   OPENAI_API_KEY=""
+   PORT=""
+
+   TMDB_API_KEY=""
+   REDIS_HOST=''
+   REDIS_PASSWORD=''
+   REDIS_PORT=
+
    ```
 
 2. Create a `.env` file in the `frontend` directory with the following contents:
 
    ```bash
-   VITE_API_URL=http://localhost:3000/api
+   VITE_FIREBASE_API_KEY = ""
    ```
 
 Replace the placeholder values with your actual API keys and MongoDB connection string.
