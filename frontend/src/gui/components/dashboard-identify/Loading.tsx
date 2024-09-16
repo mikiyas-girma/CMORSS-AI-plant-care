@@ -1,10 +1,12 @@
-import { LoaderIcon } from "lucide-react";
+import { LeafIcon } from "lucide-react";
 
-const Loading = () => {
+const Loading = ({ single }) => {
   return (
     <>
-      <LoaderIcon className="animate-spin text-primary-orange mb-4" size={48} />
-      <h3 className="text-2xl font-bold text-gray-full">Processing Image</h3>
+      <LeafIcon className="w-16 h-16 animate-pulse text-primary-green" />
+      <h3 className="text-2xl font-bold text-gray-full">
+        Processing Image{single ? "" : "s"}
+      </h3>
       <p className="text-lg font-medium text-gray-500">Please wait...</p>
     </>
   );

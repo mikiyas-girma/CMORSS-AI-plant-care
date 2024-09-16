@@ -20,6 +20,7 @@ import getAllJournals from './controllers/user/getAllJournals.js';
 import getSingleJournal from './controllers/user/getSingleJournal.js';
 import addNoteToPlantJournal from './controllers/user/addNoteToJournal.js';
 import { getTrendingMovies } from './controllers/movies/getTrendingMovies.js';
+import { authMiddleware } from './middlewares/auth.middleware.js';
 
 const app: Application = express();
 
@@ -32,6 +33,7 @@ app.use(
     credentials: true,
   })
 );
+app.use(authMiddleware);
 
 // Routes
 app.get('/', (req, res) => {

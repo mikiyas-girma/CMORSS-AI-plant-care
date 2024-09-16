@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, ReactNode, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/redux/store';
+import { AppDispatch, persistor, RootState } from '@/redux/store';
 import { axiosForApiCall } from '@/lib/axios';
 import { userActions, UserState } from '@/redux/user/userSlice';
 import { SignInFormData, SignUpFormData } from '@/types/form';
@@ -34,7 +34,9 @@ interface AuthContextValue {
   updateUserProfile: (newData) => Promise<void>;
   updateUserPassword: (newPassword) => Promise<void>;
   deleteUser: () => Promise<void>;
-}
+  saveLocation: (lat: number, lng: number) => Promise<void>;
+};
+
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -51,7 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isAuthenticated: isAuthenticated,
         isProcessing: loading,
         processFail: !!error,
-        data: currentUser,
+        data: isAuthenticated ? currentUser : null,
       },
       signUp: async (userData: SignUpFormData) => {
         dispatch(signUpStart());
@@ -82,6 +84,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
           await axiosForApiCall.post('/auth/logout');
           dispatch(signOutSuccess());
+          persistor.purge();
         } catch (err) {
           dispatch(signOutFailure(err));
           throw new Error('An error occured while signing out, please retry');
@@ -119,13 +122,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           //   dispatch(updateStart());
           await axiosForApiCall.post('/user/delete');
           dispatch(updateSuccess(null));
-        } catch (err: any) {
-          //   dispatch(updateFailure(err));
+
+          persistor.purge();
+        } catch (err) {
+          console.log(err);
+         //   dispatch(updateFailure(err));
           throw new Error(
             'An error occured while deleting your account, please retry'
           );
         }
       },
+      saveLocation: async (lat: number, lng: number) => {
+        try {
+          await axiosForApiCall.post('/user/save-location', { lat, lng });
+          console.log( lat, lng);
+        } catch (err) {
+          console.log(err);
+          throw new Error('An error occurred while saving your location, please retry');
+        }
+      },      
     };
   }, [currentUser, dispatch, isAuthenticated, loading, error]);
 
