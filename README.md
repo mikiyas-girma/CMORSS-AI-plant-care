@@ -74,15 +74,15 @@ CMORSS Agricare App is a comprehensive solution for plant enthusiasts and garden
 
 ### Backend Libraries/API
 
-- OpenAI API for AI-powered chat functionality
+- OpenAI API for AI-powered chat functionality and plant identification
 - Google Cloud Generative AI (Gemini) for additional AI features
+- plant.id API for optional plant identification
 - Cloudinary for image storage and manipulation
 - OpenWeather API for weather information
 - TMDB API for trending movies - All plants and no movies makes a ....
 - JWT for authentication
 - bcrypt for password hashing
 - Redis for caching
-
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
@@ -131,7 +131,8 @@ Before you begin, ensure you have the following installed:
    REDIS_HOST=your_redis_host
    REDIS_PASSWORD=your_redis_password
    REDIS_PORT=your_redis_port
-   GOOGLE_API_KEY=""
+   GOOGLE_API_KEY=your_google_api_key
+   PLANT_ID_API_KEY=your_plant_id_api_key (optional)
    ```
 
 ## Running the Application
