@@ -1,4 +1,6 @@
 import Separator from '@/gui/components/common/Separator';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 import WeatherWidget from '@/gui/components/dashboard-home/WeatherWidget';
 import { quickShortcuts } from './constants';
 import QuickLink from '@/gui/components/dashboard-home/QuickLink';
@@ -13,7 +15,7 @@ import ChatHistoryList from '@/gui/components/dashboard-home/ChatHistoryList';
  */
 export default function DashboardHome() {
   const user = {
-    name: 'CMORSS',
+    name: useSelector((state: RootState) => state.user.currentUser?.firstName) || '',
   };
 
   // Render Widgets

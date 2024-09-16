@@ -6,6 +6,7 @@ import {
   NotebookPen,
   UserCog,
   List,
+  MapIcon,
 } from '@/assets/Icons';
 
 import { Chat3D, Community3D, Journal3D, Plant3D } from '@/assets';
@@ -38,6 +39,12 @@ export const navigationLinks = [
     label: 'Plant Journal',
     route: DASHBOARD_PATH.journal,
     icon: NotebookPen,
+  },
+
+  {
+    label: 'Map',
+    route: DASHBOARD_PATH.map,
+    icon: MapIcon,
   },
 
   {

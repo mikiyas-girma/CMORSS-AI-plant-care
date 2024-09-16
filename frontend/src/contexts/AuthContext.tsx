@@ -33,6 +33,7 @@ interface AuthContextValue {
   updateUserProfile: (newData) => Promise<void>;
   updateUserPassword: (newPassword) => Promise<void>;
   deleteUser: () => Promise<void>;
+  saveLocation: (lat: number, lng: number) => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
@@ -130,6 +131,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           );
         }
       },
+      saveLocation: async (lat: number, lng: number) => {
+        try {
+          await axiosForApiCall.post('/user/save-location', { lat, lng });
+          console.log( lat, lng);
+        } catch (err) {
+          console.log(err);
+          throw new Error('An error occurred while saving your location, please retry');
+        }
+      },      
     };
   }, [currentUser, dispatch, isAuthenticated, loading, error]);
 
