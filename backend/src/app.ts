@@ -47,7 +47,7 @@ app.use("/api/plants", plantRoutes);
 app.use("/api/chats", chatRoutes);
 
 // Care suggestion routes
-app.use("/api/care-suggestions", careSuggestionRoutes);
+app.use('/api/chat', careSuggestionRoutes);
 
 // Implement dashboard route for needed data fetching
 app.get("/api/dashboard/weather-data", getWeatherData);

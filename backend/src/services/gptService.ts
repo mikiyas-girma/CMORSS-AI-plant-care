@@ -29,7 +29,6 @@ export const getCareSuggestion = async (plantName: string, weatherData: any, cha
     });
 
     const careSuggestions = res.choices[0].message.content;
-    console.log('Care suggestion from AI:', careSuggestions);
     return careSuggestions;
 
   } catch (error) {
@@ -38,14 +37,32 @@ export const getCareSuggestion = async (plantName: string, weatherData: any, cha
   }
 };
 
+interface IuserQuery {
+    prompt: string;
+    plantName: string | null;
+    weatherData: {
+        temperature: number | string;
+        humidity: number | string;
+        sunlightHours: number | string;
+    } | null;
+}
 
-export const aiChatService = async (userQuery: string, chatHistory: any[] = []) => {
+export const aiChatService = async (userQuery: IuserQuery, chatHistory: any[] = []) => {
   try {
     // Prepare the messages array
     const systemPrompt = [
       { role: "system", content: "You are a helpful assistant." },
       { role: "system", content: "Keep the responses concise, with a max of 200 words." },
     ];
+
+    if (userQuery.plantName && userQuery.weatherData) {
+        // If the user query includes plant details, add it to the chat history
+        const plantDetails: string = `What is the best way to care for a ${userQuery.plantName} plant in 
+                                     ${userQuery.weatherData.temperature}°C and ${userQuery.weatherData.humidity}% humidity?
+                                     The plant will receive ${userQuery.weatherData.sunlightHours} hours of sunlight per day.`;
+        chatHistory.push({ role: "user", content: plantDetails });
+    }
+
 
     // Trim the chat history to keep only the last 4 entries
     const trimmedHistory = chatHistory.slice(-4);
@@ -54,7 +71,7 @@ export const aiChatService = async (userQuery: string, chatHistory: any[] = []) 
     const messages = [
       ...systemPrompt,    // Include the system prompt
       ...trimmedHistory,  // Include the last 4 entries of chat history
-      { role: "user", content: userQuery }, // Add the current user query
+      { role: "user", content: userQuery.prompt }, // Add the current user query
     ];
 
     // Send the request to OpenAI
