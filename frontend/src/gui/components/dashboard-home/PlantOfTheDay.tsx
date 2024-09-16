@@ -7,8 +7,6 @@
 
 import { PlantFact } from '@/types';
 import { useEffect, useState } from 'react';
-import { Button } from '../ui/button';
-import { Link } from 'react-router-dom';
 import LoadingComp from '../common/LoadingComp';
 import { axiosForApiCall } from '@/lib/axios';
 
@@ -54,13 +52,6 @@ const PlantOfTheDay = () => {
             <h3 className="text-xs font-semibold">Plant Fact of the Day</h3>
             <h2 className="text-xl font-bold">{data.name}</h2>
             <p>{data.description}</p>
-
-            <Link to={`/dashboard/chat?text=${data.name}`}>
-              <Button
-                children="Chat with AI"
-                className="bg-primary-green text-white self-start"
-              />
-            </Link>
           </div>
           {/* Plant Image */}
           <div className="w-full md:w-[50%]  max-w-[300px]  object-cover rounded-2xl overflow-hidden shadow-xl hover:scale-90 transition-transform ease-in-out duration-300 mx-auto max-h-[200px]">

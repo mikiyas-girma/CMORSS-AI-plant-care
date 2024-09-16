@@ -12,7 +12,8 @@ interface AddNoteRequest extends Request {
 }
 
 const addNoteToPlantJournal = async (req: AddNoteRequest, res: Response) => {
-  const { userId, journalId, content, type, text } = req.body;
+  const { journalId, content, type, text } = req.body;
+  const userId = req.user?.id;
 
   try {
     const noteToAdd = {

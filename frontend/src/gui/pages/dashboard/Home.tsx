@@ -7,7 +7,7 @@ import QuickLink from '@/gui/components/dashboard-home/QuickLink';
 import DashboardHeader from '@/gui/components/dashboard-home/DashboardHeader';
 import PlantOfTheDay from '@/gui/components/dashboard-home/PlantOfTheDay';
 import SectionHeader from '@/gui/components/common/SectionHeader';
-import ChatHistoryList from '@/gui/components/dashboard-home/ChatHistoryList';
+import ChatHistoryList from '@/gui/components/dashboard-home/QuickJournalHistory';
 import useAuth from '@/hooks/useAuth';
 
 /**
