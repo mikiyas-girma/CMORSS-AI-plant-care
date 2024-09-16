@@ -19,6 +19,7 @@ export const DASHBOARD_PATH = {
   myplants: path(ROOTS_DASHBOARD, '/myplants'),
   chat: path(ROOTS_DASHBOARD, '/chat'),
   journal: path(ROOTS_DASHBOARD, '/journal'),
+  map: path(ROOTS_DASHBOARD, '/map'),
   community: path(ROOTS_DASHBOARD, '/community'),
   settings: path(ROOTS_DASHBOARD, '/settings'),
   plantIdentification: {

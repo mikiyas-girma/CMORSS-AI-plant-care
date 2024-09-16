@@ -14,6 +14,7 @@ import {
   ImageUp,
   LoaderCircle,
   List,
+  MapIcon,
 } from 'lucide-react';
 
 // Export the conponents out
@@ -33,4 +34,5 @@ export {
   ImageUp,
   LoaderCircle,
   List,
+  MapIcon,
 };
