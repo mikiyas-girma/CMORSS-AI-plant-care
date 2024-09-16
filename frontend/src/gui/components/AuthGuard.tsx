@@ -22,8 +22,9 @@ export default function AuthGuard({ children }: AuthGuardProps) {
     user.isAuthenticated &&
     !user.isProcessing &&
     pathname.includes(AUTH_PATH.root)
-  )
+  ) {
     return <Navigate to={DASHBOARD_PATH.root} />;
+  }
 
   return <>{user.isProcessing ? null : children}</>;
 }

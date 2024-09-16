@@ -1,25 +1,27 @@
-import { ChangeEvent, FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { Button, buttonVariants } from "@/gui/components/ui/button";
-import { Checkbox } from "@/gui/components/ui/checkbox";
-import { Input } from "@/gui/components/ui/input";
-import { Label } from "@/gui/components/ui/label";
-import DangerWrapper from "@/gui/components/common/DangerWrapper";
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { Button, buttonVariants } from '@/gui/components/ui/button';
+import { Checkbox } from '@/gui/components/ui/checkbox';
+import { Input } from '@/gui/components/ui/input';
+import { Label } from '@/gui/components/ui/label';
+import DangerWrapper from '@/gui/components/common/DangerWrapper';
 // import { cn } from "@/lib/utils";
-import { SignUpFormData } from "@/types/form";
-import { signupValidation } from "@/lib/formsValidation";
-import useAuth from "@/hooks/useAuth";
-import { DASHBOARD_PATH } from "@/routes/paths";
-import { Loader2 } from "lucide-react";
-import OAuth from "@/gui/components/OAuth";
+import { SignUpFormData } from '@/types/form';
+import { signupValidation } from '@/lib/formsValidation';
+import useAuth from '@/hooks/useAuth';
+import { DASHBOARD_PATH } from '@/routes/paths';
+import { Loader2 } from 'lucide-react';
+import OAuth from '@/gui/components/OAuth';
 
 /**
  * Sign in Route Component
  * @returns JSX Component for the page.
  */
 const SignIn = () => {
-  const [errors, setErrors] = useState<{[key in keyof SignUpFormData]: string} | null>(null);
+  const [errors, setErrors] = useState<
+    { [key in keyof SignUpFormData]: string } | null
+  >(null);
   const [formData, setFormData] = useState<SignUpFormData>({
     firstName: '',
     lastName: '',
@@ -29,42 +31,46 @@ const SignIn = () => {
     acceptPolicy: false,
   });
 
-  const { signUp, user: {isProcessing} } = useAuth();
+  const {
+    signUp,
+    user: { isProcessing },
+  } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [event.target.id]: event.target.value
+      [event.target.id]: event.target.value,
     });
-  }
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = signupValidation(formData);
-    
 
-    if (Object.values(validationErrors).find(e => e !== '')) {
-      setErrors({...validationErrors});
+    if (Object.values(validationErrors).find((e) => e !== '')) {
+      setErrors({ ...validationErrors });
       return;
     }
 
     try {
       await signUp(formData);
-      toast.success("Your account was register with success. Welcome to the familly");
+      toast.success(
+        'Your account was register with success. Welcome to the familly'
+      );
       navigate(DASHBOARD_PATH.home);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error(error);
       toast.error(error.message);
     }
-  }
+  };
 
   return (
     <>
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+      <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
         <div className="flex gap-4">
-          <div className="grid w-full max-w-sm items-center gap-1.5">
+          <div className="grid w-full items-center gap-1.5">
             <Label htmlFor="firstName">
               First name <DangerWrapper>*</DangerWrapper>
             </Label>
@@ -79,7 +85,8 @@ const SignIn = () => {
               <DangerWrapper>{errors.firstName}</DangerWrapper>
             )}
           </div>
-          <div className="grid w-full max-w-sm items-center gap-1.5">
+
+          <div className="grid w-full items-center gap-1.5">
             <Label htmlFor="lastName">
               Last name <DangerWrapper>*</DangerWrapper>
             </Label>
@@ -95,7 +102,8 @@ const SignIn = () => {
             )}
           </div>
         </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5">
+
+        <div className="grid w-full items-center gap-1.5 ">
           <Label htmlFor="email">
             Email <DangerWrapper>*</DangerWrapper>
           </Label>
@@ -108,7 +116,8 @@ const SignIn = () => {
           />
           {errors?.email && <DangerWrapper>{errors.email}</DangerWrapper>}
         </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5">
+
+        <div className="grid w-full items-center gap-1.5">
           <Label htmlFor="email">
             Password <DangerWrapper>*</DangerWrapper>
           </Label>
@@ -121,7 +130,8 @@ const SignIn = () => {
           />
           {errors?.password && <DangerWrapper>{errors.password}</DangerWrapper>}
         </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5">
+
+        <div className="grid w-full items-center gap-1.5">
           <Label htmlFor="email">
             Confirm password <DangerWrapper>*</DangerWrapper>
           </Label>
@@ -129,14 +139,14 @@ const SignIn = () => {
             autoComplete="current-password"
             type="password"
             id="confirmedPassword"
-            placeholder="confirm your password"
+            placeholder="Confirm your password"
             onChange={handleChange}
           />
           {errors?.confirmedPassword && (
             <DangerWrapper>{errors.confirmedPassword}</DangerWrapper>
           )}
         </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5">
+        <div className="grid w-full items-center gap-1.5">
           <div className="flex justify-start items-center space-x-2">
             <Checkbox
               id="remember"
@@ -147,13 +157,16 @@ const SignIn = () => {
                 });
               }}
             />
-            <Label htmlFor="remember" className="!text-muted-foreground">
+            <Label
+              htmlFor="remember"
+              className="!text-muted-foreground text-xs"
+            >
               By continuing, you are agreeing to the terms and conditions of our
-              application.{" "}
+              application.{' '}
               <Link
                 className={buttonVariants({
-                  variant: "link",
-                  className: "!p-0 !inline text-primary-green",
+                  variant: 'link',
+                  className: '!p-0 !inline text-primary-green',
                 })}
                 to="#"
               >

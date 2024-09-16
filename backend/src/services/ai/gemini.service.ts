@@ -1,17 +1,17 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import axios, { AxiosError } from "axios";
-import { plantJsonFormat } from "../../constants/index.js";
-import { parseJson } from "../../utils/parseJson.js";
-import { PlantDetails } from "../../types/models/plant.types.js";
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import axios, { AxiosError } from 'axios';
+import { plantJsonFormat } from '../../constants/index.js';
+import { parseJson } from '../../utils/parseJson.js';
+import { PlantDetails } from '../../types/models/plant.types.js';
 
 // Function to convert image URL to Base64
 async function convertImageToBase64(imageUrl: string): Promise<string> {
   try {
-    const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
-    const buffer = Buffer.from(response.data, "binary");
-    return buffer.toString("base64");
+    const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+    const buffer = Buffer.from(response.data, 'binary');
+    return buffer.toString('base64');
   } catch (error: any) {
-    console.error("Error converting image to Base64:", error.message);
+    console.error('Error converting image to Base64:', error.message);
     throw error;
   }
 }
@@ -27,28 +27,28 @@ function base64ToGenerativePart(base64Data: string, mimeType: string) {
 }
 
 // Main function to generate content with images
-export const geminiImageData = async (images: string[], description = "") => {
+export const geminiImageData = async (images: string[], description = '') => {
   const key = process.env.GOOGLE_API_KEY;
   if (!key) {
-    console.error("Google API key not found");
+    console.error('Google API key not found');
     return null;
   }
 
   const genAI = new GoogleGenerativeAI(key);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
 
   // Convert images to Base64 and create Generative Parts
   const imageParts = await Promise.all(
     images.map(async (imageUrl) => {
       const base64Image = await convertImageToBase64(imageUrl);
-      const extension = imageUrl.split(".").pop()?.toLowerCase();
+      const extension = imageUrl.split('.').pop()?.toLowerCase();
       return base64ToGenerativePart(base64Image, `image/${extension}`);
     })
   );
 
   // Define the prompt with description (if provided)
   const prompt = `reply with a valid json string following this format ${plantJsonFormat} representing ${
-    description ? "this description and " : ""
+    description ? 'this description and ' : ''
   } the plant in the image`;
 
   // Send the prompt and images to the Gemini model
@@ -62,7 +62,7 @@ export const geminiImageData = async (images: string[], description = "") => {
 
     return parseJson(data) as PlantDetails & { is_plant: boolean };
   } catch (error) {
-    console.error("Error generating content:", error);
+    console.error('Error generating content:', error);
     return null;
   }
 };
