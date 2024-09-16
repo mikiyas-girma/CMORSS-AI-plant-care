@@ -138,6 +138,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       dispatch(signInStart());
       try {
         const response = await axiosForApiCall.get('/auth/check');
+        console.log(`${axiosForApiCall}/auth/check`)
         if (response.data) {
           dispatch(signInSuccess(response.data));
         } else {

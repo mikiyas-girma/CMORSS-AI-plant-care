@@ -3,7 +3,9 @@ import { plantJsonFormat } from "../../constants/index.js";
 import { parseJson } from "../../utils/parseJson.js";
 import { PlantDetails } from "../../types/models/plant.types.js";
 
-const openai = new OpenAI();
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
 
 export const gptImageData = async (images: string[], description = "") => {
   const prompt = `reply with a valid json string following this format ${plantJsonFormat} representing ${
