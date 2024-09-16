@@ -178,7 +178,7 @@ const DashboardPlantIdentification = () => {
         setRecentPlants({
           error: undefined,
           loading: false,
-          data: plants,
+          data: plants.filter((plant: Plant) => !!plant.details),
         });
       } catch (e) {
         const error = e as AxiosError;
