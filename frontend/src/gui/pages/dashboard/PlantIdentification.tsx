@@ -3,29 +3,35 @@
  * @returns JSX Component for the view
  */
 
-import { ImageUpload, plantImage1 } from "@/assets";
+import { ImageUpload } from "@/assets";
 import CustomModal from "@/gui/components/common/CustomModal";
+import CreatePlantCard from "@/gui/components/dashboard-identify/CreatePlantCard";
 import FileUploader from "@/gui/components/dashboard-identify/FileUploader";
 import Identification from "@/gui/components/dashboard-identify/Identification";
+import IdentificationFooter from "@/gui/components/dashboard-identify/IdentificationFooter";
+import IdentificationPlaceholder from "@/gui/components/dashboard-identify/IdentificationPlaceholder";
 import Loading from "@/gui/components/dashboard-identify/Loading";
+import RecentPlaceholder from "@/gui/components/dashboard-identify/RecentPlaceholder";
 import { Button } from "@/gui/components/ui/button";
 import { Card } from "@/gui/components/ui/card";
-import { Input } from "@/gui/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/gui/components/ui/select";
+import useAuth from "@/hooks/useAuth";
 import { axiosForApiCall } from "@/lib/axios";
 import { fileToBase64 } from "@/lib/fileToBase64";
 import { AxiosError } from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Loader2Icon, XIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
+interface Plant {
+  _id: string;
+  userId: string;
+  plantName: string;
+  plantImages: string[];
+  geoLocation: string;
+  details: PlantDetails;
+  createdAt: string;
+}
 interface PlantDetails {
   name: string;
   common_names: string[];
@@ -38,30 +44,36 @@ interface PlantDetails {
   toxicity: string;
   url: string;
 }
+
+interface Query<T> {
+  loading?: boolean;
+  error?: { message: string };
+  data?: T;
+}
 /**
  * Journal Layout within the Dashboard.
  * @returns JSX Component.
  */
 const DashboardPlantIdentification = () => {
-  const [identification, setIdentification] = useState<{
-    loading?: boolean;
-    error?: { message: string };
-    data?: PlantDetails;
-  }>();
-  const [plant, setPlant] = useState<{
-    loading?: boolean;
-    error?: { message: string };
-    data?: {
+  const [identification, setIdentification] = useState<Query<PlantDetails>>();
+  const [plant, setPlant] = useState<
+    Query<{
       name?: string;
       location?: string;
-    };
-  }>();
+    }>
+  >();
+  const [recentPlants, setRecentPlants] = useState<Query<Plant[]>>({
+    data: [],
+  });
 
   const [files, setFiles] = useState<File[] | []>([]);
   const [plantImages, setPlantImages] = useState<string[]>([]);
   const [aiModel, setAiModel] = useState<"gemini" | "gpt">("gemini");
   const [isSave, setIsSave] = useState(false);
+
   const navigate = useNavigate();
+  const user = useAuth().user.data;
+
   const handleProcess = async (model = "gemini") => {
     try {
       setIdentification({ loading: true });
@@ -78,11 +90,16 @@ const DashboardPlantIdentification = () => {
         await axiosForApiCall.post("/plants/identify", { images, model })
       ).data;
 
+      const plantDetails = {
+        ...res,
+        url: res.url ? res.url : "https://en.wikipedia.org/wiki/" + res.name,
+      };
       setIdentification({
         loading: false,
-        data: res,
+        data: plantDetails,
         error: undefined,
       });
+      setFiles([]);
       setAiModel("gemini");
     } catch (e) {
       const error = e as AxiosError;
@@ -106,16 +123,26 @@ const DashboardPlantIdentification = () => {
   };
 
   const handleSave = async () => {
+    setPlant((prev) => ({
+      ...prev,
+      data: { ...prev?.data, name: identification?.data?.name },
+    }));
     setIsSave(true);
   };
 
+  const handleNew = () => {
+    setIdentification({ data: undefined });
+    setFiles([]);
+  };
+
   const handleCreate = async () => {
+    if (!user) return;
     try {
       setPlant((prev) => ({ ...prev, loading: true }));
       const data = {
-        userId: "123",
+        userId: user.id,
         plantName: plant?.data?.name,
-        images: plantImages,
+        plantImages: plantImages,
         geoLocation: plant?.data?.location,
         details: identification?.data,
       };
@@ -138,6 +165,44 @@ const DashboardPlantIdentification = () => {
       toast.error("An error occurred. Please try again later.");
     }
   };
+
+  useEffect(() => {
+    if (!user) return;
+    const getPlants = async () => {
+      try {
+        setRecentPlants((prev) => ({
+          ...prev,
+          loading: true,
+        }));
+        const plants = (await axiosForApiCall(`/plants/${user.id}`)).data;
+        setRecentPlants({
+          error: undefined,
+          loading: false,
+          data: plants,
+        });
+      } catch (e) {
+        const error = e as AxiosError;
+        setRecentPlants({
+          error: { message: error.message },
+          loading: false,
+          data: undefined,
+        });
+        console.log(error);
+      }
+    };
+    getPlants();
+  }, [user]);
+
+  useEffect(() => {
+    if (!identification?.data)
+      setIdentification({ data: undefined, error: undefined, loading: false });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [files]);
+  const removeFile = (index: number) => {
+    setFiles(files.filter((_, i) => i !== index));
+  };
+
   // Return JSX Component
   return (
     <section className="p-3 sm:pl-0 lg:p-8 w-full flex flex-col lg:flex-row relative h-full">
@@ -148,118 +213,148 @@ const DashboardPlantIdentification = () => {
         </h2>
         <div className="flex flex-col items-center justify-center space-y-2 my-2 w-full">
           <img src={ImageUpload} className="w-32" alt="Upload Image" />
-          <FileUploader files={files} setFiles={setFiles} />
-          {files.length > 0 && (
-            <Button
-              onClick={() => handleProcess()}
-              className="bg-primary-orange text-white"
-            >
-              Process Images
-            </Button>
-          )}
+          <FileUploader
+            files={files}
+            setFiles={setFiles}
+            disabled={identification?.loading || identification?.data}
+          />
         </div>
         {/* Images Grid */}
-        <p className="w-full text-center text-gray-full mt-2 hidden lg:block">
-          Previous Plant Identifications
-        </p>
-        <Card className="hidden lg:block p-4 pb-2 shadow-inner w-full">
-          <div className="grid grid-cols-2 gap-4 w-full">
-            {[1, 2, 3].map((_, index) => (
-              <Card
-                key={index}
-                className="flex flex-col items-center justify-center overflow-hidden bg-gray-neutral"
-              >
-                <img
-                  src={plantImage1}
-                  className="h-full w-full object-cover"
-                  alt="Plant Image"
-                />
-                <p className="text-gray-full text-start w-full px-2">
-                  10 Sept. 2024
-                </p>
-              </Card>
-            ))}
-          </div>
-          <p className="w-full text-center text-gray-full font-medium mt-4">
-            See More
+        {recentPlants.data && recentPlants.data?.length > 0 && (
+          <p className="w-full text-center text-gray-full mt-2 hidden lg:block">
+            Previous Plant Identifications
           </p>
+        )}
+        <Card className="hidden lg:block p-4 pb-2 shadow-inner w-full">
+          {recentPlants.loading ? (
+            <Loader2Icon
+              className="animate-spin text-primary-orange m-auto"
+              size={32}
+            />
+          ) : recentPlants.error ? (
+            <p className="text-gray-full text-center">
+              {recentPlants.error.message}
+            </p>
+          ) : recentPlants.data?.length === 0 ? (
+            <RecentPlaceholder />
+          ) : (
+            <div className="grid grid-cols-2 gap-4 w-full">
+              {recentPlants.data &&
+                recentPlants.data?.slice(0, 4).map((recentPlant) => (
+                  <Card
+                    key={recentPlant._id}
+                    className="flex flex-col items-center justify-center overflow-hidden bg-gray-neutral hover:cursor-pointer"
+                    // onClick={() => navigate(`/dashboard/myplants/${recentPlant._id}`)}
+                    onClick={() => navigate(`/dashboard/myplants`)}
+                  >
+                    <img
+                      src={recentPlant.plantImages[0]}
+                      className="h-full w-full object-cover"
+                      alt="Plant Image"
+                    />
+                    <p className="text-gray-full text-start w-full px-2 truncate">
+                      {recentPlant.plantName}
+                    </p>
+                  </Card>
+                ))}
+            </div>
+          )}
+          {recentPlants?.data && recentPlants.data.length > 4 && (
+            <Link to="/dashboard/myplants">
+              <p className="text-center text-gray-full font-medium mt-4">
+                View All
+              </p>
+            </Link>
+          )}
         </Card>
       </div>
-
       {/* Right-side scrollable card */}
       <div className="flex-1 h-full flex flex-col justify-center relative">
         <Card className="p-8 flex-grow flex flex-col overflow-y-auto scrollbar-thin">
-          {identification?.loading ? (
-            <Loading />
-          ) : identification?.error ? (
-            <div className="space-y-2 flex flex-col items-center">
-              <p className="text-gray-full text-center">
-                {identification.error.message}
-              </p>
-              <Button onClick={handleTryAgain}>Try Again</Button>
-            </div>
-          ) : identification?.data ? (
-            <>
-              <Identification
-                handleSave={handleSave}
-                identification={identification.data}
-                image={plantImages[0]}
-              />
-            </>
+          {identification?.data ? (
+            <Identification
+              handleSave={handleSave}
+              handleNew={handleNew}
+              identification={identification.data}
+              image={plantImages[0]}
+            />
           ) : (
             <>
               {files.length === 0 ? (
-                <p className="text-gray-full text-center m-auto">
-                  Add an image to get started
-                </p>
+                <IdentificationPlaceholder />
               ) : (
-                <>
-                  <div className=" flex space-x-2 flex-wrap">
+                <div className={`flex h-full flex-col justify-between`}>
+                  <div className="grid grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6 w-full">
                     {files.map((file, index) => (
-                      <div className="w-full overflow-hidden rounded-lg mb-4 flex-1 ">
+                      <div
+                        key={index}
+                        className="relative group overflow-hidden rounded-lg shadow-lg"
+                      >
                         <img
-                          key={index}
                           src={URL.createObjectURL(file)}
-                          className="h-44 object-contain rounded-lg transition-transform duration-300 ease-in-out transform hover:scale-105 "
+                          className="h-44 w-full object-cover rounded-lg transition-transform duration-300 ease-in-out transform group-hover:scale-105"
                           alt="Identified Plant"
                         />
+                        <button
+                          onClick={() => removeFile(index)}
+                          className="text-red-500 hover:text-red-700 absolute top-2 right-2 p-1 bg-red-100 rounded-full"
+                          disabled={identification?.loading}
+                        >
+                          <XIcon className="w-5 h-5" />
+                        </button>
+                        <p className="absolute bottom-0 w-full bg-white bg-opacity-70 text-center py-1 text-sm truncate">
+                          {file.name}
+                        </p>
                       </div>
                     ))}
                   </div>
-                  <p className="text-gray-full text-center m-auto">
-                    Note: click on Process Images in order to see the result
-                  </p>
-                </>
+
+                  {identification?.loading ? (
+                    <div className="w-full flex flex-col items-center justify-center">
+                      <Loading single={files.length === 1} />
+                    </div>
+                  ) : (
+                    identification?.error && (
+                      <div className="space-y-2 flex flex-col items-center">
+                        <p className="text-gray-full text-center">
+                          {identification.error.message}
+                        </p>
+                      </div>
+                    )
+                  )}
+                  <div className="w-full flex spacexflex space-x-4 justify-center">
+                    <Button
+                      onClick={
+                        identification?.error
+                          ? handleTryAgain
+                          : () => handleProcess()
+                      }
+                      className="bg-primary-orange text-white w-full"
+                      disabled={identification?.loading}
+                    >
+                      {identification?.loading ? (
+                        <Loader2Icon size={24} className=" animate-spin" />
+                      ) : identification?.error ? (
+                        "Try Again"
+                      ) : (
+                        `Process Image${files.length > 1 ? "s" : ""}`
+                      )}
+                    </Button>
+                    {identification?.error && (
+                      <Button
+                        onClick={handleNew}
+                        className="bg-secondary-blue hover:bg-cyan-700 w-full"
+                      >
+                        Identify new Plant
+                      </Button>
+                    )}
+                  </div>
+                </div>
               )}
             </>
           )}
           {identification?.data && (
-            <div className="flex flex-col items-center text-gray-700">
-              <div className="flex items-center justify-center">
-                <p className="text-sm">Not what you're looking for?</p>
-                <Button
-                  onClick={() => handleProcess("plantId")}
-                  variant="ghost"
-                  className="px-2 font-bold"
-                >
-                  Try Again
-                </Button>
-              </div>
-              <div className="flex space-x-2">
-                <p className="text-sm text-gray-900">Powered by </p>
-                <a
-                  href="https://plant.id/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img
-                    src="/kindwise.png"
-                    className="w-20"
-                    alt="Kindwise Logo"
-                  />
-                </a>
-              </div>
-            </div>
+            <IdentificationFooter onTryAgain={() => handleProcess("plantId")} />
           )}
         </Card>
       </div>
@@ -270,91 +365,16 @@ const DashboardPlantIdentification = () => {
             setIsSave(false);
           }}
         >
-          <Card className="p-8 min-h-full flex flex-col items-center justify-between space-y-8">
-            {/* Image Gallery */}
-            <div className="grid grid-cols-2 gap-4 w-full">
-              {plantImages.map((image, index) => (
-                <div
-                  key={index}
-                  className="relative group overflow-hidden rounded-lg shadow-md"
-                >
-                  <img
-                    src={`data:image/jpeg;base64,${image}`}
-                    className="w-full h-40 object-cover transition-transform duration-300 transform group-hover:scale-105"
-                    alt={`Plant ${index + 1}`}
-                  />
-                </div>
-              ))}
-            </div>
-
-            {/* Plant Form */}
-            <div className="w-full space-y-4">
-              {/* Select Dropdown for Plant Name */}
-              <div className="">
-                <label htmlFor="plantName">Plant Name</label>
-                <Select
-                  onValueChange={(value) =>
-                    setPlant((prev) => ({
-                      ...prev,
-                      data: { ...prev?.data, name: value },
-                    }))
-                  }
-                  value={plant?.data?.name}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {identification?.data?.common_names &&
-                        [
-                          identification.data.name,
-                          ...identification.data.common_names,
-                        ].map((name, index) => (
-                          <SelectItem key={index} value={name}>
-                            {name}
-                          </SelectItem>
-                        ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Input for Plant Location */}
-              <div className="">
-                <label htmlFor="plantLocation">Plant Location</label>
-                <Input
-                  id="plantLocation"
-                  placeholder="Location"
-                  className="w-full"
-                  onChange={(e) =>
-                    setPlant((prev) => ({
-                      ...prev,
-                      data: { ...prev?.data, location: e.target.value },
-                    }))
-                  }
-                />
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex justify-end space-x-2 w-full">
-              <Button
-                onClick={() => {
-                  setIsSave(false);
-                }}
-                className="bg-gray-300 hover:bg-gray-400 text-gray-700"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleCreate}
-                className="bg-primary-orange text-white hover:bg-orange-500"
-              >
-                Create Plant
-              </Button>
-            </div>
-          </Card>
+          <CreatePlantCard
+            plantImages={plantImages}
+            identification={identification}
+            setPlant={setPlant}
+            onCancel={() => {
+              setIsSave(false);
+            }}
+            onCreate={handleCreate}
+            loading={plant?.loading}
+          />
         </CustomModal>
       )}
     </section>

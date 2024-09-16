@@ -1,17 +1,22 @@
 import React, { useRef } from "react";
 import { Button } from "@/gui/components/ui/button";
 import { XIcon, PlusCircle } from "lucide-react"; // Assuming lucide-react for icons
+import { toast } from "sonner";
 
 /**
  * A file uploader component that allows users to add files to a list and remove them.
  */
-const FileUploader = ({files, setFiles}) => {
+const FileUploader = ({ files, setFiles, disabled }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null); // Use ref to access the input element
 
   // Handle adding new files to the list
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFiles([...files, ...Array.from(e.target.files)]);
+      if (files.length < 3) {
+        setFiles([...files, ...Array.from(e.target.files)]);
+      } else {
+        toast.warning("You can only upload up to 3 images.");
+      }
     }
   };
 
@@ -33,6 +38,7 @@ const FileUploader = ({files, setFiles}) => {
           variant="outline"
           className="flex items-center text-primary-orange hover:bg-primary-orange-dark py-2 px-4 rounded-full shadow-lg"
           onClick={handleUploadClick} // Click event triggers the hidden input
+          disabled={disabled}
         >
           <PlusCircle className="mr-2 w-5 h-5" />
           Add Images
@@ -60,8 +66,9 @@ const FileUploader = ({files, setFiles}) => {
               <button
                 onClick={() => removeFile(index)}
                 className="text-red-500 hover:text-red-700"
+                disabled={disabled}
               >
-                <XIcon className="w-4 h-4" />
+                <XIcon className="w-4 h-4"  />
               </button>
             </li>
           ))}
