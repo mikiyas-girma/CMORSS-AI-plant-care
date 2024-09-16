@@ -8,8 +8,7 @@ const plantJournalSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    // userId: { type: Schema.Types.ObjectId, ref: 'User' },
-    userId: { type: String, required: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
     title: {
       type: String,
       required: true,
@@ -28,7 +27,7 @@ const plantJournalSchema = new mongoose.Schema(
 
     location: {
       type: String,
-      enum: ['Indoor', 'Outdoor', 'Greenhouse'],
+      enum: ['Indoor', 'Outdoor', 'Greenhouse', 'Farmland'],
       required: true,
     },
 

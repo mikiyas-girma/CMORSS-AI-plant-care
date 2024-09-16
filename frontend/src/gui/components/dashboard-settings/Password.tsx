@@ -44,7 +44,7 @@ const Password = () => {
 
 	const { updateUserPassword, user: {isProcessing} } = useAuth();
 
-  const onSubmit = async (values: z.infer<typeof passwordFormSchema>) => {
+  	const onSubmit = async (values: z.infer<typeof passwordFormSchema>) => {
 		try {
 			updateUserPassword(values);
 			toast.success("Your password was updated with success.");
@@ -52,7 +52,7 @@ const Password = () => {
 			toast.error("Oops something went wrong, cannot update your password, please retry later.");
 			console.error(error);
 		}
-  }
+  	}
 
 	return (
 		<div>
@@ -70,7 +70,7 @@ const Password = () => {
 								<FormItem className="flex-1 w-md basis-96">
 									<FormLabel>New password</FormLabel>
 									<FormControl>
-										<Input {...field}/>
+										<Input {...field} type="password" autoComplete="new-password" />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -85,7 +85,7 @@ const Password = () => {
 								<FormItem className="flex-1 w-md basis-96">
 									<FormLabel>Confirm password</FormLabel>
 									<FormControl>
-										<Input {...field}/>
+										<Input {...field} type="password" autoComplete="new-password"/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>

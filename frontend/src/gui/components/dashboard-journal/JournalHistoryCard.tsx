@@ -1,31 +1,36 @@
 import { formatRelativeTime } from '@/lib/utils';
 import Separator from '../common/Separator';
 import CardAction from './JournalAction';
-import useToasts from '@/hooks/useToasts';
 
-type JournalHistoryCard = {
-  title: string;
-  messageCount?: number;
-  date: string;
-  journalId: string;
-  onClick: (journalId: string) => void;
-};
+import { JournalHistoryCardType } from '@/types/journal';
+import deleteJournal from '@/lib/deleteJournal';
 
 /**
  *Chat History Card
  * @returns
  */
-const JournalHistoryCard: React.FC<JournalHistoryCard> = ({
+const JournalHistoryCard: React.FC<JournalHistoryCardType> = ({
   title,
   date,
   journalId,
   onClick,
+  type = 'journal-page',
+  setReload,
 }) => {
-  const { toastSuccess } = useToasts();
-
-  const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleDelete = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.stopPropagation();
-    toastSuccess("Let's pretend it has deleted. 🤣");
+
+    const choice = confirm('Are you sure you want to delete this journal?');
+
+    if (choice) {
+      const isDeleted = await deleteJournal(journalId);
+
+      if (isDeleted && setReload) {
+        setReload((prev) => ++prev);
+      }
+    }
   };
 
   // Return JSX To Component
@@ -35,20 +40,25 @@ const JournalHistoryCard: React.FC<JournalHistoryCard> = ({
         <p>{title.slice(0, 63)}...</p>
       </div>
 
-      <Separator className="my-0" />
+      {type === 'journal-page' && (
+        <>
+          <Separator className="my-0" />
+          <div className="flex justify-between gap-3 text-xs">
+            <div>
+              <CardAction
+                label="Edit"
+                onClick={() => {
+                  if (onClick) onClick(journalId);
+                }}
+                type="edit"
+              />
+              <CardAction label="Delete" onClick={handleDelete} type="delete" />
+            </div>
 
-      <div className="flex justify-between gap-3 text-xs">
-        <div>
-          <CardAction
-            label="Edit"
-            onClick={() => onClick(journalId)}
-            type="edit"
-          />
-          <CardAction label="Delete" onClick={handleDelete} type="delete" />
-        </div>
-
-        <p>{formatRelativeTime(new Date(date))}</p>
-      </div>
+            {date && <p>{formatRelativeTime(new Date(date))}</p>}
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -7,17 +7,17 @@ import QuickLink from '@/gui/components/dashboard-home/QuickLink';
 import DashboardHeader from '@/gui/components/dashboard-home/DashboardHeader';
 import PlantOfTheDay from '@/gui/components/dashboard-home/PlantOfTheDay';
 import SectionHeader from '@/gui/components/common/SectionHeader';
-import ChatHistoryList from '@/gui/components/dashboard-home/ChatHistoryList';
-import useAuth from '@/hooks/useAuth';
+import ChatHistoryList from '@/gui/components/dashboard-home/QuickJournalHistory';
 
 /**
  * Dashboard Overview
  * @returns
  */
 export default function DashboardHome() {
-
   const user = {
-    name: useSelector((state: RootState) => state.user.currentUser?.firstName) || '',
+    name:
+      useSelector((state: RootState) => state.user.currentUser?.firstName) ||
+      '',
   };
 
   // Render Widgets
@@ -49,7 +49,7 @@ export default function DashboardHome() {
       </section>
 
       {/* Load Last 3 chat Histories */}
-      <SectionHeader title="Most Recent Chat History" />
+      <SectionHeader title="Recent Journal Entries" />
       <ChatHistoryList />
     </div>
   );
