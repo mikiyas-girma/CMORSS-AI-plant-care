@@ -23,7 +23,7 @@ export default function DashboardHome() {
   // Render Widgets
   return (
     <div className="scrollbar-thin h-full w-full p-4 sm:p-8">
-      <DashboardHeader username={data!.firstName!} />
+      <DashboardHeader username={user.name} />
 
       <Separator className="h-[2px] bg-slate-300" />
 
