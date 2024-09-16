@@ -6,6 +6,7 @@ export default {
     extend: {
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
+        space_grotesk: ['Space Grottesk', 'sans-serif'],
       },
 
       borderRadius: {
