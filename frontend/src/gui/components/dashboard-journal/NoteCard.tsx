@@ -46,7 +46,9 @@ const NoteCard: React.FC<NoteCardType> = ({ date, content, type }) => {
       )}
 
       {type === 'text' && (
-        <p className="whitespace-pre-wrap text-sm sm:text-base">{content}</p>
+        <p className="whitespace-pre-wrap text-sm sm:text-base line-clamp-4 overflow-x-auto scrollbar-thin">
+          {content}
+        </p>
       )}
 
       <p className="mt-1 m:mt-2 rounded-lg bg-white w-fit text-[10px] sm:text-xs py-1 px-2 cursor-default">

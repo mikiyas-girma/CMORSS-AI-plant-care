@@ -24,7 +24,7 @@ const PlantOfTheDay = () => {
         setData(res.data);
       } catch (error: any) {
         if (error.response) {
-          console.log(error.response.data);
+          console.log('');
         }
       } finally {
         setLoading(false);

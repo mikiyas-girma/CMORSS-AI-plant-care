@@ -241,6 +241,7 @@ const CreateJournal: React.FC<TCreateComp> = ({ closeModal, setReload }) => {
                 <PopoverContent className="w-auto p-0">
                   <Calendar
                     mode="single"
+                    toDate={new Date()}
                     selected={extra.dateAcquired}
                     onSelect={(day) =>
                       setExtra((prev) => ({ ...prev, dateAcquired: day }))
