@@ -29,7 +29,6 @@ export const getCareSuggestion = async (plantName: string, weatherData: any, cha
     });
 
     const careSuggestions = res.choices[0].message.content;
-    console.log('Care suggestion from AI:', careSuggestions);
     return careSuggestions;
 
   } catch (error) {
@@ -64,7 +63,6 @@ export const aiChatService = async (userQuery: IuserQuery, chatHistory: any[] = 
         chatHistory.push({ role: "user", content: plantDetails });
     }
 
-    console.log("chat history", chatHistory);
 
     // Trim the chat history to keep only the last 4 entries
     const trimmedHistory = chatHistory.slice(-4);

@@ -3,8 +3,8 @@ import { Button } from "@/gui/components/ui/button";
 import { Input } from "@/gui/components/ui/input";
 import { ScrollArea } from "@/gui/components/common/scroll-area";
 // import  Separator  from "@/gui/components/common/Separator"
-import { Avatar, AvatarFallback } from '@/gui/components/common/avatar';
-import { Send, Bot, User, Plus, Loader } from 'lucide-react';
+import { Avatar, AvatarFallback } from "@/gui/components/common/avatar";
+import { Send, Bot, User, Plus, Loader } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -12,9 +12,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/gui/components/common/sheet';
-import { useParams } from 'react-router-dom';
-import { axiosForApiCall } from '@/lib/axios';
+} from "@/gui/components/common/sheet";
+import { useParams } from "react-router-dom";
+import { axiosForApiCall } from "@/lib/axios";
+import { v4 as uuidv4 } from 'uuid';
+
 
 interface RouteParams {
   [key: string]: string | undefined; // Index signature allows matching any key
@@ -24,7 +26,7 @@ interface RouteParams {
 type Message = {
   id: number;
   text: string;
-  sender: 'user' | 'ai';
+  sender: "user" | "ai";
 };
 
 type ChatHistory = {
@@ -33,13 +35,13 @@ type ChatHistory = {
   messages: Message[];
 };
 
-type Page = 'home' | 'chat' | 'settings';
+type Page = "home" | "chat" | "settings";
 
 export default function DashboardChatbot() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState('');
-  const [currentPage, setCurrentPage] = useState<Page>('chat');
+  const [input, setInput] = useState("");
+  const [currentPage, setCurrentPage] = useState<Page>("chat");
   const [chatHistories, setChatHistories] = useState<ChatHistory[]>([]);
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
@@ -50,25 +52,7 @@ export default function DashboardChatbot() {
   const { plantId } = useParams<RouteParams>();
 
   useEffect(() => {
-    const fetchAdvice = async () => {
-      try {
-        if (plantId) {
-          const response = await axiosForApiCall.get(
-            `/care-suggestions/plants/${plantId}`
-          );
-          setGptResponse(response.data.gptReply);
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAdvice();
-  }, []);
-
-  useEffect(() => {
-    const savedHistories = localStorage.getItem('chatHistories');
+    const savedHistories = localStorage.getItem("chatHistories");
     if (savedHistories) {
       setChatHistories(JSON.parse(savedHistories));
     }
@@ -86,7 +70,7 @@ export default function DashboardChatbot() {
   }, [currentChatId, chatHistories]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const simulateAIResponse = (prompt: string): string => {
@@ -102,83 +86,65 @@ export default function DashboardChatbot() {
   const handleSend = async () => {
     if (input.trim()) {
       if (!currentChatId) {
-        const newChatId = Date.now().toString();
-        const newMessage: Message = {
-          id: Date.now(),
-          text: input,
-          sender: "user",
-        };
-        const newChatHistory: ChatHistory = {
-          id: newChatId,
-          title: input.slice(0, 15) + (input.length > 15 ? '...' : ''),
-          messages: [newMessage],
-        };
-        setChatHistories((prev) => [...prev, newChatHistory]);
-        setCurrentChatId(newChatId);
-
         try {
-          const response = await axiosForApiCall.post(
-            "/care-suggestions/chat",
-            { userId: "2193", userQuery: input }
-          );
+          const response = await axiosForApiCall.post("/chat/", {
+            userQuery: {
+              prompt: input,
+            },
+          });
+          const newChatId = response.data.chatId;
+          const newMessage: Message = {
+            id: uuidv4(),
+            text: input,
+            sender: "user",
+          };
+
           const aiResponse: Message = {
             id: Date.now(),
             text: response.data.response,
             sender: "ai",
           };
-          setMessages((prev) =>
-            prev.map((message) =>
-              message.id === newMessage.id
-                ? { ...message, text: aiResponse.text }
-                : message
-            )
-          );
-          setChatHistories((prev) =>
-            prev.map((chat) =>
-              chat.id === newChatId
-                ? { ...chat, messages: [...chat.messages, aiResponse] }
-                : chat
-            )
-          );
+          // update the chat history with the new user query and AI response
+          setMessages((prev) => [...prev, newMessage, aiResponse]);
+          
+        //   save the new chat history
+          const newChatHistory: ChatHistory = {
+            id: newChatId,
+            title: input.slice(0, 20) + (input.length > 15 ? "..." : ""),
+            messages: [newMessage, aiResponse],
+          };
+          setChatHistories((prev) => [...prev, newChatHistory]);
+          setCurrentChatId(newChatId);
+
         } catch (error) {
-          console.error("Error fetching AI response:", error);
+          console.error("Error starting new chat ", error);
         }
       } else {
         const newMessage: Message = {
-          id: Date.now(),
+          id: uuidv4(),
           text: input,
           sender: "user",
         };
+
         setMessages((prev) => [...prev, newMessage]);
-        setChatHistories((prev) =>
-          prev.map((chat) =>
-            chat.id === currentChatId
-              ? { ...chat, messages: [...chat.messages, newMessage] }
-              : chat
-          )
-        );
 
         try {
-          const response = await axiosForApiCall.post(
-            "/care-suggestions/chat",
-            { userId: "2193", userQuery: input }
-          );
+          const response = await axiosForApiCall.post("/chat/", {
+            userQuery: { prompt: input, chatId: currentChatId },
+          });
+
           const aiResponse: Message = {
             id: Date.now(),
             text: response.data.response,
             sender: "ai",
           };
-          setMessages((prev) =>
-            prev.map((message) =>
-              message.id === newMessage.id
-                ? { ...message, text: aiResponse.text }
-                : message
-            )
-          );
+
+          setMessages((prev) => [...prev, aiResponse]);
+
           setChatHistories((prev) =>
             prev.map((chat) =>
               chat.id === currentChatId
-                ? { ...chat, messages: [...chat.messages, aiResponse] }
+                ? { ...chat, messages: [...chat.messages,newMessage, aiResponse] }
                 : chat
             )
           );
@@ -192,7 +158,7 @@ export default function DashboardChatbot() {
   };
 
   const handlePageChange = (page: Page) => {
-    if (currentPage === 'chat' && messages.length > 0) {
+    if (currentPage === "chat" && messages.length > 0) {
       saveChatHistory();
     }
     setCurrentPage(page);
@@ -223,10 +189,9 @@ export default function DashboardChatbot() {
   };
 
   useEffect(() => {
-    localStorage.setItem('chatHistories', JSON.stringify(chatHistories));
+    localStorage.setItem("chatHistories", JSON.stringify(chatHistories));
   }, [chatHistories]);
 
-  console.log(gptResponse);
 
   return (
     <div className="flex min-h-full bg-gray-100">
@@ -277,7 +242,11 @@ export default function DashboardChatbot() {
                       >
                         <Avatar className="w-8 h-8">
                           <AvatarFallback>
-                            {message.sender === "user" ? <User color="red" /> : <Bot color="green" />}
+                            {message.sender === "user" ? (
+                              <User color="red" />
+                            ) : (
+                              <Bot color="green" />
+                            )}
                           </AvatarFallback>
                         </Avatar>
                         <div
