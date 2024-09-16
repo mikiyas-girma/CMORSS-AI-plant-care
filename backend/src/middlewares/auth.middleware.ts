@@ -5,9 +5,7 @@ import { errorHandler } from "../utils/errorHandler.js";
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
 	if (!req.path.includes('/api/auth')) {
-		console.log(req.path)
 		const token = req.cookies?.access_token;
-		console.log(req.cookies)
 
 		if (!token) {
 			console.error('Authentification error: token missing');
@@ -23,12 +21,16 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 					return next(errorHandler(401, 'Cannot authentify user'));
 				}
 				try {
-					const user = await User.findOne({ email: decoded.email });
+					const user = await User.findOne({ _id: decoded.id });
 					if (!user) {
 						console.error('Authentification error: user not found');
 						return next(errorHandler(401, 'Unknow user or invalid auth token'));
 					}
 					console.log('authentified');
+					req.body = {
+						...req.body,
+						authId: decoded.id
+					};
 					return next();
 				} catch (error) {
 					console.error('Authentification error:', error);

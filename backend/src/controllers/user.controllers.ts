@@ -6,12 +6,12 @@ import uploadImage from "../utils/uploadImage.js";
 
 const updateProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id, firstName, lastName, email, photo } = req.body;
+    const { authId, firstName, lastName, email, photo } = req.body;
 
-    if (!id) {
+    if (!authId) {
       return next(errorHandler(400, "Please provide a valid user id"));
     }
-    const user = await User.findOne({_id: id});
+    const user = await User.findOne({_id: authId});
     if (!user) {
       return next(errorHandler(404, "User not found"));
     };
@@ -20,7 +20,7 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
       const { uploadResult, imageUrl } = await uploadImage({
         image: photo,
         name: `${Date.now()}`,
-        folder: `upload/photos/${id}/`
+        folder: `upload/photos/${authId}/`
       });
       photoUrl = imageUrl;
     }
@@ -49,9 +49,9 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
 
 const updatePassword = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id, password, confirmedPassword } = req.body;
-console.log(id, password, confirmedPassword)
-    if (!id || !password || !confirmedPassword) {
+    const { authId, password, confirmedPassword } = req.body;
+
+    if (!authId || !password || !confirmedPassword) {
       return next(errorHandler(400, "Please fill in all the required fields"));
     }
 
@@ -59,7 +59,7 @@ console.log(id, password, confirmedPassword)
       return next(errorHandler(400, "The password provided are not the same"));
     }
     const hashedPassword = bcryptjs.hashSync(password, 10);
-    const user = await User.findOne({_id: id});
+    const user = await User.findOne({_id: authId});
     if (!user) {
       return next(errorHandler(404, "User not found"));
     }

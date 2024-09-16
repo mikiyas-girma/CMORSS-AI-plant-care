@@ -94,7 +94,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       updateUserProfile: async (newData) => {
         try {
           const response = await axiosForApiCall.put('/user/update-profile', {
-            id: currentUser?.id,
             ...newData,
           });
           dispatch(updateSuccess({ ...currentUser, ...response.data }));
@@ -107,7 +106,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       updateUserPassword: async (passwords) => {
         try {
           await axiosForApiCall.put('/user/update-password', {
-            id: currentUser?.id,
             ...passwords,
           });
           dispatch(updateSuccess(currentUser));

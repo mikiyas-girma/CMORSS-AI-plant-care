@@ -62,7 +62,7 @@ export const signin = async (
       );
     }
     const token = jwt.sign(
-      { email: validUser.email },
+      { id: validUser._id },
       process.env.JWT_SECRET_KEY!
     );
     const { password: pass, ...user } = validUser.toObject();
@@ -102,7 +102,7 @@ export const checkAuth = (req: Request, res: Response) => {
       }
       try {
         const user = await User.findOne(
-          { email: decoded.email },
+          { _id: decoded.id },
           { email: 1, lastName: 1, firstName: 1, photo: 1 }
         );
         if (!user) {
@@ -136,7 +136,7 @@ export const google = async (req: Request, res: Response, next: NextFunction) =>
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      const token = jwt.sign({ email: existingUser.email }, process.env.JWT_SECRET_KEY!);
+      const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET_KEY!);
       const { password: pass, ...user } = existingUser.toObject();
       return res.status(200).cookie("access_token", token, {
         httpOnly: true,
