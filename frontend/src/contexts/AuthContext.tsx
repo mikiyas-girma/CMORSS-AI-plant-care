@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/redux/store';
+import { AppDispatch, persistor, RootState } from '@/redux/store';
 import { axiosForApiCall } from '@/lib/axios';
 import { userActions, UserState } from '@/redux/user/userSlice';
 import { SignInFormData, SignUpFormData } from '@/types/form';
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isAuthenticated: isAuthenticated,
         isProcessing: loading,
         processFail: !!error,
-        data: currentUser,
+        data: isAuthenticated ? currentUser : null,
       },
       signUp: async (userData: SignUpFormData) => {
         dispatch(signUpStart());
@@ -83,6 +83,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
           await axiosForApiCall.post('/auth/logout');
           dispatch(signOutSuccess());
+          persistor.purge();
         } catch (err) {
           console.log(err);
           dispatch(signOutFailure(err));
@@ -123,6 +124,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         //   dispatch(updateStart());
           await axiosForApiCall.post('/user/delete');
           dispatch(updateSuccess(null));
+          persistor.purge();
         } catch (err) {
           console.log(err);
         //   dispatch(updateFailure(err));
