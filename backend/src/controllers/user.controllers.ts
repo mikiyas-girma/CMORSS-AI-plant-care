@@ -6,12 +6,13 @@ import uploadImage from "../utils/uploadImage.js";
 
 const updateProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { authId, firstName, lastName, email, photo } = req.body;
+    const { firstName, lastName, email, photo } = req.body;
+    const id = req.user?.id;
 
-    if (!authId) {
+    if (!id) {
       return next(errorHandler(400, "Please provide a valid user id"));
     }
-    const user = await User.findOne({_id: authId});
+    const user = await User.findOne({_id: id});
     if (!user) {
       return next(errorHandler(404, "User not found"));
     };
@@ -20,11 +21,10 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
       const { uploadResult, imageUrl } = await uploadImage({
         image: photo,
         name: `${Date.now()}`,
-        folder: `upload/photos/${authId}/`
+        folder: `upload/photos/${id}/`
       });
       photoUrl = imageUrl;
     }
-    console.log('updating:', photoUrl);
     
     user.$set({
       email: email && email !== user.email ? email : user.email,
@@ -49,9 +49,10 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
 
 const updatePassword = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { authId, password, confirmedPassword } = req.body;
+    const { password, confirmedPassword } = req.body;
+    const id = req.user?.id
 
-    if (!authId || !password || !confirmedPassword) {
+    if (!id || !password || !confirmedPassword) {
       return next(errorHandler(400, "Please fill in all the required fields"));
     }
 
@@ -59,7 +60,7 @@ const updatePassword = async (req: Request, res: Response, next: NextFunction) =
       return next(errorHandler(400, "The password provided are not the same"));
     }
     const hashedPassword = bcryptjs.hashSync(password, 10);
-    const user = await User.findOne({_id: authId});
+    const user = await User.findOne({_id: id});
     if (!user) {
       return next(errorHandler(404, "User not found"));
     }

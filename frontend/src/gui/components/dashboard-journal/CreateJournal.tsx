@@ -83,12 +83,14 @@ const CreateJournal: React.FC<TCreateComp> = ({ closeModal, setReload }) => {
       return toastError('Please select the date you acquired the plant.');
 
     const fullData = { ...values, ...extra };
+
     try {
-      await axiosForApiCall.post(`/user/journal/create`, fullData);
+      await axiosForApiCall.put(`/user/journal/create`, fullData);
 
       toastSuccess('Form Submitted!!');
       setReload((prev) => ++prev);
 
+      closeModal();
       // Handle Error
     } catch (error: any) {
       if (error.response) {
@@ -96,8 +98,6 @@ const CreateJournal: React.FC<TCreateComp> = ({ closeModal, setReload }) => {
       }
 
       toastError('A network error occured. Try again.');
-    } finally {
-      closeModal();
     }
   }
 
@@ -105,7 +105,7 @@ const CreateJournal: React.FC<TCreateComp> = ({ closeModal, setReload }) => {
   return (
     <div className="scrollbar-thin max-h-[90%] w-full max-w-[500px] animate-fadein overflow-y-auto rounded-lg bg-white p-5 px-8">
       {/* Header of the form */}
-      <div className="my-5 text-center">
+      <div className="my-3 text-center">
         <h2 className="text-2xl font-semibold text-primary-green">
           Create New Journal Entry
         </h2>
@@ -175,7 +175,7 @@ const CreateJournal: React.FC<TCreateComp> = ({ closeModal, setReload }) => {
                       <Textarea
                         placeholder="Provide a descriptive text for your users to see. This will be on the scheduling page."
                         className="h-[190px] resize-none text-[15px] sm:text-[16px]"
-                        style={{ padding: '1.4rem' }}
+                        style={{ padding: '1.2rem' }}
                         {...field}
                       />
                     </FormControl>
@@ -253,9 +253,14 @@ const CreateJournal: React.FC<TCreateComp> = ({ closeModal, setReload }) => {
 
               {/* Complete and Cancel Button */}
               <div className="flex gap-3">
-                <Button type="submit" className="w-full bg-primary-green p-6">
+                <Button
+                  type="submit"
+                  className={`w-full bg-primary-green p-6 disabled:bg-gray-full`}
+                  disabled={!form.formState.isValid}
+                >
                   Submit
                 </Button>
+
                 <Button
                   type="button"
                   onClick={() => setScreen(1)}

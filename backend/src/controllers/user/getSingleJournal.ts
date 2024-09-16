@@ -9,18 +9,21 @@ import PlantJournal from '../../models/PlantJournal.js';
  */
 
 const getSingleJournal = async (req: Request, res: Response) => {
-  const { id } = req.query;
+  const { id: _id } = req.query;
+  const userId = req.user?._id;
 
   try {
-    const result = await PlantJournal.findById(id).lean();
+    const result = await PlantJournal.findOne({ _id, userId });
+
+    if (!result) throw new Error();
 
     return res
       .status(200)
-      .json({ message: 'All user journals retrieved.', data: result });
+      .json({ message: 'Journal retrieved.', data: result });
   } catch (error) {
     return res
       .status(400)
-      .json({ message: 'Unable to Retrieve User Journals.', data: null });
+      .json({ message: 'Unable to retrieve requested journal.', data: null });
   }
 };
 
