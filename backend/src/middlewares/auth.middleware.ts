@@ -25,7 +25,7 @@ export const authMiddleware = (
           return next(errorHandler(401, 'Cannot authentify user'));
         }
         try {
-          const user = await User.findOne({ email: decoded.email });
+          const user = await User.findOne({ _id: decoded.id });
           if (!user) {
             console.error('Authentification error: user not found');
             return next(errorHandler(401, 'Unknow user or invalid auth token'));
