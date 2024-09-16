@@ -12,12 +12,14 @@ import { format } from 'date-fns';
 import { getWeatherImage } from '@/lib/getWeatherImage';
 import LoadingComp from '../common/LoadingComp';
 import { axiosForApiCall } from '@/lib/axios';
+import useToasts from '@/hooks/useToasts';
 
 const WeatherWidget = () => {
   const [loading, setLoading] = useState(true);
   const { longitude, latitude } = useGeolocation();
   const [data, setData] = useState<WeatherData>();
   const [error, setError] = useState<string | null>(null);
+  const { toastError } = useToasts();
 
   useEffect(() => {
     if (!longitude) return;
@@ -36,16 +38,16 @@ const WeatherWidget = () => {
         // Catch Error
       } catch (error: any) {
         if (error.response) {
-          console.log(error.response.data.message);
+          toastError(error.response.data.message);
         } else {
-          console.log('An Error occured. Check network connection.');
+          toastError('Weather Data: Connection Error');
         }
         setData(undefined);
       } finally {
         setLoading(false);
       }
     })();
-  }, [latitude, longitude]);
+  }, [latitude, longitude, toastError]);
 
   //   Return JSX
   return (

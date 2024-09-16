@@ -68,10 +68,11 @@ const DashboardPlantIdentification = () => {
 
   const [files, setFiles] = useState<File[] | []>([]);
   const [plantImages, setPlantImages] = useState<string[]>([]);
-  const [aiModel, setAiModel] = useState<"gemini" | "gpt">("gemini");
+  const [aiModel, setAiModel] = useState<'gemini' | 'gpt'>('gemini');
   const [isSave, setIsSave] = useState(false);
 
   const navigate = useNavigate();
+
   const user = useAuth().user.data;
 
   const handleProcess = async (model = "gemini") => {
@@ -84,10 +85,9 @@ const DashboardPlantIdentification = () => {
         })
       );
       setPlantImages(images);
-      console.log(model);
 
       const res = (
-        await axiosForApiCall.post("/plants/identify", { images, model })
+        await axiosForApiCall.post('/plants/identify', { images, model })
       ).data;
 
       const plantDetails = {
@@ -99,6 +99,7 @@ const DashboardPlantIdentification = () => {
         data: plantDetails,
         error: undefined,
       });
+
       setFiles([]);
       setAiModel("gemini");
     } catch (e) {
@@ -108,14 +109,13 @@ const DashboardPlantIdentification = () => {
         loading: false,
         error: { message: error.message },
       }));
-      toast.error("An error occurred. Please try again later.");
+      toast.error('An error occurred. Please try again later.');
     }
   };
 
   const handleTryAgain = () => {
-    const model = aiModel === "gemini" ? "gpt" : "gemini";
+    const model = aiModel === 'gemini' ? 'gpt' : 'gemini';
     setAiModel((prev) => {
-      console.log(prev, aiModel);
       return prev;
     });
     handleProcess(model);
@@ -146,14 +146,13 @@ const DashboardPlantIdentification = () => {
         geoLocation: plant?.data?.location,
         details: identification?.data,
       };
-      console.log(data);
       const res =
         plant && plant.data
-          ? (await axiosForApiCall.post("/plants", data)).data
+          ? (await axiosForApiCall.post('/plants', data)).data
           : null;
       console.log(res);
-      toast.success("Plant created successfully.");
-      navigate("/dashboard/myplants");
+      toast.success('Plant created successfully.');
+      navigate('/dashboard/myplants');
     } catch (e) {
       const error = e as AxiosError;
       setPlant((prev) => ({
@@ -162,7 +161,7 @@ const DashboardPlantIdentification = () => {
         error: { message: error.message },
       }));
       console.log(error);
-      toast.error("An error occurred. Please try again later.");
+      toast.error('An error occurred. Please try again later.');
     }
   };
 

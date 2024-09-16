@@ -3,8 +3,11 @@ import useAuth from '@/hooks/useAuth';
 import UserAvatar from './UserAvatar';
 
 const ProfileShortcut = () => {
-  const {signOut, user: {data}} = useAuth();
-  const username = data?.firstName + ' ' + data?.lastName
+  const {
+    signOut,
+    user: { data },
+  } = useAuth();
+  const username = data?.firstName + ' ' + data?.lastName;
 
   const handleLogout = async () => {
     if (signOut) {
@@ -19,13 +22,14 @@ const ProfileShortcut = () => {
   return (
     <section className="flex cursor-default items-center justify-between rounded-lg bg-gray-neutral p-2">
       <div className="flex items-center gap-2">
-        <UserAvatar className="border-2 border-white" size={50}/>
+        <UserAvatar className="border-2 border-white" size={50} />
         <p className="text-xs font-bold text-gray-full">{username}</p>
       </div>
 
       <button
         className="z-10 cursor-pointer transition-opacity duration-300 ease-in hover:opacity-65"
         onClick={handleLogout}
+        title="Log Out"
       >
         <LogOut color="red" size={18} />
       </button>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link } from 'react-router-dom';
 import {
   Table,
@@ -13,27 +14,27 @@ import { ServerURL } from '@/lib/SERVERURL';
 import axios from 'axios';
 import { PlantData } from '@/types';
 import { LoaderCircle } from '@/assets/Icons';
+import useToasts from '@/hooks/useToasts';
 
 export default function Component() {
   const [data, setData] = useState<PlantData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+
+  const { toastError } = useToasts();
 
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
-        setError(null);
 
         const res = await axios.get(`${ServerURL}/api/plants`);
         const result = res.data;
         setData(result);
       } catch (error: any) {
         if (error.response) {
-          setError(error.response);
-          console.log(error.response);
+          toastError(error.response);
         } else {
-          console.log('An Error occured. Check network connection.');
+          toastError('An Error occured. Check network connection.');
         }
       } finally {
         setLoading(false);

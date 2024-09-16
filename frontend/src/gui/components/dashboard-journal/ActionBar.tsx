@@ -20,7 +20,6 @@ const ActionBar: React.FC<TActionBar> = ({
       <Input
         placeholder="Search by Title"
         className="p-3 bg-white md:min-w-[300px] w-full"
-        style={{ padding: '1.3rem' }}
         value={searchText}
         onChange={(event) => setSearchText(event.currentTarget.value)}
       />
@@ -28,13 +27,13 @@ const ActionBar: React.FC<TActionBar> = ({
       <Button
         children={<p>Search</p>}
         onClick={handleSearch}
-        className="bg-primary-orange p-[1.3rem]"
+        className="bg-primary-orange md:min-w-[150px]"
       />
 
       <Button
         children={<p>Create New Journal</p>}
         onClick={() => setShowCreateModal((prev) => !prev)}
-        className="bg-primary-green p-[1.3rem]"
+        className="bg-primary-green"
       />
     </div>
   );
