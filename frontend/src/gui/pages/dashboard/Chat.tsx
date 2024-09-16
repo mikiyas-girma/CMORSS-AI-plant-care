@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
-import { Button } from "@/gui/components/ui/button";
-import { Input } from "@/gui/components/ui/input";
-import { ScrollArea } from "@/gui/components/common/scroll-area";
+import { useState, useEffect, useRef } from 'react';
+import { Button } from '@/gui/components/ui/button';
+import { Input } from '@/gui/components/ui/input';
+import { ScrollArea } from '@/gui/components/common/scroll-area';
 // import  Separator  from "@/gui/components/common/Separator"
 import { Avatar, AvatarFallback } from '@/gui/components/common/avatar';
 import { Send, Bot, User, Plus, Loader } from 'lucide-react';
@@ -89,15 +89,15 @@ export default function DashboardChatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const simulateAIResponse = (prompt: string): string => {
-    const responses = [
-      `I understand you're asking about "${prompt}". How can I help you with that?`,
-      `Regarding "${prompt}", could you please provide more details?`,
-      `"${prompt}" is an interesting topic. What specific information are you looking for?`,
-      `I'd be happy to discuss "${prompt}". What would you like to know?`,
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
-  };
+  // const simulateAIResponse = (prompt: string): string => {
+  //   const responses = [
+  //     `I understand you're asking about "${prompt}". How can I help you with that?`,
+  //     `Regarding "${prompt}", could you please provide more details?`,
+  //     `"${prompt}" is an interesting topic. What specific information are you looking for?`,
+  //     `I'd be happy to discuss "${prompt}". What would you like to know?`,
+  //   ];
+  //   return responses[Math.floor(Math.random() * responses.length)];
+  // };
 
   const handleSend = async () => {
     if (input.trim()) {
@@ -106,7 +106,7 @@ export default function DashboardChatbot() {
         const newMessage: Message = {
           id: Date.now(),
           text: input,
-          sender: "user",
+          sender: 'user',
         };
         const newChatHistory: ChatHistory = {
           id: newChatId,
@@ -118,13 +118,13 @@ export default function DashboardChatbot() {
 
         try {
           const response = await axiosForApiCall.post(
-            "/care-suggestions/chat",
-            { userId: "2193", userQuery: input }
+            '/care-suggestions/chat',
+            { userId: '2193', userQuery: input }
           );
           const aiResponse: Message = {
             id: Date.now(),
             text: response.data.response,
-            sender: "ai",
+            sender: 'ai',
           };
           setMessages((prev) =>
             prev.map((message) =>
@@ -141,13 +141,13 @@ export default function DashboardChatbot() {
             )
           );
         } catch (error) {
-          console.error("Error fetching AI response:", error);
+          console.error('Error fetching AI response:', error);
         }
       } else {
         const newMessage: Message = {
           id: Date.now(),
           text: input,
-          sender: "user",
+          sender: 'user',
         };
         setMessages((prev) => [...prev, newMessage]);
         setChatHistories((prev) =>
@@ -160,13 +160,13 @@ export default function DashboardChatbot() {
 
         try {
           const response = await axiosForApiCall.post(
-            "/care-suggestions/chat",
-            { userId: "2193", userQuery: input }
+            '/care-suggestions/chat',
+            { userId: '2193', userQuery: input }
           );
           const aiResponse: Message = {
             id: Date.now(),
             text: response.data.response,
-            sender: "ai",
+            sender: 'ai',
           };
           setMessages((prev) =>
             prev.map((message) =>
@@ -183,11 +183,11 @@ export default function DashboardChatbot() {
             )
           );
         } catch (error) {
-          console.error("Error fetching AI response:", error);
+          console.error('Error fetching AI response:', error);
         }
       }
 
-      setInput("");
+      setInput('');
     }
   };
 
@@ -226,8 +226,6 @@ export default function DashboardChatbot() {
     localStorage.setItem('chatHistories', JSON.stringify(chatHistories));
   }, [chatHistories]);
 
-  console.log(gptResponse);
-
   return (
     <div className="flex min-h-full bg-gray-100">
       {/* Main content */}
@@ -263,28 +261,32 @@ export default function DashboardChatbot() {
                     <div
                       key={message.id}
                       className={`flex ${
-                        message.sender === "user"
-                          ? "justify-end"
-                          : "justify-start"
+                        message.sender === 'user'
+                          ? 'justify-end'
+                          : 'justify-start'
                       } mb-4`}
                     >
                       <div
                         className={`flex items-start ${
-                          message.sender === "user"
-                            ? "flex-row-reverse"
-                            : "flex-row"
+                          message.sender === 'user'
+                            ? 'flex-row-reverse'
+                            : 'flex-row'
                         }`}
                       >
                         <Avatar className="w-8 h-8">
                           <AvatarFallback>
-                            {message.sender === "user" ? <User color="red" /> : <Bot color="green" />}
+                            {message.sender === 'user' ? (
+                              <User color="red" />
+                            ) : (
+                              <Bot color="green" />
+                            )}
                           </AvatarFallback>
                         </Avatar>
                         <div
                           className={`font-space_grotesk mx-2 p-3 rounded-lg ${
-                            message.sender === "user"
-                              ? "bg-blue-500 text-white"
-                              : "bg-gray-200 text-gray-800"
+                            message.sender === 'user'
+                              ? 'bg-blue-500 text-white'
+                              : 'bg-gray-200 text-gray-800'
                           }`}
                         >
                           {message.text}
@@ -333,7 +335,7 @@ export default function DashboardChatbot() {
                     placeholder="Type your message..."
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    onKeyPress={(e) => e.key === "Enter" && handleSend()}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                     className="flex-1"
                   />
                   <Button onClick={handleSend}>

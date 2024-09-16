@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, ReactNode, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
@@ -33,7 +34,7 @@ interface AuthContextValue {
   updateUserProfile: (newData) => Promise<void>;
   updateUserPassword: (newPassword) => Promise<void>;
   deleteUser: () => Promise<void>;
-};
+}
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -72,7 +73,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           );
           dispatch(signInSuccess(response.data));
         } catch (err) {
-          console.log(err);
           dispatch(signInFailure(err));
           throw new Error('An error occured while signing in, please retry');
         }
@@ -83,7 +83,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           await axiosForApiCall.post('/auth/logout');
           dispatch(signOutSuccess());
         } catch (err) {
-          console.log(err);
           dispatch(signOutFailure(err));
           throw new Error('An error occured while signing out, please retry');
         }
@@ -93,11 +92,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
           const response = await axiosForApiCall.put('/user/update-profile', {
             id: currentUser?.id,
-            ...newData
+            ...newData,
           });
           dispatch(updateSuccess({ ...currentUser, ...response.data }));
-        } catch (err) {
-          console.log(err);
+        } catch (err: any) {
           throw new Error(
             'An error occured while updating user profile, please retry'
           );
@@ -107,11 +105,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
           await axiosForApiCall.put('/user/update-password', {
             id: currentUser?.id,
-            ...passwords
+            ...passwords,
           });
           dispatch(updateSuccess(currentUser));
-        } catch (err) {
-          console.log(err);
+        } catch (err: any) {
           throw new Error(
             'An error occured while updating your profile, please retry'
           );
@@ -119,12 +116,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       },
       deleteUser: async () => {
         try {
-        //   dispatch(updateStart());
+          //   dispatch(updateStart());
           await axiosForApiCall.post('/user/delete');
           dispatch(updateSuccess(null));
-        } catch (err) {
-          console.log(err);
-        //   dispatch(updateFailure(err));
+        } catch (err: any) {
+          //   dispatch(updateFailure(err));
           throw new Error(
             'An error occured while deleting your account, please retry'
           );

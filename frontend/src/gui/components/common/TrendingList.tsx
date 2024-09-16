@@ -25,10 +25,10 @@ const TrendingList: React.FC<ListType> = ({ movies, setShowList }) => {
         {/* Page header */}
 
         <div className="w-full text-center  text-white mb-4">
-          <h2 className="text-5xl font-bold md:px-10 md:w-[80%] mx-auto text-primary-orange">
+          <h2 className="text-2xl pt-3 sm:text-5xl font-bold md:px-10 md:w-[80%] mx-auto text-primary-orange">
             Discover the most Popular movies of the moment
           </h2>
-          <p className="text-xl mt-2">
+          <p className="text-lg sm:text-xl mt-2">
             Catch the latest buzz in the movie world.
           </p>
         </div>

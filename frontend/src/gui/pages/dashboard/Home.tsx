@@ -6,20 +6,21 @@ import DashboardHeader from '@/gui/components/dashboard-home/DashboardHeader';
 import PlantOfTheDay from '@/gui/components/dashboard-home/PlantOfTheDay';
 import SectionHeader from '@/gui/components/common/SectionHeader';
 import ChatHistoryList from '@/gui/components/dashboard-home/ChatHistoryList';
+import useAuth from '@/hooks/useAuth';
 
 /**
  * Dashboard Overview
  * @returns
  */
 export default function DashboardHome() {
-  const user = {
-    name: 'CMORSS',
-  };
+  const {
+    user: { data },
+  } = useAuth();
 
   // Render Widgets
   return (
     <div className="scrollbar-thin h-full w-full p-4 sm:p-8">
-      <DashboardHeader username={user.name} />
+      <DashboardHeader username={data!.firstName!} />
 
       <Separator className="h-[2px] bg-slate-300" />
 

@@ -3,14 +3,14 @@
  * @returns JSX Component for the view
  */
 
-import { ImageUpload, plantImage1 } from "@/assets";
-import CustomModal from "@/gui/components/common/CustomModal";
-import FileUploader from "@/gui/components/dashboard-identify/FileUploader";
-import Identification from "@/gui/components/dashboard-identify/Identification";
-import Loading from "@/gui/components/dashboard-identify/Loading";
-import { Button } from "@/gui/components/ui/button";
-import { Card } from "@/gui/components/ui/card";
-import { Input } from "@/gui/components/ui/input";
+import { ImageUpload, plantImage1 } from '@/assets';
+import CustomModal from '@/gui/components/common/CustomModal';
+import FileUploader from '@/gui/components/dashboard-identify/FileUploader';
+import Identification from '@/gui/components/dashboard-identify/Identification';
+import Loading from '@/gui/components/dashboard-identify/Loading';
+import { Button } from '@/gui/components/ui/button';
+import { Card } from '@/gui/components/ui/card';
+import { Input } from '@/gui/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -18,13 +18,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/gui/components/ui/select";
-import { axiosForApiCall } from "@/lib/axios";
-import { fileToBase64 } from "@/lib/fileToBase64";
-import { AxiosError } from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+} from '@/gui/components/ui/select';
+import { axiosForApiCall } from '@/lib/axios';
+import { fileToBase64 } from '@/lib/fileToBase64';
+import { AxiosError } from 'axios';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 interface PlantDetails {
   name: string;
@@ -59,10 +59,10 @@ const DashboardPlantIdentification = () => {
 
   const [files, setFiles] = useState<File[] | []>([]);
   const [plantImages, setPlantImages] = useState<string[]>([]);
-  const [aiModel, setAiModel] = useState<"gemini" | "gpt">("gemini");
+  const [aiModel, setAiModel] = useState<'gemini' | 'gpt'>('gemini');
   const [isSave, setIsSave] = useState(false);
   const navigate = useNavigate();
-  const handleProcess = async (model = "gemini") => {
+  const handleProcess = async (model = 'gemini') => {
     try {
       setIdentification({ loading: true });
       // Convert files to Base64 format
@@ -72,10 +72,9 @@ const DashboardPlantIdentification = () => {
         })
       );
       setPlantImages(images);
-      console.log(model);
 
       const res = (
-        await axiosForApiCall.post("/plants/identify", { images, model })
+        await axiosForApiCall.post('/plants/identify', { images, model })
       ).data;
 
       setIdentification({
@@ -83,7 +82,7 @@ const DashboardPlantIdentification = () => {
         data: res,
         error: undefined,
       });
-      setAiModel("gemini");
+      setAiModel('gemini');
     } catch (e) {
       const error = e as AxiosError;
       setIdentification((prev) => ({
@@ -91,14 +90,13 @@ const DashboardPlantIdentification = () => {
         loading: false,
         error: { message: error.message },
       }));
-      toast.error("An error occurred. Please try again later.");
+      toast.error('An error occurred. Please try again later.');
     }
   };
 
   const handleTryAgain = () => {
-    const model = aiModel === "gemini" ? "gpt" : "gemini";
+    const model = aiModel === 'gemini' ? 'gpt' : 'gemini';
     setAiModel((prev) => {
-      console.log(prev, aiModel);
       return prev;
     });
     handleProcess(model);
@@ -113,20 +111,19 @@ const DashboardPlantIdentification = () => {
     try {
       setPlant((prev) => ({ ...prev, loading: true }));
       const data = {
-        userId: "123",
+        userId: '123',
         plantName: plant?.data?.name,
         images: plantImages,
         geoLocation: plant?.data?.location,
         details: identification?.data,
       };
-      console.log(data);
       const res =
         plant && plant.data
-          ? (await axiosForApiCall.post("/plants", data)).data
+          ? (await axiosForApiCall.post('/plants', data)).data
           : null;
       console.log(res);
-      toast.success("Plant created successfully.");
-      navigate("/dashboard/myplants");
+      toast.success('Plant created successfully.');
+      navigate('/dashboard/myplants');
     } catch (e) {
       const error = e as AxiosError;
       setPlant((prev) => ({
@@ -135,7 +132,7 @@ const DashboardPlantIdentification = () => {
         error: { message: error.message },
       }));
       console.log(error);
-      toast.error("An error occurred. Please try again later.");
+      toast.error('An error occurred. Please try again later.');
     }
   };
   // Return JSX Component
@@ -238,7 +235,7 @@ const DashboardPlantIdentification = () => {
               <div className="flex items-center justify-center">
                 <p className="text-sm">Not what you're looking for?</p>
                 <Button
-                  onClick={() => handleProcess("plantId")}
+                  onClick={() => handleProcess('plantId')}
                   variant="ghost"
                   className="px-2 font-bold"
                 >
