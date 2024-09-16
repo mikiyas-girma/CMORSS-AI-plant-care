@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Button } from "../ui/button";
-import { BotMessageSquareIcon } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { Button } from '../ui/button';
+import { BotMessageSquareIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Identification = ({ identification, image, handleSave, handleNew }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -29,7 +29,7 @@ const Identification = ({ identification, image, handleSave, handleNew }) => {
       <div className="flex space-x-2 items-center mb-4">
         <h2 className="text-3xl font-bold">{identification.name}</h2>
         <div className="relative group">
-          <button onClick={() => navigate("/dashboard/chat")}>
+          <button onClick={() => navigate('/dashboard/chat')}>
             <BotMessageSquareIcon className="w-10 h-10 text-green-600" />
           </button>
 
@@ -41,33 +41,33 @@ const Identification = ({ identification, image, handleSave, handleNew }) => {
       </div>
 
       <p className="text-gray-700 italic mb-2">
-        Common Names: {identification.common_names.join(", ")}
+        Common Names: {identification.common_names.join(', ')}
       </p>
 
       {/* Description with "Read More" functionality */}
-      <div className={`text-gray-700 ${isExpanded ? "" : "line-clamp-4"}`}>
+      <div className={`text-gray-700 ${isExpanded ? '' : 'line-clamp-4'}`}>
         <strong>Description:</strong> {identification.description}
       </div>
 
       {isExpanded && (
-        <ul className="list-disc list-inside mb-2">
+        <ul className="list-disc list-inside mb-2 flex flex-col gap-3 mt-1">
           <li>
-            <strong>Best Light Condition:</strong>{" "}
+            <strong>Best Light Condition:</strong>{' '}
             {identification.best_light_condition}
           </li>
           <li>
             <strong>Best Soil Type:</strong> {identification.best_soil_type}
           </li>
           <li>
-            <strong>Best Watering Practice:</strong>{" "}
+            <strong>Best Watering Practice:</strong>{' '}
             {identification.best_watering}
           </li>
           <li>
-            <strong>Common Uses:</strong>{" "}
-            {identification.common_uses.join(", ")}
+            <strong>Common Uses:</strong>{' '}
+            {identification.common_uses.join(', ')}
           </li>
           <li>
-            <strong>Cultural Significance:</strong>{" "}
+            <strong>Cultural Significance:</strong>{' '}
             {identification.cultural_significance}
           </li>
           <li>
@@ -80,14 +80,14 @@ const Identification = ({ identification, image, handleSave, handleNew }) => {
         variant="ghost"
         className="underline mb-4"
       >
-        {isExpanded ? "Show Less" : "Read More"}
+        {isExpanded ? 'Show Less' : 'Read More'}
       </Button>
 
       <a
         href={identification.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-primary-orange underline mb-4"
+        className="text-primary-orange underline mb-4 text-center"
       >
         Learn more on Wikipedia
       </a>

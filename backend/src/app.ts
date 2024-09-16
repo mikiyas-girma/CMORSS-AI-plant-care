@@ -57,8 +57,6 @@ app.get('/api/dashboard/weather-data', getWeatherData);
 app.get('/api/dashboard/daily-fact', getDailyPlantFact);
 
 // User Journal related actions
-app.use('/api/user/journal', authMiddleware);
-
 app.post('/api/user/journal/create', createNewJournal);
 app.get('/api/user/journal/get-all', getAllJournals);
 app.get('/api/user/journal', getSingleJournal);

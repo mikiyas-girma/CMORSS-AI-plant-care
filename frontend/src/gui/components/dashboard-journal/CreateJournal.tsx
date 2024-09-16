@@ -85,7 +85,7 @@ const CreateJournal: React.FC<TCreateComp> = ({ closeModal, setReload }) => {
     const fullData = { ...values, ...extra };
 
     try {
-      await axiosForApiCall.put(`/user/journal/create`, fullData);
+      await axiosForApiCall.post(`/user/journal/create`, fullData);
 
       toastSuccess('Form Submitted!!');
       setReload((prev) => ++prev);

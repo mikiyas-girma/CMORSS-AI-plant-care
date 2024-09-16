@@ -8,7 +8,12 @@ interface LatLong {
   lng: number;
 }
 
-const libs: Library[] = ["core", "maps", "places", "marker"];
+const libs: Library[] = ['core', 'maps', 'places', 'marker'];
+
+/**
+ * Map Component
+ * @returns
+ */
 function Map() {
   const authContext = useContext(AuthContext);
   if (!authContext) {
@@ -18,7 +23,8 @@ function Map() {
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [marker, setMarker] = useState<google.maps.Marker | null>(null);
   const [latlong, setLatlong] = useState<LatLong | null>(null);
-  const [autocomplete /*, setAutocomplete*/] = useState<google.maps.places.Autocomplete | null>(null);
+  const [autocomplete /*, setAutocomplete*/] =
+    useState<google.maps.places.Autocomplete | null>(null);
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API,
@@ -30,7 +36,7 @@ function Map() {
 
   // Get user's current location using Geolocation API
   useEffect(() => {
-    if ("geolocation" in navigator) {
+    if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setLatlong({
@@ -39,7 +45,7 @@ function Map() {
           });
         },
         (error) => {
-          console.error("Error getting location:", error);
+          console.error('Error getting location:', error);
           // Set a default location if geolocation fails
           setLatlong({ lat: 1.3521, lng: 103.8198 }); // Singapore as default
         }
@@ -64,12 +70,12 @@ function Map() {
       const gMarker = new google.maps.Marker({
         position: { lat: latlong.lat, lng: latlong.lng },
         map: gmap,
-        title: "Your Location",
+        title: 'Your Location',
       });
       setMarker(gMarker);
 
       // Add click listener to the map to move the marker when user clicks on the map
-      gmap.addListener("click", async (e) => {
+      gmap.addListener('click', async (e) => {
         const newLatLong = {
           lat: e.latLng.lat(),
           lng: e.latLng.lng(),
@@ -104,7 +110,7 @@ function Map() {
           const gMarker = new google.maps.Marker({
             position: newLatLong,
             map: map,
-            title: "Selected Place",
+            title: 'Selected Place',
           });
           setMarker(gMarker);
         }
@@ -118,7 +124,7 @@ function Map() {
   };
 
   return (
-    <div className='scrollbar-thin h-full w-full p-3 md:p-8 flex flex-col relative'>
+    <div className="scrollbar-thin h-full w-full p-3 md:p-8 flex flex-col relative">
       {/* Autocomplete search input is functional, but currently not working due to limited resource from the API */}
       {/* <Autocomplete
         onLoad={(auto) => setAutocomplete(auto)}
@@ -135,7 +141,11 @@ function Map() {
 
       {/* Map container */}
       {isLoaded ? (
-        <div ref={mapRef} style={{ height: '500px', width: '100%' }} />
+        <div
+          ref={mapRef}
+          style={{ width: '100%', objectFit: 'cover' }}
+          className="rounded-lg sm:mt-0 !-mt-8 h-[calc(100dvh-120px)] sm:h-full"
+        />
       ) : (
         <p>Loading map...</p>
       )}

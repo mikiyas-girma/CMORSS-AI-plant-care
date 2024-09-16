@@ -30,7 +30,6 @@ const createNewJournal = async (req: Request, res: Response) => {
 
   try {
     const results = await PlantJournal.create(data);
-    console.log(results);
 
     return res.status(200).json({ message: 'Journal created successfully.' });
   } catch (error) {
