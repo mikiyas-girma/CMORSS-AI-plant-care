@@ -30,7 +30,7 @@ const ImageWithPlaceholder: React.FC<PropType> = ({
           : 'min-h-full w-full bg-white rounded-lg'
       }
     >
-      {isLoading && <div className="min-h-[400px] ">{LoadingComponent}</div>}
+      {isLoading && <div className="md:min-h-[530px] ">{LoadingComponent}</div>}
 
       <img
         src={imgUrl}

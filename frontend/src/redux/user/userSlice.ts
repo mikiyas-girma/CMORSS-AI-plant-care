@@ -10,9 +10,9 @@ export interface UserState {
 
 const initialState: UserState = {
   currentUser: null,
-  isAuthenticated: true,
+  isAuthenticated: false,
   error: null,
-  loading: false,
+  loading: true,
 };
 
 const userSlice = createSlice({

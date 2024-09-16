@@ -29,7 +29,7 @@ const AuthLayout = () => {
   }, [pathname]);
 
   return (
-    <Card className="max-w-[400px]">
+    <Card className="w-full max-w-[500px] py-7 px-3 font-poppins">
       <CardHeader className="text-center">
         <CardTitle className="flex flex-col items-center text-primary-green text-3xl">
           <AppLogo width={50} height={50} />
@@ -38,9 +38,11 @@ const AuthLayout = () => {
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
+        {/* Render Nested Child Routes */}
         <Outlet />
+        {/*  */}
       </CardContent>
-      <CardFooter className="font-semibold text-sm flex justify-center gap-1">
+      <CardFooter className="font-semibold text-sm flex justify-center gap-1 -mt-1">
         {pathname.includes(AUTH_PATH.login) ? (
           <>
             Don&apos;t have an account?

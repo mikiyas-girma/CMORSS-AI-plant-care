@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Link } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -6,40 +7,41 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/gui/components/dashboard-myplants/Table';
-import { BotMessageSquare } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { ServerURL } from '@/lib/SERVERURL';
-import axios from 'axios';
-import { PlantData } from '@/types';
-import { LoaderCircle } from '@/assets/Icons';
+} from "@/gui/components/dashboard-myplants/Table";
+import { BotMessageSquare } from "lucide-react";
+import { useEffect, useState } from "react";
+import { PlantData } from "@/types";
+import { LoaderCircle } from "@/assets/Icons";
+import useToasts from "@/hooks/useToasts";
+import { axiosForApiCall } from "@/lib/axios";
+import useAuth from "@/hooks/useAuth";
 
 export default function Component() {
   const [data, setData] = useState<PlantData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const user = useAuth().user.data;
+  const { toastError } = useToasts();
 
   useEffect(() => {
+    if (!user) return;
     (async () => {
       try {
         setLoading(true);
-        setError(null);
-
-        const res = await axios.get(`${ServerURL}/api/plants`);
-        const result = res.data;
-        setData(result);
+        const res = (await axiosForApiCall.get(`/plants/${user.id}`)).data;
+        setData(res);
       } catch (error: any) {
-        if (error.response) {
-          setError(error.response);
-          console.log(error.response);
+        if (error.message === 401) {
+          toastError(error.message);
         } else {
-          console.log('An Error occured. Check network connection.');
+          toastError("An Error occured. Check network connection.");
         }
       } finally {
         setLoading(false);
       }
     })();
-  }, []);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <div className="container mx-auto py-10">
@@ -65,7 +67,7 @@ export default function Component() {
           {data.map((item, index) => (
             <TableRow
               key={index}
-              className={index % 2 === 0 ? 'bg-muted/100' : ''}
+              className={index % 2 === 0 ? "bg-muted/100" : ""}
             >
               <TableCell className="font-medium">{index + 1}</TableCell>
               <TableCell>{item.plantName}</TableCell>
