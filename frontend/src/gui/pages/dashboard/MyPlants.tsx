@@ -15,12 +15,19 @@ import { LoaderCircle } from "@/assets/Icons";
 import useToasts from "@/hooks/useToasts";
 import { axiosForApiCall } from "@/lib/axios";
 import useAuth from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
+import { useDispatch } from "react-redux";  
+import { setChatResponse, setAnalyzing } from "@/redux/chat/chatSlice";
+
 
 export default function Component() {
   const [data, setData] = useState<PlantData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const user = useAuth().user.data;
   const { toastError } = useToasts();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!user) return;
@@ -42,6 +49,26 @@ export default function Component() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+    const getCareAdvice = async (item: PlantData) => {
+        try {
+            setAnalyzing(true);
+            const response = await axiosForApiCall.post(`/chat/${item._id}`, {
+                userQuery: {
+                    chatId: uuidv4(),
+                    plantName: item.plantName,
+                    location: item.geoLocation
+                }});
+                console.log("response in plants", response.data.response);
+            dispatch(setChatResponse(response.data.response));
+            navigate(`/dashboard/chat/${item._id}`);
+
+        } catch (error) {
+            console.log("Error fetching plant care advice !!!", error);
+        } finally {
+            setAnalyzing(false);
+        }
+    };
 
   return (
     <div className="container mx-auto py-10">
@@ -78,6 +105,7 @@ export default function Component() {
                 {/* this will be changed to route to chat with this plant  */}
                 <Link
                   to={`/dashboard/chat/${item._id}`}
+                  onClick={() => getCareAdvice(item)}
                   className="text-primary"
                 >
                   <BotMessageSquare className="w-10 h-7" color="green" />

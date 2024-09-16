@@ -9,6 +9,7 @@ router.post('/', chatWithAI);
 
 // continue with stored chat
 router.get('/:chatId', chatWithAI);
+router.post('/:chatId', chatWithAI);
 
 
 export default router;
