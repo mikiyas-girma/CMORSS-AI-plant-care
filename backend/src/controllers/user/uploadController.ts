@@ -25,7 +25,6 @@ export const uploadImageController = async (
       folder: `${username}/journal/`,
     });
 
-    console.log(uploadResult.imageUrl);
     res.status(200).json({
       message: 'Image uploaded successfully',
       fileUrl: uploadResult.imageUrl,

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getCareSuggestionForPlant } from "../controllers/careSuggestion/careSuggestionController.js";
+import { getCareSuggestionForPlant, chatWithAI } from "../controllers/careSuggestion/careSuggestionController.js";
 
 const router = Router();
 
@@ -8,5 +8,9 @@ const router = Router();
 
 // Get care suggestions for a specific plant
 router.get("/plants/:plantId/", getCareSuggestionForPlant);
+
+// Follow up with the AI
+router.post('/chat', chatWithAI);
+
 
 export default router;

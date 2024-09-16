@@ -11,8 +11,6 @@ import PlantJournal from '../../models/PlantJournal.js';
 const getSingleJournal = async (req: Request, res: Response) => {
   const { id } = req.query;
 
-  console.log('QUERY PARAM: ', id);
-
   try {
     const result = await PlantJournal.findById(id).lean();
 
