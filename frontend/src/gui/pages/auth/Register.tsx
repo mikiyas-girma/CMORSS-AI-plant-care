@@ -118,7 +118,7 @@ const SignIn = () => {
         </div>
 
         <div className="grid w-full items-center gap-1.5">
-          <Label htmlFor="email">
+          <Label htmlFor="password">
             Password <DangerWrapper>*</DangerWrapper>
           </Label>
           <Input
@@ -132,7 +132,7 @@ const SignIn = () => {
         </div>
 
         <div className="grid w-full items-center gap-1.5">
-          <Label htmlFor="email">
+          <Label htmlFor="confirm_password">
             Confirm password <DangerWrapper>*</DangerWrapper>
           </Label>
           <Input

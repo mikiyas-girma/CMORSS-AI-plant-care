@@ -115,6 +115,7 @@ const Journal = () => {
         <JournalHistory
           journals={journals}
           setSelectedJournal={setSelectedJournal}
+          setReload={setReload}
         />
       )}
     </section>

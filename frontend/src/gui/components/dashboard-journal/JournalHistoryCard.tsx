@@ -1,7 +1,7 @@
 import { formatRelativeTime } from '@/lib/utils';
 import Separator from '../common/Separator';
 import CardAction from './JournalAction';
-import useToasts from '@/hooks/useToasts';
+
 import { JournalHistoryCardType } from '@/types/journal';
 import deleteJournal from '@/lib/deleteJournal';
 
@@ -15,9 +15,8 @@ const JournalHistoryCard: React.FC<JournalHistoryCardType> = ({
   journalId,
   onClick,
   type = 'journal-page',
+  setReload,
 }) => {
-  const { toastSuccess } = useToasts();
-
   const handleDelete = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -27,7 +26,10 @@ const JournalHistoryCard: React.FC<JournalHistoryCardType> = ({
 
     if (choice) {
       const isDeleted = await deleteJournal(journalId);
-      if (isDeleted) toastSuccess("Let's pretend it has deleted. 🤣");
+
+      if (isDeleted && setReload) {
+        setReload((prev) => ++prev);
+      }
     }
   };
 
@@ -38,23 +40,24 @@ const JournalHistoryCard: React.FC<JournalHistoryCardType> = ({
         <p>{title.slice(0, 63)}...</p>
       </div>
 
-      <Separator className="my-0" />
-
       {type === 'journal-page' && (
-        <div className="flex justify-between gap-3 text-xs">
-          <div>
-            <CardAction
-              label="Edit"
-              onClick={() => {
-                if (onClick) onClick(journalId);
-              }}
-              type="edit"
-            />
-            <CardAction label="Delete" onClick={handleDelete} type="delete" />
-          </div>
+        <>
+          <Separator className="my-0" />
+          <div className="flex justify-between gap-3 text-xs">
+            <div>
+              <CardAction
+                label="Edit"
+                onClick={() => {
+                  if (onClick) onClick(journalId);
+                }}
+                type="edit"
+              />
+              <CardAction label="Delete" onClick={handleDelete} type="delete" />
+            </div>
 
-          {date && <p>{formatRelativeTime(new Date(date))}</p>}
-        </div>
+            {date && <p>{formatRelativeTime(new Date(date))}</p>}
+          </div>
+        </>
       )}
     </div>
   );

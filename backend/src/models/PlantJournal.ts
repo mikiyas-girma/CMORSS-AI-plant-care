@@ -27,7 +27,7 @@ const plantJournalSchema = new mongoose.Schema(
 
     location: {
       type: String,
-      enum: ['Indoor', 'Outdoor', 'Greenhouse'],
+      enum: ['Indoor', 'Outdoor', 'Greenhouse', 'Farmland'],
       required: true,
     },
 

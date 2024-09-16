@@ -15,11 +15,11 @@ const ContainerLayout: React.FC<ContainerProp> = ({ children }) => {
     <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-primary-green sm:p-10">
       {/* Just vanity element hehe */}
       <div
-        className="absolute flex h-[100%] w-[50%] min-w-[900px] items-center justify-center rounded-[1000px] bg-white bg-opacity-[15%] animate-pulse delay-500"
+        className="absolute flex h-[100%] w-[50%] min-w-[900px] items-center justify-center rounded-[1000px] bg-white bg-opacity-[15%]"
         role="presentation"
       >
         <div
-          className="absolute h-[70%] w-[70%] rounded-[1000px] bg-white bg-opacity-[25%] animate-pulse delay-75"
+          className="absolute h-[70%] w-[70%] rounded-[1000px] bg-white bg-opacity-[25%]"
           role="presentation"
         ></div>
       </div>

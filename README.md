@@ -131,6 +131,7 @@ Before you begin, ensure you have the following installed:
    REDIS_HOST=your_redis_host
    REDIS_PASSWORD=your_redis_password
    REDIS_PORT=your_redis_port
+   GOOGLE_API_KEY=""
    ```
 
 ## Running the Application

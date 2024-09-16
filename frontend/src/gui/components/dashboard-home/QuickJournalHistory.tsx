@@ -51,6 +51,7 @@ const QuickJournalHistory = () => {
           key={index}
           title={journal.title}
           journalId={journal._id}
+          type="home"
         />
       ))}
     </div>
