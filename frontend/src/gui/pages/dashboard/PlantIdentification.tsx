@@ -17,33 +17,12 @@ import { Card } from "@/gui/components/ui/card";
 import useAuth from "@/hooks/useAuth";
 import { axiosForApiCall } from "@/lib/axios";
 import { fileToBase64 } from "@/lib/fileToBase64";
+import { Plant, PlantDetails } from "@/types";
 import { AxiosError } from "axios";
 import { Loader2Icon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
-interface Plant {
-  _id: string;
-  userId: string;
-  plantName: string;
-  plantImages: string[];
-  geoLocation: string;
-  details: PlantDetails;
-  createdAt: string;
-}
-interface PlantDetails {
-  name: string;
-  common_names: string[];
-  description: string;
-  best_light_condition: string;
-  best_soil_type: string;
-  best_watering: string;
-  common_uses: string;
-  cultural_significance: string;
-  toxicity: string;
-  url: string;
-}
 
 interface Query<T> {
   loading?: boolean;
@@ -68,7 +47,7 @@ const DashboardPlantIdentification = () => {
 
   const [files, setFiles] = useState<File[] | []>([]);
   const [plantImages, setPlantImages] = useState<string[]>([]);
-  const [aiModel, setAiModel] = useState<'gemini' | 'gpt'>('gemini');
+  const [aiModel, setAiModel] = useState<"gemini" | "gpt">("gemini");
   const [isSave, setIsSave] = useState(false);
 
   const navigate = useNavigate();
@@ -87,7 +66,7 @@ const DashboardPlantIdentification = () => {
       setPlantImages(images);
 
       const res = (
-        await axiosForApiCall.post('/plants/identify', { images, model })
+        await axiosForApiCall.post("/plants/identify", { images, model })
       ).data;
 
       const plantDetails = {
@@ -109,12 +88,12 @@ const DashboardPlantIdentification = () => {
         loading: false,
         error: { message: error.message },
       }));
-      toast.error('An error occurred. Please try again later.');
+      toast.error("An error occurred. Please try again later.");
     }
   };
 
   const handleTryAgain = () => {
-    const model = aiModel === 'gemini' ? 'gpt' : 'gemini';
+    const model = aiModel === "gemini" ? "gpt" : "gemini";
     setAiModel((prev) => {
       return prev;
     });
@@ -148,11 +127,11 @@ const DashboardPlantIdentification = () => {
       };
       const res =
         plant && plant.data
-          ? (await axiosForApiCall.post('/plants', data)).data
+          ? (await axiosForApiCall.post("/plants", data)).data
           : null;
       console.log(res);
-      toast.success('Plant created successfully.');
-      navigate('/dashboard/myplants');
+      toast.success("Plant created successfully.");
+      navigate("/dashboard/myplants");
     } catch (e) {
       const error = e as AxiosError;
       setPlant((prev) => ({
@@ -161,7 +140,7 @@ const DashboardPlantIdentification = () => {
         error: { message: error.message },
       }));
       console.log(error);
-      toast.error('An error occurred. Please try again later.');
+      toast.error("An error occurred. Please try again later.");
     }
   };
 
@@ -247,7 +226,9 @@ const DashboardPlantIdentification = () => {
                     onClick={() => navigate(`/dashboard/myplants`)}
                   >
                     <img
-                      src={recentPlant.plantImages[0]}
+                      src={
+                        recentPlant.plantImages && recentPlant.plantImages[0]
+                      }
                       className="h-full w-full object-cover"
                       alt="Plant Image"
                     />
