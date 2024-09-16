@@ -64,25 +64,25 @@ CMORSS Agricare App is a comprehensive solution for plant enthusiasts and garden
 
 ### Frontend Libraries/API
 
-- Google Maps JavaScript API and @react-google-maps/api for mapping features
-- Firebase for authentication
-- React Hook Form for form handling
-- Zod for schema validation
-- Axios for HTTP requests
-- date-fns for date manipulation
-- Sonner for toast notifications
+- [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/overview) and [@react-google-maps/api](https://github.com/JustFly1984/react-google-maps-api) for mapping features
+- [Firebase](https://firebase.google.com/docs/reference) for authentication
+- [React Hook Form](https://react-hook-form.com/) for form handling
+- [Zod](https://zod.dev/) for schema validation
+- [Axios](https://axios-http.com/docs/intro) for HTTP requests
+- [date-fns](https://date-fns.org/) for date manipulation
+- [Sonner](https://sonner.emilkowal.ski/) for toast notifications
 
 ### Backend Libraries/API
 
-- OpenAI API for AI-powered chat functionality and plant identification
-- Google Cloud Generative AI (Gemini) for additional AI features
-- plant.id API for optional plant identification
-- Cloudinary for image storage and manipulation
-- OpenWeather API for weather information
-- TMDB API for trending movies - All plants and no movies makes a ....
-- JWT for authentication
-- bcrypt for password hashing
-- Redis for caching
+- [OpenAI API](https://openai.com/index/openai-api/) for AI-powered chat functionality and plant identification
+- [Google Cloud Generative AI (Gemini)](https://ai.google.dev/gemini-api/docs) for additional AI features
+- [plant.id API](https://www.kindwise.com/plant-id) for optional plant identification
+- [Cloudinary](https://cloudinary.com/) for image storage and manipulation
+- [OpenWeather API](https://openweathermap.org/api) for weather information
+- [TMDB API](https://developer.themoviedb.org/reference/intro/getting-started) for trending movies - All plants and no movies makes a ....
+- [JWT](https://jwt.io/) for authentication
+- [bcrypt](https://github.com/kelektiv/node.bcrypt.js) for password hashing
+- [Redis](https://redis.io/) for caching
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
