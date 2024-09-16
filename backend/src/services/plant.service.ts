@@ -51,23 +51,24 @@ export const createPlantService = async (plantData: any) => {
 
   const user = await User.findById(plantData.userId);
   if (!user) throw new Error("User not found");
-
-  const uploadedImages = await Promise.all(
-    plantData.plantImages.map(async (image: string, index: number) => {
-      const { imageUrl } = await uploadImage({
-        image,
-        name: `image-${plantData.plantName}-${index}`.replace(/\s/g, "-"),
-        folder:
-          `users/${plantData.userId}/plants/${plantData.plantName}`.replace(
-            /\s/g,
-            "-"
-          ),
-      });
-      return imageUrl;
-    })
-  );
-
-  const newPlant = new Plant({ ...plantData, plantImages: uploadedImages });
+  if (plantData.plantImages && plantData.plantImages.length > 0) {
+    const uploadedImages = await Promise.all(
+      plantData.plantImages.map(async (image: string, index: number) => {
+        const { imageUrl } = await uploadImage({
+          image,
+          name: `image-${plantData.plantName}-${index}`.replace(/\s/g, "-"),
+          folder:
+            `users/${plantData.userId}/plants/${plantData.plantName}`.replace(
+              /\s/g,
+              "-"
+            ),
+        });
+        return imageUrl;
+      })
+    );
+    plantData.plantImages = uploadedImages;
+  }
+  const newPlant = new Plant({ ...plantData });
   await newPlant.save();
   return newPlant;
 };
