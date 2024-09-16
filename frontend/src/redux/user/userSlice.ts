@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { User } from '@/types/user';
-import { persistor } from '../store';
 
 export interface UserState {
   currentUser: null | User;
