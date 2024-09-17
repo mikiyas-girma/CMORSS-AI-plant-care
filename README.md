@@ -1,6 +1,8 @@
 # CMORSS Agricare App
 
 Welcome to the CMORSS Agricare App repository! This project is a fullstack web application that leverages AI technology to provide personalized plant care solutions. It was developed as part of the ALX SE FaceOff Cup Round of 11.
+## API Docs here
+https://documenter.getpostman.com/view/35992601/2sAXqqbhFW
 
 ## Table of Contents
 
