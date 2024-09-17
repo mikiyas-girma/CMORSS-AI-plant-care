@@ -1,7 +1,6 @@
 import { Request, response, Response } from "express";
 import redisClient from "../../config/redisClient.js";
 import { Plant } from "../../models/plant.model.js";
-import { CareSuggestion } from "../../models/careSuggestion.model.js"; // New collection
 import { getCurrentWeather } from "../../services/weatherService.js";
 import { aiChatService } from "../../services/gptService.js";
 import { generateUniqueId } from "../../utils/generateId.js";
@@ -42,8 +41,8 @@ export const chatWithAI = async (req: Request, res: Response) => {
         if (userQuery.plantName && userQuery.weatherData) {
           // If the user query includes plant details, add it to the chat history
           plantDetails = `Give me a plant care advice  for a ${userQuery.plantName} plant in 
-                                     ${userQuery.weatherData.temperature}°C and ${userQuery.weatherData.humidity}% humidity?
-                                     The plant will receive ${userQuery.weatherData.sunlightHours} hours of sunlight per day.`;
+                           ${userQuery.weatherData.temperature}°C and ${userQuery.weatherData.humidity}% humidity?
+                           The plant will receive ${userQuery.weatherData.sunlightHours} hours of sunlight per day.`;
 
           // push new user query to redis
           const plantCareAdvice = { role: "user", content: plantDetails };
@@ -96,8 +95,23 @@ export const chatWithAI = async (req: Request, res: Response) => {
       }
     } 
     else if (req.body.userQuery.chatId) {
+        if (req.body.userQuery.plantName && req.body.userQuery.location) {
+            const { plantName, location } = req.body.userQuery;
+            const weatherData = await getCurrentWeather(location);
+            const userQuery = {
+                prompt: `What is the best way to care for a ${plantName} plant in ${weatherData.temperature}°C and 
+                          ${weatherData.humidity}% humidity? The plant will receive ${weatherData.sunlightHours} hours 
+                          of sunlight per day.`,
+                plantName: plantName,
+                weatherData: weatherData,
+                chatId: req.body.userQuery.chatId,
+            };
+            req.body.userQuery = userQuery;
+        }
       const { userQuery } = req.body;
       const chatId  = userQuery.chatId;
+
+      
       const historyKey = `c:${chatId}`;
       let fullChatHistory = await redisClient.lRange(historyKey, 0, -1);
 

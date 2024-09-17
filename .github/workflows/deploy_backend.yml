@@ -1,0 +1,74 @@
+name: Deploy Backend
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+    branches:
+      - main
+  repository_dispatch:
+    types: [deploy_backend]
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Verify Backend Directory
+        run: ls -la backend
+
+      - name: Install Dependencies and Build
+        working-directory: backend
+        run: |
+            npm install
+            npm run build
+
+      - name: Create .ssh Directory on Runner
+        run: mkdir -p ~/.ssh
+
+      - name: Add SSH Key
+        run: |
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Add VPS Host Key to Known Hosts
+        run: |
+          ssh-keyscan -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Copy Files to VPS
+        run: |
+          rsync -avz -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }}" backend/dist/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:~/apps/agricare/backend/
+
+      - name: Copy package.json and package-lock.json to VPS
+        run: |
+          rsync -avz -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }}" backend/package*.json ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:~/apps/agricare/backend/
+
+      - name: List Backend Files on VPS
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          port: ${{ secrets.VPS_PORT }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            ls -la ~/apps/agricare/backend/
+
+      - name: Install Dependencies on VPS
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          port: ${{ secrets.VPS_PORT }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd ~/apps/agricare/backend
+            npm install --production
+            pm2 restart agricare || pm2 start server.js --name agricare

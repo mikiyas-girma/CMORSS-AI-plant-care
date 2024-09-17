@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
-import { Button } from '@/gui/components/ui/button';
-import { Input } from '@/gui/components/ui/input';
-import { ScrollArea } from '@/gui/components/common/scroll-area';
+import { useState, useEffect, useRef } from "react";
+import { Button } from "@/gui/components/ui/button";
+import { Input } from "@/gui/components/ui/input";
+import { ScrollArea } from "@/gui/components/common/scroll-area";
 // import  Separator  from "@/gui/components/common/Separator"
 import { Avatar, AvatarFallback } from "@/gui/components/common/avatar";
 import { Send, Bot, User, Plus, Loader } from "lucide-react";
@@ -15,8 +15,11 @@ import {
 } from "@/gui/components/common/sheet";
 import { useParams } from "react-router-dom";
 import { axiosForApiCall } from "@/lib/axios";
-import { v4 as uuidv4 } from 'uuid';
-
+import { v4 as uuidv4 } from "uuid";
+import { useSelector } from "react-redux";
+import { useAppSelector } from "@/hooks/selectorHook";
+import { setChatResponse } from "@/redux/chat/chatSlice";
+import { useDispatch } from "react-redux";
 
 interface RouteParams {
   [key: string]: string | undefined; // Index signature allows matching any key
@@ -46,8 +49,17 @@ export default function DashboardChatbot() {
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const dispatch = useDispatch();
 
-  const [gptResponse, setGptResponse] = useState<string | null>(null);
+  const chatResponse = useAppSelector((state) => state.chat.response);
+  const analyzing = useAppSelector((state) => state.chat.analyzing);
+
+  // Clear the chat response when the component unmounts
+  useEffect(() => {
+    return () => {
+      dispatch(setChatResponse("")); // Clear the response on unmount
+    };
+  }, [dispatch]);
 
   const { plantId } = useParams<RouteParams>();
 
@@ -73,16 +85,6 @@ export default function DashboardChatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // const simulateAIResponse = (prompt: string): string => {
-  //   const responses = [
-  //     `I understand you're asking about "${prompt}". How can I help you with that?`,
-  //     `Regarding "${prompt}", could you please provide more details?`,
-  //     `"${prompt}" is an interesting topic. What specific information are you looking for?`,
-  //     `I'd be happy to discuss "${prompt}". What would you like to know?`,
-  //   ];
-  //   return responses[Math.floor(Math.random() * responses.length)];
-  // };
-
   const handleSend = async () => {
     if (input.trim()) {
       if (!currentChatId) {
@@ -102,12 +104,12 @@ export default function DashboardChatbot() {
           const aiResponse: Message = {
             id: Date.now(),
             text: response.data.response,
-            sender: 'ai',
+            sender: "ai",
           };
           // update the chat history with the new user query and AI response
           setMessages((prev) => [...prev, newMessage, aiResponse]);
-          
-        //   save the new chat history
+
+          //   save the new chat history
           const newChatHistory: ChatHistory = {
             id: newChatId,
             title: input.slice(0, 20) + (input.length > 15 ? "..." : ""),
@@ -115,7 +117,6 @@ export default function DashboardChatbot() {
           };
           setChatHistories((prev) => [...prev, newChatHistory]);
           setCurrentChatId(newChatId);
-
         } catch (error) {
           console.error("Error starting new chat ", error);
         }
@@ -123,7 +124,7 @@ export default function DashboardChatbot() {
         const newMessage: Message = {
           id: uuidv4(),
           text: input,
-          sender: 'user',
+          sender: "user",
         };
 
         setMessages((prev) => [...prev, newMessage]);
@@ -136,7 +137,7 @@ export default function DashboardChatbot() {
           const aiResponse: Message = {
             id: Date.now(),
             text: response.data.response,
-            sender: 'ai',
+            sender: "ai",
           };
 
           setMessages((prev) => [...prev, aiResponse]);
@@ -144,16 +145,19 @@ export default function DashboardChatbot() {
           setChatHistories((prev) =>
             prev.map((chat) =>
               chat.id === currentChatId
-                ? { ...chat, messages: [...chat.messages,newMessage, aiResponse] }
+                ? {
+                    ...chat,
+                    messages: [...chat.messages, newMessage, aiResponse],
+                  }
                 : chat
             )
           );
         } catch (error) {
-          console.error('Error fetching AI response:', error);
+          console.error("Error fetching AI response:", error);
         }
       }
 
-      setInput('');
+      setInput("");
     }
   };
 
@@ -175,7 +179,7 @@ export default function DashboardChatbot() {
   };
 
   const startNewChat = () => {
-    gptResponse && setGptResponse(null);
+    const chatResponse = useAppSelector((state) => "");
     saveChatHistory();
     setMessages([]);
     setCurrentChatId(null);
@@ -192,12 +196,11 @@ export default function DashboardChatbot() {
     localStorage.setItem("chatHistories", JSON.stringify(chatHistories));
   }, [chatHistories]);
 
-
   return (
     <div className="flex min-h-full bg-gray-100">
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {loading ? (
+        { analyzing ? (
           <div className="flex flex-col h-full items-center justify-center space-x-2">
             <Loader size={52} color="green" className="animate-spin" />
             <p>Analyzing Your Weather</p>
@@ -209,7 +212,7 @@ export default function DashboardChatbot() {
               <ScrollArea className="flex-1">
                 <div className="p-4">
                   <div>
-                    {gptResponse && (
+                    {(chatResponse || !analyzing )? (
                       <div className="flex justify-start mb-4">
                         <div className="flex items-start flex-row">
                           <Avatar className="w-8 h-8">
@@ -218,26 +221,31 @@ export default function DashboardChatbot() {
                             </AvatarFallback>
                           </Avatar>
                           <div className="font-space_grotesk mx-2 px-7 leading-7 text-justify rounded-lg bg-gray-200 text-gray-800">
-                            {gptResponse}
+                            {chatResponse}
                           </div>
                         </div>
                       </div>
-                    )}
+                    ) : (
+                        <div className="flex justify-center mb-4">
+                            <Loader size={52} color="green" className="animate-spin" />
+                        </div>
+                    )
+                }
                   </div>
                   {messages.map((message) => (
                     <div
                       key={message.id}
                       className={`flex ${
-                        message.sender === 'user'
-                          ? 'justify-end'
-                          : 'justify-start'
+                        message.sender === "user"
+                          ? "justify-end"
+                          : "justify-start"
                       } mb-4`}
                     >
                       <div
                         className={`flex items-start ${
-                          message.sender === 'user'
-                            ? 'flex-row-reverse'
-                            : 'flex-row'
+                          message.sender === "user"
+                            ? "flex-row-reverse"
+                            : "flex-row"
                         }`}
                       >
                         <Avatar className="w-8 h-8">
@@ -251,9 +259,9 @@ export default function DashboardChatbot() {
                         </Avatar>
                         <div
                           className={`font-space_grotesk mx-2 p-3 rounded-lg ${
-                            message.sender === 'user'
-                              ? 'bg-blue-500 text-white'
-                              : 'bg-gray-200 text-gray-800'
+                            message.sender === "user"
+                              ? "bg-blue-500 text-white"
+                              : "bg-gray-200 text-gray-800"
                           }`}
                         >
                           {message.text}
@@ -302,7 +310,7 @@ export default function DashboardChatbot() {
                     placeholder="Type your message..."
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                    onKeyPress={(e) => e.key === "Enter" && handleSend()}
                     className="flex-1"
                   />
                   <Button onClick={handleSend}>
