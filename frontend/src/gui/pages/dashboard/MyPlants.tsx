@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useNavigate } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -14,6 +12,11 @@ import { LoaderCircle } from "@/assets/Icons";
 import useToasts from "@/hooks/useToasts";
 import { axiosForApiCall } from "@/lib/axios";
 import useAuth from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import { useDispatch } from "react-redux";
+import { setChatResponse, setAnalyzing } from "@/redux/chat/chatSlice";
+
 import { Card } from "@/gui/components/ui/card";
 import { Button } from "@/gui/components/ui/button";
 import { Plant } from "@/types";
@@ -22,10 +25,11 @@ import { toast } from "sonner";
 import AddPlantModal from "@/gui/components/dashboard-myplants/AddPlantModal";
 import MyPlantsPlaceholder from "@/gui/components/dashboard-myplants/MyPlantsPlaceholder";
 import { fileToBase64 } from "@/lib/fileToBase64";
+import { Link } from "react-router-dom";
 
 export default function Component() {
   const [data, setData] = useState<Plant[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [deletePlant, setDeletePlant] = useState<{
     plantId?: string;
     loading?: boolean;
@@ -35,29 +39,65 @@ export default function Component() {
   const [loadingAdd, setLoadingAdd] = useState<boolean>(false);
   const [files, setFiles] = useState<File[]>([]);
 
-  const user = useAuth().user.data;
+  const user = useAuth().user;
   const { toastError } = useToasts();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    if (!user) return;
-    (async () => {
+    // Check if user data is ready and available
+    if (user.isProcessing || !user.data?._id) return;
+
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const res = (await axiosForApiCall.get(`/plants/${user.id}`)).data;
-        setData(res);
+        const res = (await axiosForApiCall.get(`/plants/${user.data?._id}`))
+          .data;
+        setData(res); // Store fetched plant data
       } catch (error: any) {
-        if (error.message === 401) {
-          toastError(error.message);
+        if (error.response?.status === 401) {
+          toastError("Unauthorized");
         } else {
-          toastError("An Error occured. Check network connection.");
+          toastError("An error occurred. Check your network connection.");
         }
       } finally {
-        setLoading(false);
+        setLoading(false); // Stop loading state after API request is completed
       }
-    })();
+    };
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, loadingAdd]);
+    fetchData(); // Fetch data once user is authenticated and the component is ready
+  }, [user]);
+
+  if (user.isProcessing || loading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <LoaderCircle
+          size={36}
+          className="animate-spin duration-300 ease-linear"
+        />
+        <p className="text-xs">Loading plant data...</p>
+      </div>
+    );
+  }
+
+  const getCareAdvice = async (item) => {
+    try {
+      setAnalyzing(true);
+      const response = await axiosForApiCall.post(`/chat/${item._id}`, {
+        userQuery: {
+          chatId: uuidv4(),
+          plantName: item.plantName,
+          location: item.geoLocation,
+        },
+      });
+      dispatch(setChatResponse(response.data.response));
+      navigate(`/dashboard/chat/${item._id}`);
+    } catch (error) {
+      console.log("Error fetching plant care advice !!!", error);
+    } finally {
+      setAnalyzing(false);
+    }
+  };
 
   const handleDelete = async () => {
     try {
@@ -88,7 +128,7 @@ export default function Component() {
         })
       );
       const data = {
-        userId: user.id,
+        userId: user.data?._id,
         plantImages,
         ...plantData,
       };
@@ -169,13 +209,20 @@ export default function Component() {
                       <Button className="p-1 bg-primary-green hover:bg-green-700">
                         <Pencil className="w-6 h-6 text-white" />
                       </Button>
-                      <Button
-                        onClick={() => navigate(`/dashboard/chat/${item._id}`)}
-                        className="p-1 bg-secondary-blue hover:bg-cyan-700"
-                      >
-                        <BotMessageSquare className="w-6 h-6 text-white" />
-                      </Button>
                     </div>
+                  </TableCell>
+                  <TableCell>
+                    <Link
+                      to={`/dashboard/chat/${item._id}`}
+                      onClick={() => getCareAdvice(item)}
+                      className="font-space_grotesk  italic text-green-500 text-primary group flex flex-col items-center" // Flexbox for alignment
+                      style={{ height: "60px" }} // Adjust this height based on your layout
+                    >
+                      <p className="invisible group-hover:visible">
+                        Get Advice From AI
+                      </p>{" "}
+                      <BotMessageSquare className="w-10 h-7" color="green" />
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}
