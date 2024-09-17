@@ -13,7 +13,7 @@ export const authMiddleware = (
     const token = req.cookies?.access_token;
     if (!token) {
       console.error('Authentification error: token missing');
-      return next(errorHandler(401, 'Unauthentified user'));
+      return next(errorHandler(401, 'Unauthorized user'));
     }
 
     return jwt.verify(

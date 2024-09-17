@@ -20,6 +20,7 @@ Welcome to the CMORSS Agricare App repository! This project is a fullstack web a
   - [Configuration](#configuration)
   - [Running the Application](#running-the-application)
   - [Contributing](#contributing)
+  - [API Documentation](#api-documentation)
   - [License](#license)
 
 ## Project Overview
@@ -160,6 +161,10 @@ We welcome contributions to the CMORSS Agricare App! Please follow these steps t
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+
+## API Documentation
+
+- [Plant Journal](./Route_Documentation/journal/README.md)
 
 ## License
 
