@@ -10,7 +10,7 @@ import PlantJournal from '../../models/PlantJournal.js';
 
 const getAllJournals = async (req: Request, res: Response) => {
   //   Retreive user identification from cookies or header.
-  const userId = 'Stephen';
+  const userId = req.user?._id;
 
   try {
     const result = await PlantJournal.aggregate([

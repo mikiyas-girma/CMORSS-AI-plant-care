@@ -1,5 +1,5 @@
-import React from "react";
-import { Card } from "../ui/card";
+import React from 'react';
+import { Card } from '../ui/card';
 import {
   Select,
   SelectContent,
@@ -7,10 +7,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { Loader2Icon } from "lucide-react";
+} from '../ui/select';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { Loader2Icon } from 'lucide-react';
 
 const CreatePlantCard = ({
   plantImages,
@@ -21,7 +21,7 @@ const CreatePlantCard = ({
   loading,
 }) => {
   return (
-    <Card className="p-8 min-h-full flex flex-col items-center justify-between space-y-8">
+    <Card className="p-8 flex flex-col items-center justify-between space-y-8">
       {/* Image Gallery */}
       <div className="grid grid-cols-2 gap-4 w-full">
         {plantImages.map((image, index) => (
@@ -106,7 +106,7 @@ const CreatePlantCard = ({
           Create Plant
           <Loader2Icon
             className={`animate-spin ml-2 transition-all duration-300 ${
-              loading ? "opacity-100 max-w-[24px]" : "opacity-0 max-w-0"
+              loading ? 'opacity-100 max-w-[24px]' : 'opacity-0 max-w-0'
             } overflow-hidden`}
             size={24}
           />

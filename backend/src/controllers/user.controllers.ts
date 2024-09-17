@@ -6,7 +6,8 @@ import uploadImage from "../utils/uploadImage.js";
 
 const updateProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id, firstName, lastName, email, photo } = req.body;
+    const { firstName, lastName, email, photo } = req.body;
+    const id = req.user?.id;
 
     if (!id) {
       return next(errorHandler(400, "Please provide a valid user id"));
@@ -24,7 +25,6 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
       });
       photoUrl = imageUrl;
     }
-    console.log('updating:', photoUrl);
     
     user.$set({
       email: email && email !== user.email ? email : user.email,
@@ -49,8 +49,9 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
 
 const updatePassword = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id, password, confirmedPassword } = req.body;
-console.log(id, password, confirmedPassword)
+    const { password, confirmedPassword } = req.body;
+    const id = req.user?.id
+
     if (!id || !password || !confirmedPassword) {
       return next(errorHandler(400, "Please fill in all the required fields"));
     }

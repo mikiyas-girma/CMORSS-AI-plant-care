@@ -5,11 +5,11 @@ import {
   Leaf,
   NotebookPen,
   UserCog,
-  List,
   MapIcon,
 } from '@/assets/Icons';
 
 import { Chat3D, Community3D, Journal3D, Plant3D } from '@/assets';
+import { Sprout } from 'lucide-react';
 
 export const navigationLinks = [
   {
@@ -20,7 +20,7 @@ export const navigationLinks = [
   {
     label: 'My Plants',
     route: DASHBOARD_PATH.myplants,
-    icon: List,
+    icon: Sprout,
   },
 
   {
@@ -82,9 +82,9 @@ export const quickShortcuts = [
 
   {
     image: Community3D,
-    title: 'Chat With AI',
+    title: 'Community',
     className: 'bg-secondary-blue',
-    description: 'Start a conversation to learn about your plants, and more.',
+    description: 'Share ideas and connect with other plant enthusiasts!',
     route: DASHBOARD_PATH.community,
   },
 ];

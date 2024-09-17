@@ -2,7 +2,7 @@ import path from "path"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 
-const apiURL = process.env.VITE_API_URL || "http://localhost:3000"
+const apiURL = "http://localhost:3003";
  
 export default defineConfig({
   server: {
@@ -10,7 +10,6 @@ export default defineConfig({
       "/api": {
         target: apiURL,
         secure: false,
-        changeOrigin: true,
       },
     }
   },

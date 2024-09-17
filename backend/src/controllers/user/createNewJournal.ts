@@ -10,11 +10,10 @@ import PlantJournal from '../../models/PlantJournal.js';
  */
 
 const createNewJournal = async (req: Request, res: Response) => {
-  const date = new Date();
+  const userId = req.user?._id;
+
   const { title, name, species, dateAcquired, location, health, message } =
     req.body as PlantJournalType & { message: string };
-
-  const userId = 'Stephen';
 
   const data = {
     name,
@@ -28,11 +27,13 @@ const createNewJournal = async (req: Request, res: Response) => {
     images: [],
     careHistory: [],
   };
+
   try {
     const results = await PlantJournal.create(data);
 
     return res.status(200).json({ message: 'Journal created successfully.' });
   } catch (error) {
+    console.log(error);
     return res
       .status(400)
       .json({ message: 'Unable to create journal with data.' });

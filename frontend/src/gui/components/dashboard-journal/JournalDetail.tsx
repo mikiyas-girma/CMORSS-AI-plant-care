@@ -85,10 +85,7 @@ const JournalDetail: React.FC<JournalIDType> = ({ journalId }) => {
         };
       }
 
-      const res = await axiosForApiCall.post(
-        '/user/journal/add-note',
-        noteData
-      );
+      const res = await axiosForApiCall.put('/user/journal/add-note', noteData);
 
       toastSuccess(res.data.message);
       setJournal(res.data.journal);
