@@ -84,7 +84,8 @@ export const quickShortcuts = [
     image: Community3D,
     title: 'Community',
     className: 'bg-secondary-blue',
-    description: 'Share ideas and connect with other plant enthusiasts!',
+    description:
+      'Share ideas and connect with other plant enthusiasts around you!',
     route: DASHBOARD_PATH.community,
   },
 ];
