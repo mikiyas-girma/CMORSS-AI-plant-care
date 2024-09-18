@@ -73,7 +73,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             '/auth/signin',
             credentials
           );
-          dispatch(signInSuccess(response.data));
+          const normalizedUser = {...response.data, id: response.data._id || response.data.id};
+          dispatch(signInSuccess(normalizedUser));
         } catch (err) {
           dispatch(signInFailure(err));
           throw new Error('An error occured while signing in, please retry');
@@ -144,16 +145,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const checkAuthState = async () => {
+      console.log("dispatching signin start")
       dispatch(signInStart());
       try {
         const response = await axiosForApiCall.get('/auth/check');
+        const normalizedUser = {...response.data, id: response.data._id || response.data.id};
+        console.log(`${axiosForApiCall}/auth/check`)
         if (response.data) {
-          dispatch(signInSuccess(response.data));
+          dispatch(signInSuccess(normalizedUser));
         } else {
           dispatch(signInFailure('No user found'));
           throw new Error('No user found');
         }
       } catch (err) {
+        console.log("nopppp")
         dispatch(signInFailure(err));
         throw new Error('No user found');
       }
