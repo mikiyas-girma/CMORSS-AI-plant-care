@@ -46,14 +46,14 @@ export default function Component() {
 
   useEffect(() => {
     // Check if user data is ready and available
-    if (user.isProcessing || !user.data?._id) return;
+    if (user.isProcessing || !user.data?.id) return;
 
     const fetchData = async () => {
       try {
         setLoading(true);
-        const res = (await axiosForApiCall.get(`/plants/${user.data?._id}`))
+        const res = (await axiosForApiCall.get(`/plants/${user.data?.id}`))
           .data;
-        setData(res); // Store fetched plant data
+        setData(res);
       } catch (error: any) {
         if (error.response?.status === 401) {
           toastError("Unauthorized");
@@ -61,11 +61,11 @@ export default function Component() {
           toastError("An error occurred. Check your network connection.");
         }
       } finally {
-        setLoading(false); // Stop loading state after API request is completed
+        setLoading(false);
       }
     };
 
-    fetchData(); // Fetch data once user is authenticated and the component is ready
+    fetchData();
   }, [user]);
 
   if (user.isProcessing || loading) {
@@ -128,7 +128,7 @@ export default function Component() {
         })
       );
       const data = {
-        userId: user.data?._id,
+        userId: user.data?.id,
         plantImages,
         ...plantData,
       };
