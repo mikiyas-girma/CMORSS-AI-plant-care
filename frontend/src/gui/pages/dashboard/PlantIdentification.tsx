@@ -119,7 +119,7 @@ const DashboardPlantIdentification = () => {
     try {
       setPlant((prev) => ({ ...prev, loading: true }));
       const data = {
-        userId: user._id,
+        userId: user.id,
         plantName: plant?.data?.name,
         plantImages: plantImages,
         geoLocation: plant?.data?.location,
@@ -152,7 +152,7 @@ const DashboardPlantIdentification = () => {
           ...prev,
           loading: true,
         }));
-        const plants = (await axiosForApiCall(`/plants/${user._id}`)).data;
+        const plants = (await axiosForApiCall(`/plants/${user.id}`)).data;
         setRecentPlants({
           error: undefined,
           loading: false,
