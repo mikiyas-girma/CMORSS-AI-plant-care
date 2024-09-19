@@ -11,6 +11,7 @@ const plantSchema = new Schema<IPlant>(
     plantImages: { type: [String]},
     details: plantDetailsSchema,
     dateAcquired: { type: Date, default: Date.now },
+    address: { type: String, required: true },
     geoLocation: { type: String, required: true },
     locationDetails: {type: String, enum: ["Indoor", "Outdoor", "Greenhouse"]},
     health: { type: String },

@@ -8,6 +8,7 @@ export interface IPlant extends Document {
   plantImages: string[];
   details: PlantDetails;
   dateAcquired: Date;
+  address: string;
   geoLocation: string;
   locationDetails: "Indoor" | "Outdoor" | "Greenhouse";
   health: "Excellent" | "Good" | "Fair" | "Poor";

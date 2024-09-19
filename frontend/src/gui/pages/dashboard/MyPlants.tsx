@@ -196,7 +196,7 @@ export default function Component() {
                   </TableCell>
                   <TableCell>{item.plantName}</TableCell>
                   <TableCell className="hidden sm:table-cell">
-                    {item.geoLocation}
+                    {item.address}
                   </TableCell>
                   <TableCell className="text-right ">
                     <div className="flex space-x-1">

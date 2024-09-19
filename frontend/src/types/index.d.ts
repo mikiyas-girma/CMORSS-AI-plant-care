@@ -58,6 +58,7 @@ export type Plant = {
   userId: string;
   plantName: string;
   plantImages?: string[];
+  address: string;
   geoLocation: string;
   details?: PlantDetails;
   createdAt: string;

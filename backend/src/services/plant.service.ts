@@ -2,6 +2,7 @@ import { IPlant } from "../interfaces/IPlant.js";
 import { Plant } from "../models/plant.model.js";
 import User from "../models/user.model.js";
 import uploadImage from "../utils/uploadImage.js";
+import reverseGeocode from "../utils/reverseGeoLocation.js";
 
 function validateFields<T>(
   data: Partial<T>,
@@ -68,7 +69,12 @@ export const createPlantService = async (plantData: any) => {
     );
     plantData.plantImages = uploadedImages;
   }
-  const newPlant = new Plant({ ...plantData });
+
+  const geocode = JSON.parse(plantData.geoLocation);
+  const address = await reverseGeocode(geocode.lat, geocode.lng);
+  const place = address.split(",").slice(1, 3).join(",");
+
+  const newPlant = new Plant({ ...plantData, address: place });
   await newPlant.save();
   return newPlant;
 };

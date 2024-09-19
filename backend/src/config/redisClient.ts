@@ -7,6 +7,7 @@ const redisClient = createClient({
     socket: {
         host: process.env.REDIS_HOST || 'redis://localhost:6379',
         port: parseInt(process.env.REDIS_PORT || '6379'),
+        timeout: parseInt(process.env.REDIS_TIMEOUT || '5000'),
     }
 });
 
